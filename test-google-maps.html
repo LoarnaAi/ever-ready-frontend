@@ -1,0 +1,107 @@
+<!-- @format -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Google Maps Test</title>
+    <style>
+      #autocomplete {
+        width: 300px;
+        padding: 8px;
+        font-size: 16px;
+        margin: 20px;
+      }
+      .status {
+        margin: 20px;
+        padding: 10px;
+        border-radius: 5px;
+      }
+      .success {
+        background-color: #d4edda;
+        color: #155724;
+      }
+      .error {
+        background-color: #f8d7da;
+        color: #721c24;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Google Maps API Test</h2>
+
+    <div id="status" class="status">Loading Google Maps...</div>
+
+    <h3>Enter Postcode or Address:</h3>
+    <input
+      id="autocomplete"
+      type="text"
+      placeholder="Start typing postcode or address"
+    />
+
+    <script>
+      const API_KEY = "AIzaSyAJPDr2WJvb6aertgRmLdFBYKWxSG_ceQE";
+
+      function initAutocomplete() {
+        const statusDiv = document.getElementById("status");
+        const input = document.getElementById("autocomplete");
+
+        try {
+          // Initialize the autocomplete object
+          const autocomplete = new google.maps.places.Autocomplete(input, {
+            types: ["address"], // restrict results to addresses
+            componentRestrictions: { country: "gb" }, // restrict to UK
+          });
+
+          // When user selects an address from the dropdown
+          autocomplete.addListener("place_changed", () => {
+            const place = autocomplete.getPlace();
+            if (!place.geometry) {
+              console.log(
+                "No details available for input: '" + place.name + "'"
+              );
+              return;
+            }
+
+            // Full address
+            console.log("Selected Address:", place.formatted_address);
+
+            // Coordinates
+            console.log("Latitude:", place.geometry.location.lat());
+            console.log("Longitude:", place.geometry.location.lng());
+
+            // Extract postcode
+            let postcode = "";
+            if (place.address_components) {
+              place.address_components.forEach((comp) => {
+                if (comp.types.includes("postal_code")) {
+                  postcode = comp.long_name;
+                }
+              });
+            }
+            console.log("Postcode:", postcode);
+          });
+
+          statusDiv.className = "status success";
+          statusDiv.textContent =
+            "✅ Google Maps loaded successfully! Try typing a UK postcode.";
+        } catch (error) {
+          statusDiv.className = "status error";
+          statusDiv.textContent = "❌ Error: " + error.message;
+          console.error("Error:", error);
+        }
+      }
+
+      // Load Google Maps script
+      const script = document.createElement("script");
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places&callback=initAutocomplete`;
+      script.async = true;
+      script.defer = true;
+      script.onerror = () => {
+        document.getElementById("status").className = "status error";
+        document.getElementById("status").textContent =
+          "❌ Failed to load Google Maps script. Check your API key.";
+      };
+      document.head.appendChild(script);
+    </script>
+  </body>
+</html>

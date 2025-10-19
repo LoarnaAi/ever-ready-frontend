@@ -1,3 +1,101 @@
+/** @format */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Ensure input text and placeholders are visible */
+input,
+textarea,
+select {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+/* Ensure input focus states are visible */
+input:focus,
+textarea:focus,
+select:focus {
+  color: #111827 !important;
+  background-color: #ffffff !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: #6b7280 !important;
+}
+
+/* Ensure select options are visible */
+select option {
+  color: #111827 !important;
+  background-color: white !important;
+}
+
+/* Ensure SVG icons in buttons are visible */
+button svg {
+  fill: currentColor !important;
+  color: inherit !important;
+}
+
+/* Ensure button text is always visible */
+button {
+  color: inherit !important;
+}
+
+/* Specific styling for green buttons */
+button[class*="bg-green-500"] {
+  color: #ffffff !important;
+  background-color: #10b981 !important;
+}
+
+button[class*="bg-green-600"] {
+  color: #ffffff !important;
+  background-color: #059669 !important;
+}
+
+/* Ensure all button text is visible */
+button[class*="text-white"] {
+  color: #ffffff !important;
+}
+
+button[class*="text-gray-700"] {
+  color: #374151 !important;
+}
+
+button[class*="text-gray-500"] {
+  color: #6b7280 !important;
+}
+
+button[class*="text-black"] {
+  color: #000000 !important;
+}
+
+/* Gradient button styling */
+button[class*="bg-gradient-to-r"] {
+  color: #ffffff !important;
+}
+
+/* Ensure all button backgrounds are visible */
+button[class*="bg-gray-600"] {
+  background-color: #4b5563 !important;
+  color: #ffffff !important;
+}
+
+button[class*="bg-gray-700"] {
+  background-color: #374151 !important;
+  color: #ffffff !important;
+}
+
+button[class*="bg-gray-300"] {
+  background-color: #d1d5db !important;
+  color: #6b7280 !important;
+}
+
+/* Plus/minus button styling */
+button[class*="text-gray-700"]:not([class*="bg-"]) {
+  color: #374151 !important;
+}
+
+button[class*="text-gray-900"] {
+  color: #111827 !important;
+}
