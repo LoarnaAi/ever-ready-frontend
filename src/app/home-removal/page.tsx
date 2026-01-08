@@ -314,12 +314,12 @@ export default function HomeRemoval() {
 
   // Render step 1 (service selection)
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-5xl flex gap-6">
+    <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3 sm:p-4">
+      <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-4 lg:gap-6">
         {/* Left Section */}
-        <div className="w-1/2 bg-white p-6 flex flex-col">
+        <div className="w-full lg:w-96 bg-white p-4 sm:p-6 flex flex-col order-1">
           {/* Rating */}
-          <div className="mb-4">
+          <div className="mb-3 sm:mb-4">
             <div className="inline-flex items-center gap-2 text-xs">
               <span className="font-semibold text-gray-900">
                 Excellent 4.4 out of 5
@@ -336,15 +336,15 @@ export default function HomeRemoval() {
           </div>
 
           {/* Logo */}
-          <div className="mb-6">
-            <h1 className="text-3xl font-bold text-gray-900">Ever Ready (Demo)</h1>
+          <div className="mb-4 sm:mb-6">
+            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Ever-Ready.ai (Demo)</h1>
           </div>
 
           {/* Service Title */}
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Home Removals</h2>
+          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Home Removals</h2>
 
           {/* Features List */}
-          <ul className="space-y-2 mb-8">
+          <ul className="space-y-2 mb-6 sm:mb-8">
             <li className="flex items-center gap-2">
               <svg
                 className="w-4 h-4 text-orange-500 flex-shrink-0"
@@ -357,7 +357,7 @@ export default function HomeRemoval() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-sm text-gray-700">
+              <span className="text-xs sm:text-sm text-gray-700">
                 Free 48-hour cancellation policy
               </span>
             </li>
@@ -373,21 +373,21 @@ export default function HomeRemoval() {
                   clipRule="evenodd"
                 />
               </svg>
-              <span className="text-sm text-gray-700">
+              <span className="text-xs sm:text-sm text-gray-700">
                 Insurance included in price
               </span>
             </li>
           </ul>
 
           {/* Personalised Quote Card */}
-          <div className="bg-white border border-gray-200 rounded-lg p-5 shadow-sm">
+          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-5 shadow-sm">
             <div className="flex items-start justify-between mb-3">
-              <h3 className="text-lg font-semibold text-gray-900">
+              <h3 className="text-base sm:text-lg font-semibold text-gray-900">
                 Personalised quote
               </h3>
-              <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 ml-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 ml-2 sm:ml-3">
                 <svg
-                  className="w-6 h-6 text-gray-400"
+                  className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -401,13 +401,13 @@ export default function HomeRemoval() {
                 </svg>
               </div>
             </div>
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-xs sm:text-sm text-gray-600 mb-4">
               We will be in touch with you to discuss all the details of your
               move and provide you with an accurate quote.
             </p>
             <button
               onClick={handlePersonalisedQuote}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-sm"
+              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-xs sm:text-sm"
             >
               Get a quote
             </button>
@@ -415,24 +415,24 @@ export default function HomeRemoval() {
         </div>
 
         {/* Right Section */}
-        <div className="w-1/2 bg-gray-50 p-6 flex flex-col">
+        <div className="w-full lg:w-1/2 bg-gray-50 p-4 sm:p-6 flex flex-col order-2">
           {/* Heading */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-gray-900 mb-3">
+          <div className="mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
               How big is your Home?
             </h2>
-            <p className="text-sm text-gray-600">
+            <p className="text-xs sm:text-sm text-gray-600">
               Please choose from the below options
             </p>
           </div>
 
           {/* Service Options Grid */}
-          <div className="grid grid-cols-2 gap-3 flex-1">
+          <div className="grid grid-cols-2 gap-3 sm:gap-3 flex-1">
             {serviceOptions.map((service) => (
               <div
                 key={service.id}
                 onClick={() => handleServiceSelect(service.id)}
-                className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all relative ${
+                className={`bg-white border-2 rounded-lg p-4 sm:p-4 cursor-pointer transition-all relative ${
                   selectedService === service.id
                     ? "border-orange-500 shadow-lg"
                     : "border-gray-200 hover:border-gray-300"
@@ -440,7 +440,7 @@ export default function HomeRemoval() {
               >
 
                 {/* Moving Van Illustration */}
-                <div className="mb-3 h-16 flex items-center justify-center">
+                <div className="mb-3 h-12 sm:h-16 flex items-center justify-center">
                   <svg
                     className="w-full h-full text-gray-300"
                     fill="none"
@@ -456,11 +456,10 @@ export default function HomeRemoval() {
                   </svg>
                 </div>
 
-                {/* Title and Price */}
-                <h3 className="text-base font-semibold text-gray-900 mb-1">
+                {/* Title */}
+                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-1">
                   {service.title}
                 </h3>
-
 
                 {/* Select Button */}
                 <button
@@ -468,7 +467,7 @@ export default function HomeRemoval() {
                     e.stopPropagation();
                     handleServiceSelect(service.id);
                   }}
-                  className={`w-full py-2 px-3 rounded-lg font-medium transition-colors text-sm ${
+                  className={`w-full py-2 px-3 rounded-lg font-medium transition-colors text-xs sm:text-sm ${
                     selectedService === service.id
                       ? "bg-orange-500 text-white hover:bg-orange-600"
                       : "bg-gray-100 text-gray-700 hover:bg-gray-200"
@@ -481,11 +480,11 @@ export default function HomeRemoval() {
           </div>
 
           {/* Continue Button */}
-          <div className="mt-6 flex justify-end">
+          <div className="mt-4 sm:mt-6 flex justify-center sm:justify-end">
             <button
               onClick={handleContinue}
               disabled={!selectedService}
-              className={`px-6 py-2.5 rounded-lg font-medium transition-all text-sm ${
+              className={`w-full sm:w-auto px-6 py-2.5 sm:py-2.5 rounded-lg font-medium transition-all text-sm ${
                 selectedService
                   ? "bg-orange-500 text-white hover:bg-orange-600 shadow-lg"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
