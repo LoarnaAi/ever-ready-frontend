@@ -370,6 +370,18 @@ export default function Step2FurnitureSelection({
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-6xl">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Step 2 of 6</span>
+            <span className="text-sm text-gray-500">Inventory</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '33.33%' }}></div>
+          </div>
+        </div>
+      </div>
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4">
         {/* Left Sidebar - Quote Summary */}
         <div className="w-full lg:w-96 bg-white border border-gray-200 p-5 flex flex-col rounded-xl shadow-md order-1 lg:order-1">

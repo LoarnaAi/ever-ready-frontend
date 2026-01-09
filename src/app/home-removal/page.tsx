@@ -155,23 +155,23 @@ export default function HomeRemoval() {
   const serviceOptions = [
     {
       id: "1-bedroom",
-      title: "1 Bedroom - Inventory List",
-      hasInfo: false,
+      title: "1 Bedroom Home",
+      bedrooms: 1,
     },
     {
       id: "2-bedrooms",
-      title: "2 Bedrooms - Inventory List",
-      hasInfo: false,
+      title: "2 Bedroom Home",
+      bedrooms: 2,
     },
     {
       id: "3-bedrooms",
-      title: "3 Bedrooms - Inventory List",
-      hasInfo: false,
+      title: "3 Bedroom Home",
+      bedrooms: 3,
     },
     {
       id: "4-bedrooms",
-      title: "4 Bedrooms - Inventory List",
-      hasInfo: false,
+      title: "4 Bedroom Home",
+      bedrooms: 4,
     },
   ];
 
@@ -187,11 +187,6 @@ export default function HomeRemoval() {
       setInitialFurnitureQuantities(prepopulatedQuantities);
       setCurrentStep(2);
     }
-  };
-
-  const handlePersonalisedQuote = () => {
-    setSelectedService("personalised");
-    setCurrentStep(2);
   };
 
   const handleStep2Continue = (quantities: { [key: string]: number }) => {
@@ -315,183 +310,214 @@ export default function HomeRemoval() {
   // Render step 1 (service selection)
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-3 sm:p-4">
-      <div className="w-full max-w-5xl flex flex-col lg:flex-row gap-4 lg:gap-6">
-        {/* Left Section */}
-        <div className="w-full lg:w-96 bg-white p-4 sm:p-6 flex flex-col order-1">
-          {/* Rating */}
-          <div className="mb-3 sm:mb-4">
-            <div className="inline-flex items-center gap-2 text-xs">
-              <span className="font-semibold text-gray-900">
-                Excellent 4.4 out of 5
-              </span>
-              <svg
-                className="w-4 h-4 text-green-500"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-              </svg>
-              <span className="text-gray-600">Trustpilot</span>
-            </div>
+      <div className="w-full max-w-5xl">
+        {/* Progress Bar */}
+        <div className="mb-6 sm:mb-8">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Step 1 of 6</span>
+            <span className="text-sm text-gray-500">Home Size</span>
           </div>
-
-          {/* Logo */}
-          <div className="mb-4 sm:mb-6">
-            <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Ever-Ready.ai (Demo)</h1>
-          </div>
-
-          {/* Service Title */}
-          <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Home Removals</h2>
-
-          {/* Features List */}
-          <ul className="space-y-2 mb-6 sm:mb-8">
-            <li className="flex items-center gap-2">
-              <svg
-                className="w-4 h-4 text-orange-500 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Free 48-hour cancellation policy
-              </span>
-            </li>
-            <li className="flex items-center gap-2">
-              <svg
-                className="w-4 h-4 text-orange-500 flex-shrink-0"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                  clipRule="evenodd"
-                />
-              </svg>
-              <span className="text-xs sm:text-sm text-gray-700">
-                Insurance included in price
-              </span>
-            </li>
-          </ul>
-
-          {/* Personalised Quote Card */}
-          <div className="bg-white border border-gray-200 rounded-lg p-4 sm:p-5 shadow-sm">
-            <div className="flex items-start justify-between mb-3">
-              <h3 className="text-base sm:text-lg font-semibold text-gray-900">
-                Personalised quote
-              </h3>
-              <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0 ml-2 sm:ml-3">
-                <svg
-                  className="w-5 h-5 sm:w-6 sm:h-6 text-gray-400"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
-            </div>
-            <p className="text-xs sm:text-sm text-gray-600 mb-4">
-              We will be in touch with you to discuss all the details of your
-              move and provide you with an accurate quote.
-            </p>
-            <button
-              onClick={handlePersonalisedQuote}
-              className="w-full bg-orange-500 hover:bg-orange-600 text-white font-medium py-2.5 px-4 rounded-lg transition-colors text-xs sm:text-sm"
-            >
-              Get a quote
-            </button>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '16.66%' }}></div>
           </div>
         </div>
 
-        {/* Right Section */}
-        <div className="w-full lg:w-1/2 bg-gray-50 p-4 sm:p-6 flex flex-col order-2">
-          {/* Heading */}
-          <div className="mb-4 sm:mb-6">
-            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2 sm:mb-3">
-              How big is your Home?
-            </h2>
-            <p className="text-xs sm:text-sm text-gray-600">
-              Please choose from the below options
+        <div className="flex flex-col lg:flex-row gap-4 lg:gap-6">
+          {/* Left Section */}
+          <div className="w-full lg:w-96 bg-white p-4 sm:p-6 rounded-lg shadow-sm flex flex-col order-1">
+            {/* Rating */}
+            <div className="mb-3 sm:mb-4">
+              <div className="inline-flex items-center gap-2 text-xs">
+                <span className="font-semibold text-gray-900">
+                  Excellent 4.4 out of 5
+                </span>
+                <svg
+                  className="w-4 h-4 text-green-500"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                </svg>
+                <span className="text-gray-600">Trustpilot</span>
+              </div>
+            </div>
+
+            {/* Logo */}
+            <div className="mb-4 sm:mb-6">
+              <h1 className="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">Ever-Ready.ai (Demo)</h1>
+            </div>
+
+            {/* Service Title */}
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-3 sm:mb-4">Home Removals</h2>
+
+            {/* Intro Text */}
+            <p className="text-sm text-gray-600 mb-4 sm:mb-6">
+              Get an instant quote for your home move. Tell us about your property and we&apos;ll calculate the best price for your removal.
             </p>
+
+            {/* Features List */}
+            <ul className="space-y-3 mb-6 sm:mb-8">
+              <li className="flex items-center gap-3">
+                <svg
+                  className="w-5 h-5 text-orange-500 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-700">
+                  Free 48-hour cancellation policy
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <svg
+                  className="w-5 h-5 text-orange-500 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-700">
+                  Insurance included in price
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <svg
+                  className="w-5 h-5 text-orange-500 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-700">
+                  Professional, vetted movers
+                </span>
+              </li>
+              <li className="flex items-center gap-3">
+                <svg
+                  className="w-5 h-5 text-orange-500 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+                <span className="text-sm text-gray-700">
+                  Instant online quote
+                </span>
+              </li>
+            </ul>
+
+            {/* Trust Badge */}
+            <div className="mt-auto pt-4 border-t border-gray-100">
+              <div className="flex items-center gap-2 text-xs text-gray-500">
+                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                </svg>
+                <span>Secure booking - Your data is protected</span>
+              </div>
+            </div>
           </div>
 
-          {/* Service Options Grid */}
-          <div className="grid grid-cols-2 gap-3 sm:gap-3 flex-1">
-            {serviceOptions.map((service) => (
-              <div
-                key={service.id}
-                onClick={() => handleServiceSelect(service.id)}
-                className={`bg-white border-2 rounded-lg p-4 sm:p-4 cursor-pointer transition-all relative ${
-                  selectedService === service.id
-                    ? "border-orange-500 shadow-lg"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
+          {/* Right Section */}
+          <div className="w-full lg:flex-1 bg-white p-4 sm:p-6 rounded-lg shadow-sm flex flex-col order-2">
+            {/* Heading */}
+            <div className="mb-4 sm:mb-6">
+              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+                How big is your home?
+              </h2>
+              <p className="text-sm text-gray-600">
+                Select your home size to get started with your quote
+              </p>
+            </div>
 
-                {/* Moving Van Illustration */}
-                <div className="mb-3 h-12 sm:h-16 flex items-center justify-center">
-                  <svg
-                    className="w-full h-full text-gray-300"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                    />
-                  </svg>
-                </div>
-
-                {/* Title */}
-                <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 sm:mb-1">
-                  {service.title}
-                </h3>
-
-                {/* Select Button */}
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleServiceSelect(service.id);
-                  }}
-                  className={`w-full py-2 px-3 rounded-lg font-medium transition-colors text-xs sm:text-sm ${
+            {/* Service Options Grid */}
+            <div className="grid grid-cols-2 gap-3 sm:gap-4 flex-1">
+              {serviceOptions.map((service) => (
+                <div
+                  key={service.id}
+                  onClick={() => handleServiceSelect(service.id)}
+                  className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all relative ${
                     selectedService === service.id
-                      ? "bg-orange-500 text-white hover:bg-orange-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      ? "border-orange-500 shadow-lg bg-orange-50"
+                      : "border-gray-200 hover:border-gray-300 hover:shadow-md"
                   }`}
                 >
-                  {selectedService === service.id ? "Selected" : "Select"}
-                </button>
-              </div>
-            ))}
-          </div>
+                  {/* House Icon with Bedroom Count */}
+                  <div className="mb-3 h-14 sm:h-16 flex items-center justify-center">
+                    <div className="relative">
+                      <svg
+                        className={`w-12 h-12 sm:w-14 sm:h-14 ${
+                          selectedService === service.id ? "text-orange-500" : "text-gray-400"
+                        }`}
+                        fill="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M12 3L4 9v12h16V9l-8-6zm6 16h-3v-5H9v5H6v-9.5l6-4.5 6 4.5V19z" />
+                        <path d="M10 14h4v5h-4z" opacity="0.3" />
+                      </svg>
+                      <span className={`absolute -top-1 -right-1 w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
+                        selectedService === service.id
+                          ? "bg-orange-500 text-white"
+                          : "bg-gray-200 text-gray-600"
+                      }`}>
+                        {service.bedrooms}
+                      </span>
+                    </div>
+                  </div>
 
-          {/* Continue Button */}
-          <div className="mt-4 sm:mt-6 flex justify-center sm:justify-end">
-            <button
-              onClick={handleContinue}
-              disabled={!selectedService}
-              className={`w-full sm:w-auto px-6 py-2.5 sm:py-2.5 rounded-lg font-medium transition-all text-sm ${
-                selectedService
-                  ? "bg-orange-500 text-white hover:bg-orange-600 shadow-lg"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
-            >
-              Continue
-            </button>
+                  {/* Title */}
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-3 text-center">
+                    {service.title}
+                  </h3>
+
+                  {/* Select Button */}
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleServiceSelect(service.id);
+                    }}
+                    className={`w-full py-2 px-3 rounded-lg font-medium transition-colors text-xs sm:text-sm ${
+                      selectedService === service.id
+                        ? "bg-orange-500 text-white hover:bg-orange-600"
+                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                    }`}
+                  >
+                    {selectedService === service.id ? "Selected" : "Select"}
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Continue Button */}
+            <div className="mt-6 flex justify-end">
+              <button
+                onClick={handleContinue}
+                disabled={!selectedService}
+                className={`w-full sm:w-auto px-8 py-3 rounded-lg font-medium transition-all text-sm ${
+                  selectedService
+                    ? "bg-orange-500 text-white hover:bg-orange-600 shadow-lg"
+                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                }`}
+              >
+                Continue
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -559,6 +559,18 @@ export default function Step4AddressDetails({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-6xl">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Step 4 of 6</span>
+            <span className="text-sm text-gray-500">Addresses</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '66.66%' }}></div>
+          </div>
+        </div>
+      </div>
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4">
         {/* Left Sidebar - Quote Summary */}
         <div className="w-full lg:w-96 bg-white border border-gray-200 p-4 flex flex-col rounded-lg shadow-sm order-1 lg:order-1">

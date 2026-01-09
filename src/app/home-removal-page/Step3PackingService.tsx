@@ -399,6 +399,18 @@ export default function Step3PackingService({
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-2 sm:p-4">
+      <div className="w-full max-w-6xl">
+        {/* Progress Bar */}
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-sm font-medium text-gray-700">Step 3 of 6</span>
+            <span className="text-sm text-gray-500">Packing</span>
+          </div>
+          <div className="w-full bg-gray-200 rounded-full h-2">
+            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '50%' }}></div>
+          </div>
+        </div>
+      </div>
       <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4">
         {/* Left Sidebar - Quote Summary */}
         <div className="w-full lg:w-96 bg-white border border-gray-200 p-4 flex flex-col rounded-lg shadow-sm order-1 lg:order-1">
@@ -732,62 +744,6 @@ export default function Step3PackingService({
                 </div>
               );
             })}
-          </div>
-
-          {/* Dismantle Package Card - Separate option */}
-          <div className="mt-6">
-            <div
-              onClick={() => setSelectedDismantlePackage(!selectedDismantlePackage)}
-              className={`bg-white border-2 rounded-lg p-4 cursor-pointer transition-all flex items-center gap-4 ${
-                selectedDismantlePackage
-                  ? "border-orange-500 shadow-lg bg-orange-50/30"
-                  : "border-gray-200 hover:border-orange-300 hover:shadow-md"
-              }`}
-            >
-              <div
-                className={`w-16 h-16 bg-gradient-to-br rounded-lg flex items-center justify-center flex-shrink-0 ${
-                  selectedDismantlePackage
-                    ? "from-orange-100 to-orange-50"
-                    : "from-gray-100 to-gray-50"
-                }`}
-              >
-                <svg
-                  className={`w-8 h-8 ${
-                    selectedDismantlePackage
-                      ? "text-orange-500"
-                      : "text-gray-400"
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                  />
-                </svg>
-              </div>
-              <div className="flex-1">
-                <h3 className="text-sm font-bold text-gray-900 mb-1">
-                High Quality Packing Materials
-                </h3>
-              </div>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  setSelectedDismantlePackage(!selectedDismantlePackage);
-                }}
-                className={`px-4 py-2 rounded-lg font-semibold transition-all text-sm ${
-                  selectedDismantlePackage
-                    ? "bg-orange-500 text-white hover:bg-orange-600 shadow-md"
-                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                }`}
-              >
-                {selectedDismantlePackage ? "✓ Selected" : "Select"}
-              </button>
-            </div>
           </div>
 
           {/* Packing Materials Section */}
