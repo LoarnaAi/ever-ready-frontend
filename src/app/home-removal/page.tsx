@@ -206,6 +206,10 @@ export default function HomeRemoval() {
     setCurrentStep(4);
   };
 
+  const handleStep2Previous = () => {
+    setCurrentStep(1);
+  };
+
   const handleStep3Previous = () => {
     setCurrentStep(2);
   };
@@ -302,6 +306,7 @@ export default function HomeRemoval() {
       <Step2FurnitureSelection
         serviceParam={selectedService}
         onContinue={handleStep2Continue}
+        onPrevious={handleStep2Previous}
         initialFurnitureQuantities={furnitureQuantities}
       />
     );

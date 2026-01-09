@@ -8,6 +8,7 @@ import { getFurnitureIcon } from "./furnitureIcons";
 interface Step2FurnitureSelectionProps {
   serviceParam: string | null;
   onContinue: (quantities: { [key: string]: number }) => void;
+  onPrevious: () => void;
   currentStep?: number;
   setCurrentStep?: (step: number) => void;
   initialFurnitureQuantities?: { [key: string]: number };
@@ -16,6 +17,7 @@ interface Step2FurnitureSelectionProps {
 export default function Step2FurnitureSelection({
   serviceParam,
   onContinue,
+  onPrevious,
   initialFurnitureQuantities = {},
 }: Step2FurnitureSelectionProps) {
   // Helper function to convert name to ID
@@ -816,11 +818,20 @@ export default function Step2FurnitureSelection({
             })()}
           </div>
 
-          {/* Continue Button */}
-          <div className="mt-6 flex justify-center sm:justify-end">
+          {/* Navigation Buttons */}
+          <div className="mt-6 flex justify-between items-center">
+            <button
+              onClick={onPrevious}
+              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors text-sm"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              Back
+            </button>
             <button
               onClick={() => onContinue(furnitureQuantities)}
-              className="w-full sm:w-auto px-6 py-2.5 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 shadow-lg transition-all text-sm"
+              className="px-6 py-2.5 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 shadow-lg transition-all text-sm"
             >
               Continue
             </button>
