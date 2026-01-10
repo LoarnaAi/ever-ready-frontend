@@ -566,14 +566,32 @@ export default function Step2FurnitureSelection({
         <div className="flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
           {/* Heading */}
           <div className="mb-6">
-            <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
-              We have Pre-Selected the typical items with the property type you have selected
-              <br />
-              You can still Add Or Remove items from this list.
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+              Your inventory is ready to customise!
             </h2>
-            <p className="text-sm text-gray-600">
-              Please type item you want to add or remove from the inventory list
+            <p className="text-sm text-gray-600 mb-4">
+              We've pre-selected typical items for your home. Add anything we missed or remove what you don't need.
             </p>
+
+            {/* Quick Add Suggestions */}
+            <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4">
+              <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-3">
+                Popular items to add
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["Bicycle", "Desk", "Bookcase", "Rug", "Floor Lamp", "Artwork"].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setSearchQuery(item);
+                    }}
+                    className="px-3 py-1.5 bg-white border border-orange-300 rounded-full text-xs font-medium text-orange-700 hover:bg-orange-100 hover:border-orange-400 transition-all shadow-sm"
+                  >
+                    + {item}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Search Box */}

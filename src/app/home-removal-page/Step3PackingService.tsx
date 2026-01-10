@@ -383,6 +383,17 @@ export default function Step3PackingService({
     },
   ];
 
+  // Packing materials data - used in both grid and bottom sheet
+  const packingMaterials = [
+    { id: "small-boxes", title: "Small Boxes", specs: "36cm x 36cm x36cm ~14inch (up to 15kg)" },
+    { id: "large-boxes", title: "Large boxes", specs: "46cm x 46cm x46cm ~18 inches (up to 20kg)" },
+    { id: "wardrobe-boxes", title: "Wardrobe boxes", specs: "51cm x 45cm x 122cm (up to 20kg)" },
+    { id: "tape", title: "Tape", specs: "Brown PVC tape: 5cm x 6600cm" },
+    { id: "bubble-wrap", title: "Bubble wrap(s)", specs: "30cm x 50m roll" },
+    { id: "paper-pack", title: "Paper pack", specs: "White packing paper pack" },
+    { id: "stretch-wrap", title: "Stretch wrap", specs: "30cm x 50m roll" },
+  ];
+
 
   const handleSelectPackingService = (serviceId: string) => {
     if (serviceId === "dismantle-reassemble") {
