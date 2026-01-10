@@ -67,6 +67,7 @@ function HomeRemovalPageContent() {
       <Step2FurnitureSelection
         serviceParam={selectedService}
         onContinue={(quantities) => handleStep2Continue(quantities, false)}
+        onPrevious={() => {}}
       />
     );
   }

@@ -3,16 +3,27 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Step2FurnitureSelection from "../home-removal-page/Step2FurnitureSelection";
 import Step3PackingService from "../home-removal-page/Step3PackingService";
 import Step4AddressDetails from "../home-removal-page/Step4AddressDetails";
 import Step5DateScheduling from "../home-removal-page/Step5DateScheduling";
 import Step6ContactDetails from "../home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
+import ConfirmationModal from "@/components/ConfirmationModal";
+import {
+  createJob,
+  FurnitureItem,
+  PackingMaterial,
+  ContactDetails,
+} from "@/lib/tempDb";
 
 export default function HomeRemoval() {
+  const router = useRouter();
   const [selectedService, setSelectedService] = useState<string>("");
   const [currentStep, setCurrentStep] = useState<number>(1);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [submittedJobId, setSubmittedJobId] = useState<string>("");
   const [furnitureQuantities, setFurnitureQuantities] = useState<{
     [key: string]: number;
   }>({});
@@ -231,9 +242,148 @@ export default function HomeRemoval() {
     setCurrentStep(4);
   };
 
-  const handleStep6Submit = () => {
-    // Handle form submission - could redirect to success page or show confirmation
-    alert("Order submitted successfully! Our team will contact you shortly.");
+  // Helper to convert furniture quantities to items array
+  const convertToFurnitureItems = (
+    quantities: { [key: string]: number },
+    includeNames = true
+  ): FurnitureItem[] => {
+    const furnitureNames: { [key: string]: string } = {
+      "single-bed": "Single Bed & Mattress",
+      "double-king-bed": "Double Bed & Mattress",
+      "kingsize-bed": "Kingsize Bed & Mattress",
+      "wardrobe": "Single Wardrobe",
+      "double-wardrobe": "Double Wardrobe",
+      "chest-of-drawers": "Chest Of Drawers",
+      "bedside-table": "Bedside Table",
+      "dressing-table": "Dressing Table",
+      "tv-small": "Small Television/TV",
+      "tv-large": "Large Television/TV",
+      "sofa-2-seater": "Two Seater Sofa",
+      "sofa-3-seater": "Three Seater Sofa",
+      "armchair": "Armchair",
+      "coffee-table": "Coffee Table",
+      "side-table": "Side Table",
+      "tv-stand": "TV Stand",
+      "bookcase": "Bookcase",
+      "rug": "Rug",
+      "desk": "Desk",
+      "office-chair": "Office Chair",
+      "floor-lamp": "Floor Lamp",
+      "dining-table": "4 Seater Dining Table",
+      "dining-table-6": "6 Seater Dining Table",
+      "dining-chair": "Dining Chair",
+      "sideboard": "Sideboard",
+      "fridge-freezer": "Fridge Freezer",
+      "washing-machine": "Washing Machine",
+      "microwave": "Microwave Oven",
+      "cooker-oven": "Cooker",
+      "dishwasher": "Dishwasher",
+      "kitchen-table": "Kitchen Table",
+      "bin": "Bin",
+      "ironing-board": "Ironing Board",
+      "tumble-dryer": "Tumble Dryer",
+      "bathroom-mirror": "Small Mirror",
+      "bathroom-mirror-large": "Large Mirror",
+      "bathroom-cabinet": "Bathroom Cabinet",
+      "garden-table": "Garden Table",
+      "garden-chair": "Garden Chair",
+      "lawn-mower": "Lawn Mower",
+      "small-box": "Small Boxes",
+      "medium-box": "Medium Boxes",
+      "large-box": "Large Boxes",
+      "wardrobe-box": "Wardrobe Boxes",
+      "suitcase": "Suitcase",
+      "bag": "Bag",
+      "monitor": "Monitor",
+      "coffee-side-table": "Coffee/Side Table",
+    };
+
+    return Object.entries(quantities)
+      .filter(([, qty]) => qty > 0)
+      .map(([itemId, quantity]) => ({
+        itemId,
+        name: includeNames ? (furnitureNames[itemId] || itemId) : itemId,
+        quantity,
+      }));
+  };
+
+  // Helper to convert packing materials
+  const convertToPackingMaterials = (
+    quantities: { [key: string]: number }
+  ): PackingMaterial[] => {
+    const materialNames: { [key: string]: string } = {
+      "small-boxes": "Small Boxes",
+      "large-boxes": "Large Boxes",
+      "wardrobe-boxes": "Wardrobe Boxes",
+      "tape": "Tape",
+      "bubble-wrap": "Bubble Wrap",
+      "paper-pack": "Paper Pack",
+      "stretch-wrap": "Stretch Wrap",
+    };
+
+    return Object.entries(quantities)
+      .filter(([, qty]) => qty > 0)
+      .map(([materialId, quantity]) => ({
+        materialId,
+        name: materialNames[materialId] || materialId,
+        quantity,
+      }));
+  };
+
+  // Load saved addresses and dates from localStorage
+  const loadSavedData = () => {
+    if (typeof window === "undefined") {
+      return {
+        collectionAddress: null,
+        deliveryAddress: null,
+        collectionDate: null,
+        materialsDeliveryDate: null,
+      };
+    }
+
+    const collectionAddress = localStorage.getItem("step4_collectionAddress");
+    const deliveryAddress = localStorage.getItem("step4_deliveryAddress");
+    const collectionDate = localStorage.getItem("step5_collectionDate");
+    const materialsDelivery = localStorage.getItem("step5_materialsDelivery");
+
+    return {
+      collectionAddress: collectionAddress ? JSON.parse(collectionAddress) : null,
+      deliveryAddress: deliveryAddress ? JSON.parse(deliveryAddress) : null,
+      collectionDate: collectionDate ? JSON.parse(collectionDate) : null,
+      materialsDeliveryDate: materialsDelivery ? JSON.parse(materialsDelivery) : null,
+    };
+  };
+
+  const handleStep6Submit = (contactData: ContactDetails) => {
+    // Load saved data from localStorage
+    const savedData = loadSavedData();
+
+    // Create job in temp database
+    const jobId = createJob({
+      homeSize: selectedService,
+      furnitureItems: convertToFurnitureItems(furnitureQuantities),
+      initialFurnitureItems: convertToFurnitureItems(initialFurnitureQuantities),
+      packingService: selectedPackingService,
+      packingMaterials: convertToPackingMaterials(packingMaterialQuantities),
+      dismantlePackage: selectedDismantlePackage,
+      collectionAddress: savedData.collectionAddress,
+      deliveryAddress: savedData.deliveryAddress,
+      collectionDate: savedData.collectionDate,
+      materialsDeliveryDate: savedData.materialsDeliveryDate,
+      contact: contactData,
+    });
+
+    // Store job ID and show confirmation modal
+    setSubmittedJobId(jobId);
+    setShowConfirmationModal(true);
+  };
+
+  const handleViewSummary = () => {
+    router.push(`/home-removal/job-summary/${submittedJobId}`);
+  };
+
+  const handleCloseModal = () => {
+    setShowConfirmationModal(false);
   };
 
   const handleStep6Previous = () => {
@@ -243,16 +393,24 @@ export default function HomeRemoval() {
   // Render step 6 when currentStep is 6
   if (currentStep === 6 && selectedService) {
     return (
-      <Step6ContactDetails
-        serviceParam={selectedService}
-        onSubmit={handleStep6Submit}
-        onPrevious={handleStep6Previous}
-        furnitureQuantities={furnitureQuantities}
-        initialFurnitureQuantities={initialFurnitureQuantities}
-        selectedDismantlePackage={selectedDismantlePackage}
-        packingMaterialQuantities={packingMaterialQuantities}
-        selectedPackingService={selectedPackingService}
-      />
+      <>
+        <Step6ContactDetails
+          serviceParam={selectedService}
+          onSubmit={handleStep6Submit}
+          onPrevious={handleStep6Previous}
+          furnitureQuantities={furnitureQuantities}
+          initialFurnitureQuantities={initialFurnitureQuantities}
+          selectedDismantlePackage={selectedDismantlePackage}
+          packingMaterialQuantities={packingMaterialQuantities}
+          selectedPackingService={selectedPackingService}
+        />
+        <ConfirmationModal
+          isOpen={showConfirmationModal}
+          jobId={submittedJobId}
+          onClose={handleCloseModal}
+          onViewSummary={handleViewSummary}
+        />
+      </>
     );
   }
 

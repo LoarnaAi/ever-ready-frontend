@@ -8,7 +8,7 @@ import MobileBottomSheet from "@/components/MobileBottomSheet";
 
 interface Step6ContactDetailsProps {
   serviceParam: string | null;
-  onSubmit: () => void;
+  onSubmit: (contactData: ContactData) => void;
   onPrevious: () => void;
   furnitureQuantities?: { [key: string]: number };
   initialFurnitureQuantities?: { [key: string]: number };
@@ -430,7 +430,7 @@ export default function Step6ContactDetails({
 
   const handleSubmit = () => {
     if (isFormValid()) {
-      onSubmit();
+      onSubmit(contactData);
     }
   };
 
