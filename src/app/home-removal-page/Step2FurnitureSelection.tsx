@@ -63,9 +63,11 @@ export default function Step2FurnitureSelection({
   const [expandedSections, setExpandedSections] = useState<{
     prepopulated: boolean;
     additional: boolean;
+    removed: boolean;
   }>({
     prepopulated: false,
     additional: false,
+    removed: false,
   });
 
   // Map service IDs to display info
@@ -201,7 +203,7 @@ export default function Step2FurnitureSelection({
     setFurnitureQuantities((prev) => {
       const currentQuantity = prev[itemId] || 0;
       const initialQuantity = mergedInitialQuantities[itemId] || 0;
-      
+
       // For prepopulated items, don't go below initial quantity
       if (initialQuantity > 0) {
         if (currentQuantity <= initialQuantity) {
@@ -213,7 +215,7 @@ export default function Step2FurnitureSelection({
           [itemId]: currentQuantity - 1,
         };
       }
-      
+
       // For non-prepopulated items, allow deletion when reaching 0
       if (currentQuantity <= 1) {
         const newQuantities = { ...prev };
@@ -224,6 +226,15 @@ export default function Step2FurnitureSelection({
         ...prev,
         [itemId]: currentQuantity - 1,
       };
+    });
+  };
+
+  const handleRemoveItem = (itemId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setFurnitureQuantities((prev) => {
+      const newQuantities = { ...prev };
+      delete newQuantities[itemId];
+      return newQuantities;
     });
   };
 
@@ -257,11 +268,18 @@ export default function Step2FurnitureSelection({
 
   // Separate prepopulated items from additional items
   const additionalItems: { id: string; name: string; quantity: number }[] = [];
-  
-  // Organize prepopulated furniture by category (only show initial quantities)
+
+  // Organize prepopulated furniture by category (show current quantities, exclude removed items)
   const organizedFurniture = Object.entries(mergedInitialQuantities).reduce(
     (acc, [itemId, initialQuantity]) => {
-      if (initialQuantity > 0) {
+      // Get current quantity - if item was removed, this will be 0 or undefined
+      const currentQuantity = furnitureQuantities[itemId] || 0;
+
+      // Only show items that are still selected (not removed)
+      // Show up to the initial quantity in prepopulated section
+      if (initialQuantity > 0 && currentQuantity > 0) {
+        // Show the lesser of current quantity or initial quantity in prepopulated
+        const displayQuantity = Math.min(currentQuantity, initialQuantity);
         const itemInfo = furnitureDisplayMap[itemId];
         if (itemInfo) {
           let category = itemInfo.category;
@@ -282,7 +300,7 @@ export default function Step2FurnitureSelection({
           acc[category].push({
             id: itemId,
             name: itemInfo.name,
-            quantity: initialQuantity,
+            quantity: displayQuantity,
           });
         } else {
           // Fallback for items not in map - try to find in furnitureItems
@@ -294,7 +312,7 @@ export default function Step2FurnitureSelection({
             acc["Other"].push({
               id: itemId,
               name: item.title,
-              quantity: initialQuantity,
+              quantity: displayQuantity,
             });
           }
         }
@@ -303,6 +321,22 @@ export default function Step2FurnitureSelection({
     },
     {} as { [category: string]: { id: string; name: string; quantity: number }[] }
   );
+
+  // Track removed prepopulated items for display
+  const removedItems: { id: string; name: string; wasQuantity: number }[] = [];
+  Object.entries(mergedInitialQuantities).forEach(([itemId, initialQuantity]) => {
+    const currentQuantity = furnitureQuantities[itemId] || 0;
+    if (initialQuantity > 0 && currentQuantity === 0) {
+      const itemInfo = furnitureDisplayMap[itemId];
+      if (itemInfo) {
+        removedItems.push({
+          id: itemId,
+          name: itemInfo.name,
+          wasQuantity: initialQuantity,
+        });
+      }
+    }
+  });
 
   // Calculate additional items (items added beyond initial quantities)
   // Use the same names as shown in the furniture cards
@@ -552,6 +586,69 @@ export default function Step2FurnitureSelection({
                   </div>
                 )}
               </div>
+
+              {/* 3. Removed Items */}
+              {removedItems.length > 0 && (
+                <div className="space-y-2 pt-3 border-t border-gray-200">
+                  <button
+                    onClick={() => setExpandedSections(prev => ({ ...prev, removed: !prev.removed }))}
+                    className="w-full flex items-center justify-between text-xs font-bold text-red-600 uppercase tracking-wider border-b-2 border-red-200 pb-2 hover:text-red-700 transition-colors"
+                  >
+                    <span>Removed Items ({removedItems.length})</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${expandedSections.removed ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {expandedSections.removed && (
+                    <div className="pt-2">
+                      <div className="space-y-1.5 pl-1">
+                        {removedItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center gap-2 text-xs text-red-600 leading-relaxed"
+                          >
+                            <svg
+                              className="w-3 h-3 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span className="flex-1">
+                              <span className="font-medium line-through">{item.name}</span>
+                              <span className="text-red-400 ml-1.5 font-normal">
+                                (was {item.wasQuantity})
+                              </span>
+                            </span>
+                            <button
+                              onClick={() => {
+                                setFurnitureQuantities((prev) => ({
+                                  ...prev,
+                                  [item.id]: item.wasQuantity,
+                                }));
+                              }}
+                              className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                            >
+                              Restore
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
           </div>
@@ -596,6 +693,9 @@ export default function Step2FurnitureSelection({
 
           {/* Search Box */}
           <div className="mb-6">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Search to add new items or remove existing ones
+            </label>
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                 <svg
@@ -616,7 +716,7 @@ export default function Step2FurnitureSelection({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for furniture items..."
+                placeholder="e.g. sofa, wardrobe, bicycle..."
                 className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all text-sm sm:text-base"
               />
               {searchQuery && (
@@ -710,7 +810,9 @@ export default function Step2FurnitureSelection({
                   <div
                     key={item.id}
                     className={`border-2 rounded-lg p-4 transition-all ${
-                      isSelected
+                      isPrepopulated && !isSelected
+                        ? "border-red-200 bg-red-50/30"
+                        : isSelected
                         ? "border-orange-500 bg-orange-50/30"
                         : "border-gray-200 bg-white hover:border-orange-300 hover:shadow-sm"
                     }`}
@@ -724,7 +826,7 @@ export default function Step2FurnitureSelection({
                           <h3 className="text-sm font-semibold text-gray-900 mb-1">
                             {item.title}
                           </h3>
-                          {isPrepopulated && (
+                          {isPrepopulated && isSelected && (
                             <div className="text-xs text-orange-600 font-medium mt-1 flex items-center gap-1">
                               <svg
                                 className="w-3 h-3"
@@ -739,12 +841,30 @@ export default function Step2FurnitureSelection({
                                   d="M5 13l4 4L19 7"
                                 />
                               </svg>
-                              Already in package ({initialQuantity})
+                              In your package ({quantity})
                               {additionalQuantity > 0 && (
                                 <span className="text-gray-600 ml-1">
-                                  + {additionalQuantity} additional
+                                  (incl. {additionalQuantity} extra)
                                 </span>
                               )}
+                            </div>
+                          )}
+                          {isPrepopulated && !isSelected && (
+                            <div className="text-xs text-red-500 font-medium mt-1 flex items-center gap-1">
+                              <svg
+                                className="w-3 h-3"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={2}
+                                  d="M6 18L18 6M6 6l12 12"
+                                />
+                              </svg>
+                              Removed from package (was {initialQuantity})
                             </div>
                           )}
                           {!isPrepopulated && isSelected && additionalQuantity > 0 && (
@@ -757,44 +877,69 @@ export default function Step2FurnitureSelection({
                         </div>
                       </div>
                       <div className="ml-4">
-                        {isPrepopulated ? (
-                          // Prepopulated items - show count buttons for additional quantity
-                          additionalQuantity > 0 ? (
-                            <div className="flex items-center gap-3">
+                        {isPrepopulated && isSelected ? (
+                          // Prepopulated items that are still selected
+                          <div className="flex items-center gap-2">
+                            {additionalQuantity > 0 ? (
+                              // Has additional items - show quantity controls
+                              <div className="flex items-center gap-2">
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleDecrementQuantity(item.id, e);
+                                  }}
+                                  className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                                >
+                                  <span className="text-base font-medium leading-none">−</span>
+                                </button>
+                                <span className="text-sm font-bold text-gray-900 min-w-[1.5rem] text-center">
+                                  {quantity}
+                                </span>
+                                <button
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    handleIncrementQuantity(item.id, e);
+                                  }}
+                                  className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                                >
+                                  <span className="text-base font-medium leading-none">+</span>
+                                </button>
+                              </div>
+                            ) : (
+                              // No additional - show Add More button
                               <button
                                 onClick={(e) => {
                                   e.stopPropagation();
-                                  handleDecrementQuantity(item.id, e);
+                                  handleAddFurniture(item.id);
                                 }}
-                                className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                                className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
                               >
-                                <span className="text-lg font-medium leading-none">−</span>
+                                Add More
                               </button>
-                              <span className="text-base font-bold text-gray-900 min-w-[1.5rem] text-center">
-                                {quantity}
-                              </span>
-                              <button
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  handleIncrementQuantity(item.id, e);
-                                }}
-                                className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
-                              >
-                                <span className="text-lg font-medium leading-none">+</span>
-                              </button>
-                            </div>
-                          ) : (
-                            // Prepopulated but no additional - show Add button to add more
+                            )}
+                            {/* Remove button for prepopulated items */}
                             <button
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                handleAddFurniture(item.id);
-                              }}
-                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
+                              onClick={(e) => handleRemoveItem(item.id, e)}
+                              className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs bg-red-100 text-red-600 hover:bg-red-200 border border-red-200"
                             >
-                              Add More
+                              Remove
                             </button>
-                          )
+                          </div>
+                        ) : isPrepopulated && !isSelected ? (
+                          // Prepopulated but was removed - show Add to restore
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              // Restore to initial quantity
+                              setFurnitureQuantities((prev) => ({
+                                ...prev,
+                                [item.id]: initialQuantity,
+                              }));
+                            }}
+                            className="px-4 py-2 rounded-lg font-medium transition-all text-sm bg-green-500 text-white hover:bg-green-600 shadow-sm"
+                          >
+                            Restore ({initialQuantity})
+                          </button>
                         ) : isSelected ? (
                           // Non-prepopulated selected items - show quantity controls
                           <div className="flex items-center gap-3">
