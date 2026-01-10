@@ -47,3 +47,7 @@ next-env.d.ts
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Downloaded binaries and tools
+cloudflared
+cloudflared.deb
