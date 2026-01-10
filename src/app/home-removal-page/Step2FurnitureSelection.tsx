@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
+import MobileBottomSheet from "@/components/MobileBottomSheet";
 
 interface Step2FurnitureSelectionProps {
   serviceParam: string | null;
@@ -370,9 +371,12 @@ export default function Step2FurnitureSelection({
     "Other",
   ];
 
+  // Calculate total items for mobile summary
+  const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex flex-col items-center justify-center p-2 sm:p-4">
-      <div className="w-full max-w-6xl">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
         {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
@@ -383,10 +387,10 @@ export default function Step2FurnitureSelection({
             <div className="bg-orange-500 h-2 rounded-full" style={{ width: '33.33%' }}></div>
           </div>
         </div>
-      </div>
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4">
-        {/* Left Sidebar - Quote Summary */}
-        <div className="w-full lg:w-96 bg-white border border-gray-200 p-5 flex flex-col rounded-xl shadow-md order-1 lg:order-1">
+
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+          {/* Left Sidebar - Quote Summary - Hidden on mobile */}
+          <div className="hidden md:flex md:flex-col w-full md:w-80 lg:w-96 bg-white border border-gray-200 p-5 rounded-xl shadow-md">
           {/* Rating */}
           <div className="mb-4">
             <div className="inline-flex items-center gap-2 text-xs">
@@ -558,8 +562,8 @@ export default function Step2FurnitureSelection({
           </p>
         </div>
 
-        {/* Right Content Area */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm p-4 sm:p-6 order-2 lg:order-2">
+        {/* Right Content Area - Full width on mobile */}
+        <div className="flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
           {/* Heading */}
           <div className="mb-6">
             <h2 className="text-base sm:text-lg font-bold text-gray-900 mb-2">
@@ -744,7 +748,7 @@ export default function Step2FurnitureSelection({
                                   e.stopPropagation();
                                   handleDecrementQuantity(item.id, e);
                                 }}
-                                className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                                className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
                               >
                                 <span className="text-lg font-medium leading-none">−</span>
                               </button>
@@ -756,7 +760,7 @@ export default function Step2FurnitureSelection({
                                   e.stopPropagation();
                                   handleIncrementQuantity(item.id, e);
                                 }}
-                                className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                                className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
                               >
                                 <span className="text-lg font-medium leading-none">+</span>
                               </button>
@@ -781,7 +785,7 @@ export default function Step2FurnitureSelection({
                                 e.stopPropagation();
                                 handleDecrementQuantity(item.id, e);
                               }}
-                              className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                              className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
                             >
                               <span className="text-lg font-medium leading-none">−</span>
                             </button>
@@ -793,7 +797,7 @@ export default function Step2FurnitureSelection({
                                 e.stopPropagation();
                                 handleIncrementQuantity(item.id, e);
                               }}
-                              className="w-9 h-9 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
+                              className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700"
                             >
                               <span className="text-lg font-medium leading-none">+</span>
                             </button>
@@ -818,11 +822,11 @@ export default function Step2FurnitureSelection({
             })()}
           </div>
 
-          {/* Navigation Buttons */}
-          <div className="mt-6 flex justify-between items-center">
+          {/* Navigation Buttons - Full width stacked on mobile */}
+          <div className="mt-6 flex flex-col-reverse sm:flex-row gap-3 sm:justify-between sm:items-center">
             <button
               onClick={onPrevious}
-              className="flex items-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors text-sm"
+              className="flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 font-medium transition-colors text-base py-3 sm:py-2 border border-gray-300 rounded-lg sm:border-0 min-h-[48px] sm:min-h-0"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -831,25 +835,93 @@ export default function Step2FurnitureSelection({
             </button>
             <button
               onClick={() => onContinue(furnitureQuantities)}
-              className="px-6 py-2.5 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 shadow-lg transition-all text-sm"
+              className="w-full sm:w-auto px-6 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 shadow-lg transition-all text-base min-h-[48px]"
             >
               Continue
             </button>
           </div>
         </div>
+        </div>
+
+        {/* Guarantee Message */}
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
+          <div className="font-semibold text-xs text-gray-900 mb-1.5">
+            No Surprises Guarantee
+          </div>
+          <p className="text-xs text-gray-700">
+            We'll complete the job, no matter how long it takes - at no extra
+            charge - As long as the items, access, and dismantling info are
+            accurate.
+          </p>
+        </div>
       </div>
 
-      {/* Guarantee Message - Moved to end for mobile view */}
-      <div className="w-full max-w-6xl bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
-        <div className="font-semibold text-xs text-gray-900 mb-1.5">
-          No Surprises Guarantee
+      {/* Mobile Bottom Sheet */}
+      <MobileBottomSheet
+        peekContent={
+          <div className="flex items-center gap-3 text-sm">
+            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+            <span className="font-medium text-gray-900">{currentService.title}</span>
+            <span className="text-gray-500">|</span>
+            <span className="text-gray-600">{totalItems} items</span>
+            <span className="text-orange-500 ml-auto">View Details</span>
+          </div>
+        }
+        title="Inventory Summary"
+      >
+        <div className="space-y-4">
+          {/* Current Selection */}
+          <div className="flex items-center justify-between py-2 border-b border-gray-100">
+            <span className="text-gray-600">Package</span>
+            <span className="font-medium text-gray-900">{currentService.title}</span>
+          </div>
+          <div className="flex items-center justify-between py-2 border-b border-gray-100">
+            <span className="text-gray-600">Total Items</span>
+            <span className="font-medium text-gray-900">{totalItems} items</span>
+          </div>
+
+          {/* Prepopulated Items Summary */}
+          {Object.keys(organizedFurniture).length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">Prepopulated Items:</h4>
+              <div className="space-y-1 text-sm text-gray-600 max-h-32 overflow-y-auto">
+                {categoryOrder.map((category) => {
+                  const items = organizedFurniture[category];
+                  if (!items || items.length === 0) return null;
+                  return (
+                    <div key={category} className="flex justify-between">
+                      <span>{category}</span>
+                      <span className="text-gray-900">{items.length} items</span>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Additional Items Summary */}
+          {additionalItems.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-sm font-medium text-gray-700">Additional Items:</h4>
+              <div className="space-y-1 text-sm text-gray-600 max-h-32 overflow-y-auto">
+                {additionalItems.map((item) => (
+                  <div key={item.id} className="flex justify-between">
+                    <span>{item.name}</span>
+                    <span className="text-gray-900">x{item.quantity}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Disclaimer */}
+          <p className="text-xs text-gray-500 pt-2 border-t border-gray-100">
+            *Extra charges may apply for undeclared items.
+          </p>
         </div>
-        <p className="text-xs text-gray-700">
-          We'll complete the job, no matter how long it takes - at no extra
-          charge - As long as the items, access, and dismantling info are
-          accurate.
-        </p>
-      </div>
+      </MobileBottomSheet>
     </div>
   );
 }

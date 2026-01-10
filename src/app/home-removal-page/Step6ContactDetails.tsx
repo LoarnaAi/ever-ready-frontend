@@ -4,6 +4,7 @@
 
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
+import MobileBottomSheet from "@/components/MobileBottomSheet";
 
 interface Step6ContactDetailsProps {
   serviceParam: string | null;
@@ -447,9 +448,9 @@ export default function Step6ContactDetails({
           </div>
         </div>
       </div>
-      <div className="w-full max-w-6xl flex flex-col lg:flex-row gap-4">
-        {/* Left Sidebar - Quote Summary */}
-        <div className="w-full lg:w-96 bg-white border border-gray-200 p-4 flex flex-col rounded-lg shadow-sm order-1 lg:order-1">
+      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4">
+        {/* Left Sidebar - Quote Summary (hidden on mobile, shown on tablet+) */}
+        <div className="hidden md:flex md:flex-col w-full md:w-80 lg:w-96 bg-white border border-gray-200 p-4 rounded-lg shadow-sm order-1 md:order-1">
           {/* Rating */}
           <div className="mb-4">
             <div className="inline-flex items-center gap-2 text-xs">
@@ -746,7 +747,7 @@ export default function Step6ContactDetails({
         </div>
 
         {/* Right Content Area */}
-        <div className="flex-1 bg-white rounded-lg shadow-sm p-4 max-w-2xl order-2 lg:order-2">
+        <div className="flex-1 bg-white rounded-lg shadow-sm p-4 max-w-2xl order-2 md:order-2">
           {/* Heading */}
           <h2 className="text-sm sm:text-base font-bold text-gray-900 mb-4">
             Leave your details, and our team will reach out to finalize your order
@@ -829,9 +830,9 @@ export default function Step6ContactDetails({
           <div className="mt-4 space-y-2">
             
             {/* Newsletter Checkbox */}
-            <label className="flex items-center gap-2 cursor-pointer group">
+            <label className="flex items-center gap-3 cursor-pointer group min-h-[44px] py-1">
               <div
-                className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all ${
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all flex-shrink-0 ${
                   contactData.signUpForNews
                     ? "bg-orange-500 border-orange-500"
                     : "bg-white border-gray-300 group-hover:border-gray-400"
@@ -839,7 +840,7 @@ export default function Step6ContactDetails({
                 onClick={() => updateContactData("signUpForNews", !contactData.signUpForNews)}
               >
                 {contactData.signUpForNews && (
-                  <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -848,15 +849,15 @@ export default function Step6ContactDetails({
                   </svg>
                 )}
               </div>
-              <span className="text-xs text-gray-700">
+              <span className="text-sm text-gray-700">
                 Sign me up for early promotions and Ever Ready news
               </span>
             </label>
 
             {/* Terms Checkbox */}
-            <label className="flex items-start gap-2 cursor-pointer group">
+            <label className="flex items-start gap-3 cursor-pointer group min-h-[44px] py-1">
               <div
-                className={`w-4 h-4 rounded border-2 flex items-center justify-center transition-all mt-0.5 ${
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all mt-0.5 flex-shrink-0 ${
                   contactData.agreeToTerms
                     ? "bg-orange-500 border-orange-500"
                     : "bg-white border-gray-300 group-hover:border-gray-400"
@@ -864,7 +865,7 @@ export default function Step6ContactDetails({
                 onClick={() => updateContactData("agreeToTerms", !contactData.agreeToTerms)}
               >
                 {contactData.agreeToTerms && (
-                  <svg className="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -873,7 +874,7 @@ export default function Step6ContactDetails({
                   </svg>
                 )}
               </div>
-              <span className="text-xs text-gray-700">
+              <span className="text-sm text-gray-700">
                 I agree with the{" "}
                 <a href="/terms-and-conditions" className="text-orange-500 hover:underline">
                   Terms & Conditions
@@ -897,21 +898,22 @@ export default function Step6ContactDetails({
           </p>
 
           {/* Navigation Buttons */}
-          <div className="flex items-center justify-between mt-5">
+          <div className="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 mt-5">
             <button
               type="button"
               onClick={onPrevious}
-              className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
+              className="flex items-center justify-center w-full sm:w-11 h-11 rounded-full border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors"
             >
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
+              <span className="sm:hidden ml-2 text-base font-medium">Back</span>
             </button>
             <button
               type="button"
               onClick={handleSubmit}
               disabled={!isFormValid()}
-              className={`px-4 sm:px-6 py-2 text-sm rounded-lg font-semibold shadow-lg transition-all ${
+              className={`w-full sm:w-auto px-6 py-3 text-base rounded-lg font-semibold shadow-lg transition-all min-h-[48px] ${
                 isFormValid()
                   ? "bg-orange-500 text-white hover:bg-orange-600"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
@@ -922,6 +924,69 @@ export default function Step6ContactDetails({
           </div>
         </div>
       </div>
+
+      {/* Mobile Bottom Sheet for Quote Summary */}
+      <MobileBottomSheet
+        peekContent={
+          <div className="flex items-center gap-2 text-sm">
+            <span className="font-medium text-gray-800">{currentService.title}</span>
+            <span className="text-gray-400">|</span>
+            <span className="text-gray-600">Contact Details</span>
+            <span className="text-orange-500 ml-auto font-medium">View Summary</span>
+          </div>
+        }
+      >
+        {/* Summary Content */}
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-base font-semibold text-gray-900">{currentService.title}</h3>
+            <span className="text-xs text-gray-500">Step 6 of 6</span>
+          </div>
+
+          {/* Move Details Summary */}
+          <div className="space-y-3">
+            {savedAddresses.collection?.postcode && (
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-gray-800">Collection:</div>
+                <div className="text-xs text-gray-700 pl-2">
+                  {savedAddresses.collection.address || savedAddresses.collection.postcode}
+                </div>
+              </div>
+            )}
+            {savedAddresses.delivery?.postcode && (
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-gray-800">Delivery:</div>
+                <div className="text-xs text-gray-700 pl-2">
+                  {savedAddresses.delivery.address || savedAddresses.delivery.postcode}
+                </div>
+              </div>
+            )}
+            {savedDates.collectionDate?.date && (
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-gray-800">Collection Date:</div>
+                <div className="text-xs text-gray-700 pl-2">
+                  {formatDate(savedDates.collectionDate.date)} - {savedDates.collectionDate.timeSlot}
+                </div>
+              </div>
+            )}
+            {contactData.firstName && (
+              <div className="space-y-1">
+                <div className="text-xs font-semibold text-gray-800">Contact:</div>
+                <div className="text-xs text-gray-700 pl-2">
+                  {contactData.firstName} {contactData.lastName}
+                  {contactData.email && <div>{contactData.email}</div>}
+                  {contactData.phone && <div>{contactData.countryCode} {contactData.phone}</div>}
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Disclaimer */}
+          <p className="text-xs text-gray-500 italic border-t pt-3">
+            *Extra charges may apply for undeclared items.
+          </p>
+        </div>
+      </MobileBottomSheet>
 
       {/* Guarantee Message - Moved to end for mobile view */}
       <div className="w-full max-w-6xl bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
