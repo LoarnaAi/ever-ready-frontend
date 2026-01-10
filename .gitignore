@@ -47,3 +47,5 @@ next-env.d.ts
 .Trashes
 ehthumbs.db
 Thumbs.db
+.claude/hook_log.txt
+nohup.out
