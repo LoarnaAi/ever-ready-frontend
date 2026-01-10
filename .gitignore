@@ -48,3 +48,4 @@ next-env.d.ts
 ehthumbs.db
 Thumbs.db
 .claude/hook_log.txt
+nohup.out
