@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
-import MobileBottomSheet from "@/components/MobileBottomSheet";
+import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
 
 interface Step2FurnitureSelectionProps {
   serviceParam: string | null;
@@ -421,6 +421,216 @@ export default function Step2FurnitureSelection({
             <div className="bg-orange-500 h-2 rounded-full" style={{ width: '33.33%' }}></div>
           </div>
         </div>
+
+        {/* Mobile Accordion - View pre selected inventory */}
+        <MobileJobDetailsAccordion title="View pre selected inventory">
+          {/* Quote Summary Card - Same as desktop */}
+          <div className="bg-white rounded-lg">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <h3 className="text-base font-bold text-gray-900">
+                  {currentService.title}
+                </h3>
+                <p className="text-xs text-gray-500 mt-0.5">Base package</p>
+              </div>
+            </div>
+
+            {/* Progress Indicator */}
+            <div className="mb-4">
+              <div className="flex items-center justify-between text-xs text-gray-600 mb-2">
+                <span className="font-medium">Step 2 of 6</span>
+                <span className="text-gray-400">33%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
+                <div
+                  className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-300"
+                  style={{ width: "33.33%" }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Checkout Container - Same accordion sections as desktop */}
+            <div className="space-y-4 mb-3 max-h-[450px] overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
+              {/* 1. PrePopulated Items */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                >
+                  <span>1. PrePopulated Items</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${expandedSections.prepopulated ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {expandedSections.prepopulated && (
+                  <div className="pt-2">
+                    {Object.keys(organizedFurniture).length > 0 ? (
+                      <div className="space-y-3">
+                        {categoryOrder.map((category) => {
+                          const items = organizedFurniture[category];
+                          if (!items || items.length === 0) return null;
+
+                          return (
+                            <div key={category} className="space-y-1.5">
+                              <h5 className="text-xs font-semibold text-gray-700 uppercase tracking-wide border-b border-gray-200 pb-1">
+                                {category}
+                              </h5>
+                              <div className="space-y-1 pl-1">
+                                {items.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
+                                  >
+                                    <div className="mt-0.5">
+                                      {getFurnitureIcon(item.id, item.name, 14)}
+                                    </div>
+                                    <span className="flex-1">
+                                      <span className="text-gray-800 font-medium">{item.name}</span>
+                                      {item.quantity > 1 && (
+                                        <span className="text-gray-500 ml-1.5 font-normal">
+                                          × {item.quantity}
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p>No prepopulated items</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Additional Items */}
+              <div className="space-y-2 pt-3 border-t border-gray-200">
+                <button
+                  onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                >
+                  <span>2. Additional Items</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${expandedSections.additional ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {expandedSections.additional && (
+                  <div className="pt-2">
+                    {additionalItems.length > 0 ? (
+                      <div className="space-y-1.5 pl-1">
+                        {additionalItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
+                          >
+                            <div className="mt-0.5">
+                              {getFurnitureIcon(item.id, item.name, 14)}
+                            </div>
+                            <span className="flex-1">
+                              <span className="text-gray-800 font-medium">{item.name}</span>
+                              {item.quantity > 1 && (
+                                <span className="text-gray-500 ml-1.5 font-normal">
+                                  × {item.quantity}
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p>No additional items</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Removed Items */}
+              {removedItems.length > 0 && (
+                <div className="space-y-2 pt-3 border-t border-gray-200">
+                  <button
+                    onClick={() => setExpandedSections(prev => ({ ...prev, removed: !prev.removed }))}
+                    className="w-full flex items-center justify-between text-xs font-bold text-red-600 uppercase tracking-wider border-b-2 border-red-200 pb-2 hover:text-red-700 transition-colors"
+                  >
+                    <span>Removed Items ({removedItems.length})</span>
+                    <svg
+                      className={`w-4 h-4 transition-transform ${expandedSections.removed ? 'rotate-180' : ''}`}
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {expandedSections.removed && (
+                    <div className="pt-2">
+                      <div className="space-y-1.5 pl-1">
+                        {removedItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-center gap-2 text-xs text-red-600 leading-relaxed"
+                          >
+                            <svg
+                              className="w-3 h-3 flex-shrink-0"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M6 18L18 6M6 6l12 12"
+                              />
+                            </svg>
+                            <span className="flex-1">
+                              <span className="font-medium line-through">{item.name}</span>
+                              <span className="text-red-400 ml-1.5 font-normal">
+                                (was {item.wasQuantity})
+                              </span>
+                            </span>
+                            <button
+                              onClick={() => {
+                                setFurnitureQuantities((prev) => ({
+                                  ...prev,
+                                  [item.id]: item.wasQuantity,
+                                }));
+                              }}
+                              className="text-[10px] px-2 py-0.5 bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                            >
+                              Restore
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+
+            {/* Disclaimer */}
+            <p className="text-xs text-gray-500">
+              *Extra charges may apply for undeclared items.
+            </p>
+          </div>
+        </MobileJobDetailsAccordion>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           {/* Left Sidebar - Quote Summary - Hidden on mobile */}
@@ -1018,73 +1228,6 @@ export default function Step2FurnitureSelection({
           </p>
         </div>
       </div>
-
-      {/* Mobile Bottom Sheet */}
-      <MobileBottomSheet
-        peekContent={
-          <div className="flex items-center gap-3 text-sm">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-            <span className="font-medium text-gray-900">{currentService.title}</span>
-            <span className="text-gray-500">|</span>
-            <span className="text-gray-600">{totalItems} items</span>
-            <span className="text-orange-500 ml-auto">View Details</span>
-          </div>
-        }
-        title="Inventory Summary"
-      >
-        <div className="space-y-4">
-          {/* Current Selection */}
-          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-            <span className="text-gray-600">Package</span>
-            <span className="font-medium text-gray-900">{currentService.title}</span>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-            <span className="text-gray-600">Total Items</span>
-            <span className="font-medium text-gray-900">{totalItems} items</span>
-          </div>
-
-          {/* Prepopulated Items Summary */}
-          {Object.keys(organizedFurniture).length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-700">Prepopulated Items:</h4>
-              <div className="space-y-1 text-sm text-gray-600 max-h-32 overflow-y-auto">
-                {categoryOrder.map((category) => {
-                  const items = organizedFurniture[category];
-                  if (!items || items.length === 0) return null;
-                  return (
-                    <div key={category} className="flex justify-between">
-                      <span>{category}</span>
-                      <span className="text-gray-900">{items.length} items</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Additional Items Summary */}
-          {additionalItems.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-700">Additional Items:</h4>
-              <div className="space-y-1 text-sm text-gray-600 max-h-32 overflow-y-auto">
-                {additionalItems.map((item) => (
-                  <div key={item.id} className="flex justify-between">
-                    <span>{item.name}</span>
-                    <span className="text-gray-900">x{item.quantity}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Disclaimer */}
-          <p className="text-xs text-gray-500 pt-2 border-t border-gray-100">
-            *Extra charges may apply for undeclared items.
-          </p>
-        </div>
-      </MobileBottomSheet>
     </div>
   );
 }

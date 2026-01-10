@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
-import MobileBottomSheet from "@/components/MobileBottomSheet";
+import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
 
 interface Step3PackingServiceProps {
   serviceParam: string | null;
@@ -426,6 +426,228 @@ export default function Step3PackingService({
             <div className="bg-orange-500 h-2 rounded-full" style={{ width: '50%' }}></div>
           </div>
         </div>
+
+        {/* Mobile Accordion - View Job Details */}
+        <MobileJobDetailsAccordion title="View Job Details">
+          {/* Quote Summary Card - Same as desktop */}
+          <div className="bg-white rounded-lg">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-base font-semibold text-gray-900">
+                {currentService.title}
+              </h3>
+            </div>
+
+            {/* Progress Indicator */}
+            <div className="mb-3">
+              <div className="flex items-center justify-between text-xs text-gray-600 mb-1.5">
+                <span>Step 3 of 6</span>
+                <span className="text-gray-400">50%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-1.5">
+                <div
+                  className="bg-orange-500 h-1.5 rounded-full transition-all"
+                  style={{ width: "50%" }}
+                ></div>
+              </div>
+            </div>
+
+            {/* Checkout Container - Same accordion sections as desktop */}
+            <div className="space-y-4 mb-3 max-h-[450px] overflow-y-auto pr-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#d1d5db #f3f4f6' }}>
+              {/* 1. PrePopulated Items */}
+              <div className="space-y-2">
+                <button
+                  onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                >
+                  <span>1. PrePopulated Items</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${expandedSections.prepopulated ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {expandedSections.prepopulated && (
+                  <div className="pt-2">
+                    {Object.keys(organizedFurniture).length > 0 ? (
+                      <div className="space-y-3">
+                        {categoryOrder.map((category) => {
+                          const items = organizedFurniture[category];
+                          if (!items || items.length === 0) return null;
+
+                          return (
+                            <div key={category} className="space-y-1.5">
+                              <h5 className="text-xs font-semibold text-gray-700 uppercase tracking-wide border-b border-gray-200 pb-1">
+                                {category}
+                              </h5>
+                              <div className="space-y-1 pl-1">
+                                {items.map((item) => (
+                                  <div
+                                    key={item.id}
+                                    className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
+                                  >
+                                    <div className="mt-0.5">
+                                      {getFurnitureIcon(item.id, item.name, 14)}
+                                    </div>
+                                    <span className="flex-1">
+                                      <span className="text-gray-800 font-medium">{item.name}</span>
+                                      {item.quantity > 1 && (
+                                        <span className="text-gray-500 ml-1.5 font-normal">
+                                          × {item.quantity}
+                                        </span>
+                                      )}
+                                    </span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p>No prepopulated items</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 2. Additional Items */}
+              <div className="space-y-2 pt-3 border-t border-gray-200">
+                <button
+                  onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                >
+                  <span>2. Additional Items</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${expandedSections.additional ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {expandedSections.additional && (
+                  <div className="pt-2">
+                    {additionalItems.length > 0 ? (
+                      <div className="space-y-1.5 pl-1">
+                        {additionalItems.map((item) => (
+                          <div
+                            key={item.id}
+                            className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
+                          >
+                            <div className="mt-0.5">
+                              {getFurnitureIcon(item.id, item.name, 14)}
+                            </div>
+                            <span className="flex-1">
+                              <span className="text-gray-800 font-medium">{item.name}</span>
+                              {item.quantity > 1 && (
+                                <span className="text-gray-500 ml-1.5 font-normal">
+                                  × {item.quantity}
+                                </span>
+                              )}
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                        <p>No additional items</p>
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+
+              {/* 3. Additional Services */}
+              <div className="space-y-2 pt-3 border-t border-gray-200">
+                <button
+                  onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                >
+                  <span>3. Additional Services</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${expandedSections.services ? 'rotate-180' : ''}`}
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+                {expandedSections.services && (
+                  <div className="pt-2">
+                    <div className="space-y-1.5 pl-1">
+                      {selectedPackingService && (
+                        <div className="flex items-start gap-2 text-xs text-gray-700">
+                          <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-gray-800 font-medium">All Inclusive Packing</span>
+                        </div>
+                      )}
+                      {selectedDismantlePackage && (
+                        <div className="flex items-start gap-2 text-xs text-gray-700">
+                          <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
+                          </svg>
+                          <span className="text-gray-800 font-medium">High Quality Packing Materials</span>
+                        </div>
+                      )}
+                      {Object.keys(packingMaterialQuantities).length > 0 && (
+                        <div className="space-y-1 mt-2">
+                          {Object.entries(packingMaterialQuantities).map(([materialId, quantity]) => {
+                            const materialNames: { [key: string]: string } = {
+                              "small-boxes": "Small Boxes",
+                              "large-boxes": "Large Boxes",
+                              "wardrobe-boxes": "Wardrobe Boxes",
+                              "tape": "Tape",
+                              "bubble-wrap": "Bubble Wrap",
+                              "paper-pack": "Paper Pack",
+                              "stretch-wrap": "Stretch Wrap",
+                            };
+                            return (
+                              <div key={materialId} className="flex items-start gap-2 text-xs text-gray-700 pl-1">
+                                <span className="text-gray-800 font-medium">
+                                  {materialNames[materialId] || materialId}: × {quantity}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      )}
+                      {!selectedPackingService && !selectedDismantlePackage && Object.keys(packingMaterialQuantities).length === 0 && (
+                        <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
+                          <p>No additional services</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Promotional Box */}
+            <div className="bg-black border-2 border-orange-500 rounded-lg p-3 mb-3">
+              <p className="text-xs text-white leading-relaxed">
+                Don't have time to pack? We'll do it for you. Just choose{" "}
+                <span className="font-semibold text-orange-400">
+                  "All Inclusive Packing"
+                </span>{" "}
+                and we'll take care of everything.
+              </p>
+            </div>
+
+            {/* Disclaimer */}
+            <p className="text-xs text-gray-500">
+              *Extra charges may apply for undeclared items.
+            </p>
+          </div>
+        </MobileJobDetailsAccordion>
 
         <div className="flex flex-col md:flex-row gap-4 md:gap-6">
           {/* Left Sidebar - Quote Summary - Hidden on mobile */}
@@ -1071,77 +1293,6 @@ export default function Step3PackingService({
           </p>
         </div>
       </div>
-
-      {/* Mobile Bottom Sheet */}
-      <MobileBottomSheet
-        peekContent={
-          <div className="flex items-center gap-3 text-sm">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-            </svg>
-            <span className="font-medium text-gray-900">{currentService.title}</span>
-            <span className="text-gray-500">|</span>
-            <span className="text-gray-600">{totalItems} items</span>
-            {totalMaterials > 0 && (
-              <>
-                <span className="text-gray-500">|</span>
-                <span className="text-gray-600">{totalMaterials} materials</span>
-              </>
-            )}
-            <span className="text-orange-500 ml-auto">View Details</span>
-          </div>
-        }
-        title="Packing Summary"
-      >
-        <div className="space-y-4">
-          {/* Current Selection */}
-          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-            <span className="text-gray-600">Package</span>
-            <span className="font-medium text-gray-900">{currentService.title}</span>
-          </div>
-          <div className="flex items-center justify-between py-2 border-b border-gray-100">
-            <span className="text-gray-600">Total Items</span>
-            <span className="font-medium text-gray-900">{totalItems} items</span>
-          </div>
-
-          {/* Packing Service */}
-          {selectedPackingService && (
-            <div className="flex items-center justify-between py-2 border-b border-gray-100">
-              <span className="text-gray-600">Packing Service</span>
-              <span className="font-medium text-orange-500">All Inclusive</span>
-            </div>
-          )}
-
-          {/* Packing Materials */}
-          {totalMaterials > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-sm font-medium text-gray-700">Packing Materials:</h4>
-              <div className="space-y-1 text-sm text-gray-600">
-                {Object.entries(packingMaterialQuantities).map(([id, qty]) => {
-                  if (qty === 0) return null;
-                  const material = packingMaterials.find(m => m.id === id);
-                  return (
-                    <div key={id} className="flex justify-between">
-                      <span>{material?.title || id}</span>
-                      <span className="text-gray-900">x{qty}</span>
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          )}
-
-          {/* Dismantle Package */}
-          {selectedDismantlePackage && (
-            <div className="flex items-center gap-2 text-sm text-orange-600 py-2 border-t border-gray-100">
-              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-              <span>Dismantle Package included</span>
-            </div>
-          )}
-        </div>
-      </MobileBottomSheet>
     </div>
   );
 }
