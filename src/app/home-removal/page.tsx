@@ -11,12 +11,12 @@ import Step5DateScheduling from "../home-removal-page/Step5DateScheduling";
 import Step6ContactDetails from "../home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { createJobAction } from "@/lib/actions/jobActions";
 import {
-  createJob,
   FurnitureItem,
   PackingMaterial,
   ContactDetails,
-} from "@/lib/tempDb";
+} from "@/lib/database.types";
 
 export default function HomeRemoval() {
   const router = useRouter();
@@ -354,28 +354,46 @@ export default function HomeRemoval() {
     };
   };
 
-  const handleStep6Submit = (contactData: ContactDetails) => {
-    // Load saved data from localStorage
-    const savedData = loadSavedData();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Create job in temp database
-    const jobId = createJob({
-      homeSize: selectedService,
-      furnitureItems: convertToFurnitureItems(furnitureQuantities),
-      initialFurnitureItems: convertToFurnitureItems(initialFurnitureQuantities),
-      packingService: selectedPackingService,
-      packingMaterials: convertToPackingMaterials(packingMaterialQuantities),
-      dismantlePackage: selectedDismantlePackage,
-      collectionAddress: savedData.collectionAddress,
-      deliveryAddress: savedData.deliveryAddress,
-      collectionDate: savedData.collectionDate,
-      materialsDeliveryDate: savedData.materialsDeliveryDate,
-      contact: contactData,
-    });
+  const handleStep6Submit = async (contactData: ContactDetails) => {
+    if (isSubmitting) return;
 
-    // Store job ID and show confirmation modal
-    setSubmittedJobId(jobId);
-    setShowConfirmationModal(true);
+    setIsSubmitting(true);
+
+    try {
+      // Load saved data from localStorage
+      const savedData = loadSavedData();
+
+      // Create job in Supabase database
+      const result = await createJobAction({
+        homeSize: selectedService,
+        furnitureItems: convertToFurnitureItems(furnitureQuantities),
+        initialFurnitureItems: convertToFurnitureItems(initialFurnitureQuantities),
+        packingService: selectedPackingService,
+        packingMaterials: convertToPackingMaterials(packingMaterialQuantities),
+        dismantlePackage: selectedDismantlePackage,
+        collectionAddress: savedData.collectionAddress,
+        deliveryAddress: savedData.deliveryAddress,
+        collectionDate: savedData.collectionDate,
+        materialsDeliveryDate: savedData.materialsDeliveryDate,
+        contact: contactData,
+      });
+
+      if (result.success && result.jobId) {
+        // Store job ID and show confirmation modal
+        setSubmittedJobId(result.jobId);
+        setShowConfirmationModal(true);
+      } else {
+        console.error("Error creating job:", result.error);
+        alert("There was an error submitting your booking. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting job:", error);
+      alert("There was an error submitting your booking. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleViewSummary = () => {

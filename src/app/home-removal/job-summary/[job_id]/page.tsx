@@ -5,7 +5,9 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
-import { getJob, JobData, formatJobId } from "@/lib/tempDb";
+import { getJobAction } from "@/lib/actions/jobActions";
+import { formatJobId } from "@/lib/utils/jobUtils";
+import { JobData } from "@/lib/database.types";
 
 export default function JobSummaryPage() {
   const params = useParams();
@@ -15,11 +17,18 @@ export default function JobSummaryPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (jobId) {
-      const jobData = getJob(jobId);
-      setJob(jobData);
-      setLoading(false);
+    async function fetchJob() {
+      if (jobId) {
+        const result = await getJobAction(jobId);
+        if (result.success && result.data) {
+          setJob(result.data);
+        } else {
+          setJob(null);
+        }
+        setLoading(false);
+      }
     }
+    fetchJob();
   }, [jobId]);
 
   const handleCopyLink = async () => {
