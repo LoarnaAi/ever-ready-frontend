@@ -941,25 +941,6 @@ export default function Step2FurnitureSelection({
               </div>
             </div>
 
-            {/* Quick Add Suggestions - Moved below search */}
-            <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 mb-6">
-              <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-3">
-                Popular items to add
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {["Bicycle", "Desk", "Bookcase", "Rug", "Floor Lamp", "Artwork"].map((item) => (
-                  <button
-                    key={item}
-                    onClick={() => {
-                      setSearchQuery(item);
-                    }}
-                    className="px-3 py-1.5 bg-white border border-orange-300 rounded-full text-xs font-medium text-orange-700 hover:bg-orange-100 hover:border-orange-400 transition-all shadow-sm"
-                  >
-                    + {item}
-                  </button>
-                ))}
-              </div>
-            </div>
 
 
             {/* Search Results */}
@@ -1030,10 +1011,10 @@ export default function Step2FurnitureSelection({
                     <div
                       key={item.id}
                       className={`border-2 rounded-lg p-4 transition-all ${isPrepopulated && !isSelected
-                          ? "border-red-200 bg-red-50/30"
-                          : isSelected
-                            ? "border-orange-500 bg-orange-50/30"
-                            : "border-gray-200 bg-white hover:border-orange-300 hover:shadow-sm"
+                        ? "border-red-200 bg-red-50/30"
+                        : isSelected
+                          ? "border-orange-500 bg-orange-50/30"
+                          : "border-gray-200 bg-white hover:border-orange-300 hover:shadow-sm"
                         }`}
                     >
                       <div className="flex items-center justify-between">
@@ -1202,6 +1183,26 @@ export default function Step2FurnitureSelection({
                   );
                 });
               })()}
+            </div>
+
+            {/* Quick Add Suggestions */}
+            <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 mt-6">
+              <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-3">
+                Popular items to add
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {["Desk", "Bookcase", "Rug", "Artwork"].map((item) => (
+                  <button
+                    key={item}
+                    onClick={() => {
+                      setSearchQuery(item);
+                    }}
+                    className="px-3 py-1.5 bg-white border border-orange-300 rounded-full text-xs font-medium text-orange-700 hover:bg-orange-100 hover:border-orange-400 transition-all shadow-sm"
+                  >
+                    + {item}
+                  </button>
+                ))}
+              </div>
             </div>
 
             {/* Navigation Buttons - Full width stacked on mobile */}
