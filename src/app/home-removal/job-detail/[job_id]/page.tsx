@@ -6,13 +6,12 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
 import {
-  getJob,
-  JobData,
-  JobStatus,
-  formatJobId,
-  updateJobStatus,
-  updateInternalNotes,
-} from "@/lib/tempDb";
+  getJobAction,
+  updateJobStatusAction,
+  updateInternalNotesAction,
+} from "@/lib/actions/jobActions";
+import { formatJobId } from "@/lib/utils/jobUtils";
+import { JobData, JobStatus } from "@/lib/database.types";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -24,26 +23,33 @@ export default function JobDetailPage() {
   const [statusUpdated, setStatusUpdated] = useState(false);
 
   useEffect(() => {
-    if (jobId) {
-      const jobData = getJob(jobId);
-      setJob(jobData);
-      if (jobData) {
-        setNotes(jobData.internalNotes);
+    async function fetchJob() {
+      if (jobId) {
+        const result = await getJobAction(jobId);
+        if (result.success && result.data) {
+          setJob(result.data);
+          setNotes(result.data.internalNotes);
+        } else {
+          setJob(null);
+        }
+        setLoading(false);
       }
-      setLoading(false);
     }
+    fetchJob();
   }, [jobId]);
 
-  const handleStatusChange = (newStatus: JobStatus) => {
-    if (updateJobStatus(jobId, newStatus)) {
+  const handleStatusChange = async (newStatus: JobStatus) => {
+    const result = await updateJobStatusAction(jobId, newStatus);
+    if (result.success) {
       setJob((prev) => (prev ? { ...prev, status: newStatus } : null));
       setStatusUpdated(true);
       setTimeout(() => setStatusUpdated(false), 2000);
     }
   };
 
-  const handleSaveNotes = () => {
-    if (updateInternalNotes(jobId, notes)) {
+  const handleSaveNotes = async () => {
+    const result = await updateInternalNotesAction(jobId, notes);
+    if (result.success) {
       setJob((prev) => (prev ? { ...prev, internalNotes: notes } : null));
       setNotesSaved(true);
       setTimeout(() => setNotesSaved(false), 2000);

@@ -11,12 +11,12 @@ import Step5DateScheduling from "../home-removal-page/Step5DateScheduling";
 import Step6ContactDetails from "../home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import { createJobAction } from "@/lib/actions/jobActions";
 import {
-  createJob,
   FurnitureItem,
   PackingMaterial,
   ContactDetails,
-} from "@/lib/tempDb";
+} from "@/lib/database.types";
 
 export default function HomeRemoval() {
   const router = useRouter();
@@ -354,28 +354,46 @@ export default function HomeRemoval() {
     };
   };
 
-  const handleStep6Submit = (contactData: ContactDetails) => {
-    // Load saved data from localStorage
-    const savedData = loadSavedData();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Create job in temp database
-    const jobId = createJob({
-      homeSize: selectedService,
-      furnitureItems: convertToFurnitureItems(furnitureQuantities),
-      initialFurnitureItems: convertToFurnitureItems(initialFurnitureQuantities),
-      packingService: selectedPackingService,
-      packingMaterials: convertToPackingMaterials(packingMaterialQuantities),
-      dismantlePackage: selectedDismantlePackage,
-      collectionAddress: savedData.collectionAddress,
-      deliveryAddress: savedData.deliveryAddress,
-      collectionDate: savedData.collectionDate,
-      materialsDeliveryDate: savedData.materialsDeliveryDate,
-      contact: contactData,
-    });
+  const handleStep6Submit = async (contactData: ContactDetails) => {
+    if (isSubmitting) return;
 
-    // Store job ID and show confirmation modal
-    setSubmittedJobId(jobId);
-    setShowConfirmationModal(true);
+    setIsSubmitting(true);
+
+    try {
+      // Load saved data from localStorage
+      const savedData = loadSavedData();
+
+      // Create job in Supabase database
+      const result = await createJobAction({
+        homeSize: selectedService,
+        furnitureItems: convertToFurnitureItems(furnitureQuantities),
+        initialFurnitureItems: convertToFurnitureItems(initialFurnitureQuantities),
+        packingService: selectedPackingService,
+        packingMaterials: convertToPackingMaterials(packingMaterialQuantities),
+        dismantlePackage: selectedDismantlePackage,
+        collectionAddress: savedData.collectionAddress,
+        deliveryAddress: savedData.deliveryAddress,
+        collectionDate: savedData.collectionDate,
+        materialsDeliveryDate: savedData.materialsDeliveryDate,
+        contact: contactData,
+      });
+
+      if (result.success && result.jobId) {
+        // Store job ID and show confirmation modal
+        setSubmittedJobId(result.jobId);
+        setShowConfirmationModal(true);
+      } else {
+        console.error("Error creating job:", result.error);
+        alert("There was an error submitting your booking. Please try again.");
+      }
+    } catch (error) {
+      console.error("Error submitting job:", error);
+      alert("There was an error submitting your booking. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleViewSummary = () => {
@@ -627,23 +645,23 @@ export default function HomeRemoval() {
               </p>
             </div>
 
-            {/* Service Options Grid - Single column on mobile, 2 columns on sm+ */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 flex-1">
+            {/* Service Options Grid - 2 columns on mobile and up */}
+            <div className="grid grid-cols-2 gap-4 flex-1">
               {serviceOptions.map((service) => (
                 <div
                   key={service.id}
                   onClick={() => handleServiceSelect(service.id)}
-                  className={`bg-white border-2 rounded-xl p-4 sm:p-5 cursor-pointer transition-all relative ${
+                  className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${
                     selectedService === service.id
                       ? "border-orange-500 shadow-lg bg-orange-50"
                       : "border-gray-200 hover:border-gray-300 hover:shadow-md"
                   }`}
                 >
                   {/* House Icon with Bedroom Count */}
-                  <div className="mb-3 h-16 flex items-center justify-center">
+                  <div className="mb-2 h-14 flex items-center justify-center">
                     <div className="relative">
                       <svg
-                        className={`w-14 h-14 ${
+                        className={`w-12 h-12 sm:w-14 sm:h-14 ${
                           selectedService === service.id ? "text-orange-500" : "text-gray-400"
                         }`}
                         fill="currentColor"
@@ -652,7 +670,7 @@ export default function HomeRemoval() {
                         <path d="M12 3L4 9v12h16V9l-8-6zm6 16h-3v-5H9v5H6v-9.5l6-4.5 6 4.5V19z" />
                         <path d="M10 14h4v5h-4z" opacity="0.3" />
                       </svg>
-                      <span className={`absolute -top-1 -right-1 w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold ${
+                      <span className={`absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
                         selectedService === service.id
                           ? "bg-orange-500 text-white"
                           : "bg-gray-200 text-gray-600"
@@ -663,7 +681,7 @@ export default function HomeRemoval() {
                   </div>
 
                   {/* Title */}
-                  <h3 className="text-base font-semibold text-gray-900 mb-3 text-center">
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 text-center">
                     {service.title}
                   </h3>
 
@@ -673,7 +691,7 @@ export default function HomeRemoval() {
                       e.stopPropagation();
                       handleServiceSelect(service.id);
                     }}
-                    className={`w-full py-3 px-4 rounded-lg font-medium transition-colors text-base min-h-[48px] ${
+                    className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base min-h-[44px] ${
                       selectedService === service.id
                         ? "bg-orange-500 text-white hover:bg-orange-600"
                         : "bg-gray-100 text-gray-700 hover:bg-gray-200"

@@ -460,7 +460,7 @@ export default function Step5DateScheduling({
       <div className="flex-1">
         {/* 6 Hours Interval */}
         <div className="mb-4">
-          <h4 className="text-xs font-semibold text-gray-900 mb-2">6 hours interval</h4>
+          <h4 className="text-xs font-semibold text-gray-900 mb-2">Time Slot</h4>
           <div className="flex flex-wrap gap-2">
             {sixHourSlots.map((slot) => (
               <button
@@ -1137,7 +1137,7 @@ export default function Step5DateScheduling({
               between <span className="text-orange-500">{collectionDate.timeSlot}</span>.
             </p>
 
-            <div className="flex flex-col md:flex-row gap-4 md:gap-6">
+            <div className="flex flex-col gap-4 md:gap-6">
               {/* Date Picker */}
               <div className="w-full md:w-64">
                 <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1201,4 +1201,3 @@ export default function Step5DateScheduling({
     </div>
   );
 }
-
