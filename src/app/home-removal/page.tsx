@@ -592,24 +592,7 @@ export default function HomeRemoval() {
                 <span className="text-sm text-gray-700">
                   Professional, vetted movers
                 </span>
-              </li>
-              <li className="flex items-center gap-3">
-                <svg
-                  className="w-5 h-5 text-orange-500 flex-shrink-0"
-                  fill="currentColor"
-                  viewBox="0 0 20 20"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-sm text-gray-700">
-                  Instant online quote
-                </span>
-              </li>
-            </ul>
+              </li>   </ul>
 
             {/* Trust Badge */}
             <div className="mt-auto pt-4 border-t border-gray-100">
@@ -651,30 +634,27 @@ export default function HomeRemoval() {
                 <div
                   key={service.id}
                   onClick={() => handleServiceSelect(service.id)}
-                  className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${
-                    selectedService === service.id
-                      ? "border-orange-500 shadow-lg bg-orange-50"
-                      : "border-gray-200 hover:border-gray-300 hover:shadow-md"
-                  }`}
+                  className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${selectedService === service.id
+                    ? "border-orange-500 shadow-lg bg-orange-50"
+                    : "border-gray-200 hover:border-gray-300 hover:shadow-md"
+                    }`}
                 >
                   {/* House Icon with Bedroom Count */}
                   <div className="mb-2 h-14 flex items-center justify-center">
                     <div className="relative">
                       <svg
-                        className={`w-12 h-12 sm:w-14 sm:h-14 ${
-                          selectedService === service.id ? "text-orange-500" : "text-gray-400"
-                        }`}
+                        className={`w-12 h-12 sm:w-14 sm:h-14 ${selectedService === service.id ? "text-orange-500" : "text-gray-400"
+                          }`}
                         fill="currentColor"
                         viewBox="0 0 24 24"
                       >
                         <path d="M12 3L4 9v12h16V9l-8-6zm6 16h-3v-5H9v5H6v-9.5l6-4.5 6 4.5V19z" />
                         <path d="M10 14h4v5h-4z" opacity="0.3" />
                       </svg>
-                      <span className={`absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${
-                        selectedService === service.id
-                          ? "bg-orange-500 text-white"
-                          : "bg-gray-200 text-gray-600"
-                      }`}>
+                      <span className={`absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${selectedService === service.id
+                        ? "bg-orange-500 text-white"
+                        : "bg-gray-200 text-gray-600"
+                        }`}>
                         {service.bedrooms}
                       </span>
                     </div>
@@ -691,11 +671,10 @@ export default function HomeRemoval() {
                       e.stopPropagation();
                       handleServiceSelect(service.id);
                     }}
-                    className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base min-h-[44px] ${
-                      selectedService === service.id
-                        ? "bg-orange-500 text-white hover:bg-orange-600"
-                        : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                    }`}
+                    className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base min-h-[44px] ${selectedService === service.id
+                      ? "bg-orange-500 text-white hover:bg-orange-600"
+                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                      }`}
                   >
                     {selectedService === service.id ? "Selected" : "Select"}
                   </button>
@@ -708,11 +687,10 @@ export default function HomeRemoval() {
               <button
                 onClick={handleContinue}
                 disabled={!selectedService}
-                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${
-                  selectedService
-                    ? "bg-orange-500 text-white hover:bg-orange-600 shadow-lg"
-                    : "bg-gray-200 text-gray-400 cursor-not-allowed"
-                }`}
+                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${selectedService
+                  ? "bg-orange-500 text-white hover:bg-orange-600 shadow-lg"
+                  : "bg-gray-200 text-gray-400 cursor-not-allowed"
+                  }`}
               >
                 Continue
               </button>
