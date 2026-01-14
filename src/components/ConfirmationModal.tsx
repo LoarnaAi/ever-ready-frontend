@@ -53,10 +53,10 @@ export default function ConfirmationModal({
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
         {/* Success Header */}
-        <div className="bg-gradient-to-r from-green-500 to-green-600 px-6 py-8 text-center">
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center">
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
-              className="w-10 h-10 text-green-500"
+              className="w-10 h-10 text-orange-500"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -70,9 +70,9 @@ export default function ConfirmationModal({
             </svg>
           </div>
           <h2 className="text-2xl font-bold text-white mb-2">
-            Order Submitted Successfully!
+            Job Submitted Successfully!
           </h2>
-          <p className="text-green-100 text-sm">
+          <p className="text-orange-100 text-sm">
             Your booking request has been received
           </p>
         </div>

@@ -29,9 +29,7 @@ export default function Step3PackingService({
 }: Step3PackingServiceProps) {
   const [selectedPackingService, setSelectedPackingService] =
     useState<string>("");
-  const [packingMaterialQuantities, setPackingMaterialQuantities] = useState<{
-    [key: string]: number;
-  }>({});
+  const packingMaterialQuantities: { [key: string]: number } = {};
   const [selectedDismantlePackage, setSelectedDismantlePackage] =
     useState<boolean>(propSelectedDismantlePackage);
   const [expandedSections, setExpandedSections] = useState<{
@@ -326,92 +324,9 @@ export default function Step3PackingService({
     "Other",
   ];
 
-  const packingServices = [
-    {
-      id: "all-inclusive",
-      title: "All Inclusive Packing",
-      icon: (
-        <svg
-          className="w-full h-full"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-          />
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M8 8h8M8 12h8M8 16h8"
-          />
-        </svg>
-      ),
-      features: [
-        "Professional packing service",
-        "Furniture packing",
-        "Packing materials included",
-      ],
-      buttonText: "Select",
-    },
-    {
-      id: "dismantle-reassemble",
-      title: "High Quality Packing Materials",
-      icon: (
-        <svg
-          className="w-full h-full"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-          />
-        </svg>
-      ),
-      features: [
-        "Professional dismantling",
-      ],
-      buttonText: "Select",
-    },
-  ];
-
-  // Packing materials data - used in both grid and bottom sheet
-  const packingMaterials = [
-    { id: "small-boxes", title: "Small Boxes", specs: "36cm x 36cm x36cm ~14inch (up to 15kg)" },
-    { id: "large-boxes", title: "Large boxes", specs: "46cm x 46cm x46cm ~18 inches (up to 20kg)" },
-    { id: "wardrobe-boxes", title: "Wardrobe boxes", specs: "51cm x 45cm x 122cm (up to 20kg)" },
-    { id: "tape", title: "Tape", specs: "Brown PVC tape: 5cm x 6600cm" },
-    { id: "bubble-wrap", title: "Bubble wrap(s)", specs: "30cm x 50m roll" },
-    { id: "paper-pack", title: "Paper pack", specs: "White packing paper pack" },
-    { id: "stretch-wrap", title: "Stretch wrap", specs: "30cm x 50m roll" },
-  ];
-
-
-  const handleSelectPackingService = (serviceId: string) => {
-    if (serviceId === "dismantle-reassemble") {
-      // Toggle dismantle package
-      setSelectedDismantlePackage(!selectedDismantlePackage);
-    } else {
-      // Toggle packing service
-      if (selectedPackingService === serviceId) {
-        setSelectedPackingService("");
-      } else {
-        setSelectedPackingService(serviceId);
-      }
-    }
-  };
 
   // Calculate total items for mobile summary
   const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
-  const totalMaterials = Object.values(packingMaterialQuantities).reduce((sum, qty) => sum + qty, 0);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -582,7 +497,7 @@ export default function Step3PackingService({
                 {expandedSections.services && (
                   <div className="pt-2">
                     <div className="space-y-1.5 pl-1">
-                      {selectedPackingService && (
+                      {selectedPackingService === "all-inclusive" && (
                         <div className="flex items-start gap-2 text-xs text-gray-700">
                           <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -590,37 +505,7 @@ export default function Step3PackingService({
                           <span className="text-gray-800 font-medium">All Inclusive Packing</span>
                         </div>
                       )}
-                      {selectedDismantlePackage && (
-                        <div className="flex items-start gap-2 text-xs text-gray-700">
-                          <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-gray-800 font-medium">High Quality Packing Materials</span>
-                        </div>
-                      )}
-                      {Object.keys(packingMaterialQuantities).length > 0 && (
-                        <div className="space-y-1 mt-2">
-                          {Object.entries(packingMaterialQuantities).map(([materialId, quantity]) => {
-                            const materialNames: { [key: string]: string } = {
-                              "small-boxes": "Small Boxes",
-                              "large-boxes": "Large Boxes",
-                              "wardrobe-boxes": "Wardrobe Boxes",
-                              "tape": "Tape",
-                              "bubble-wrap": "Bubble Wrap",
-                              "paper-pack": "Paper Pack",
-                              "stretch-wrap": "Stretch Wrap",
-                            };
-                            return (
-                              <div key={materialId} className="flex items-start gap-2 text-xs text-gray-700 pl-1">
-                                <span className="text-gray-800 font-medium">
-                                  {materialNames[materialId] || materialId}: × {quantity}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                      {!selectedPackingService && !selectedDismantlePackage && Object.keys(packingMaterialQuantities).length === 0 && (
+                      {selectedPackingService !== "all-inclusive" && (
                         <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
                           <p>No additional services</p>
                         </div>
@@ -829,7 +714,7 @@ export default function Step3PackingService({
                 {expandedSections.services && (
                   <div className="pt-2">
                     <div className="space-y-1.5 pl-1">
-                      {selectedPackingService && (
+                      {selectedPackingService === "all-inclusive" && (
                         <div className="flex items-start gap-2 text-xs text-gray-700">
                           <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
                             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -837,37 +722,7 @@ export default function Step3PackingService({
                           <span className="text-gray-800 font-medium">All Inclusive Packing</span>
                         </div>
                       )}
-                      {selectedDismantlePackage && (
-                        <div className="flex items-start gap-2 text-xs text-gray-700">
-                          <svg className="w-3 h-3 text-green-500 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
-                            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                          </svg>
-                          <span className="text-gray-800 font-medium">High Quality Packing Materials</span>
-                        </div>
-                      )}
-                      {Object.keys(packingMaterialQuantities).length > 0 && (
-                        <div className="space-y-1 mt-2">
-                          {Object.entries(packingMaterialQuantities).map(([materialId, quantity]) => {
-                            const materialNames: { [key: string]: string } = {
-                              "small-boxes": "Small Boxes",
-                              "large-boxes": "Large Boxes",
-                              "wardrobe-boxes": "Wardrobe Boxes",
-                              "tape": "Tape",
-                              "bubble-wrap": "Bubble Wrap",
-                              "paper-pack": "Paper Pack",
-                              "stretch-wrap": "Stretch Wrap",
-                            };
-                            return (
-                              <div key={materialId} className="flex items-start gap-2 text-xs text-gray-700 pl-1">
-                                <span className="text-gray-800 font-medium">
-                                  {materialNames[materialId] || materialId}: × {quantity}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      )}
-                      {!selectedPackingService && !selectedDismantlePackage && Object.keys(packingMaterialQuantities).length === 0 && (
+                      {selectedPackingService !== "all-inclusive" && (
                         <div className="text-xs text-gray-500 text-center py-4 bg-gray-50 rounded-lg border border-gray-200">
                           <p>No additional services</p>
                         </div>
@@ -900,360 +755,77 @@ export default function Step3PackingService({
         {/* Right Content Area */}
         <div className="flex-1 bg-white rounded-lg shadow-sm p-4 sm:p-6 max-w-2xl order-2 lg:order-2">
           {/* Heading */}
-          <div className="mb-4">
-            <h2 className="text-base sm:text-lg font-bold text-gray-900">
-              We'll securely pack every item, saving you time and ensuring
-              everything arrives safely.
+          <div className="mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
+              Do you want All Inclusive Packing?
             </h2>
+            <p className="text-sm sm:text-base text-gray-600">
+              We'll securely pack every item, saving you time and ensuring everything arrives safely.
+            </p>
           </div>
 
-          {/* Packing Services Container - Two services side by side with equal width */}
-          <div className="relative mt-4 sm:mt-6 grid grid-cols-2 gap-3 sm:gap-6 mb-6">
-            {packingServices.map((service) => {
-              const isSelected = service.id === "dismantle-reassemble" 
-                ? selectedDismantlePackage 
-                : selectedPackingService === service.id;
-              return (
-                <div
-                  key={service.id}
-                  className={`border-2 hover:shadow-md hover:shadow-slate-200/30 flex relative flex-col items-center justify-center rounded-xl sm:rounded-2xl p-3 sm:p-4 transition duration-300 select-none hover:bg-white ${
-                    isSelected
-                      ? "border-orange-500 shadow-xl bg-orange-50/30"
-                      : "border-gray-200 bg-white"
-                  }`}
-                >
-                  {/* Icon */}
-                  <div
-                    className={`mb-2 sm:mb-3 h-12 w-12 sm:h-16 sm:w-16 bg-gradient-to-br rounded-lg flex items-center justify-center ${
-                      isSelected
-                        ? "from-orange-100 to-orange-50"
-                        : "from-gray-100 to-gray-50"
-                    }`}
-                  >
-                    <div
-                      className={`w-8 h-8 sm:w-10 sm:h-10 ${
-                        isSelected ? "text-orange-500" : "text-gray-400"
-                      }`}
-                    >
-                      {service.icon}
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-center text-center flex-1 justify-center w-full">
-                    <h3 className="text-xs sm:text-sm font-bold text-gray-900 mb-1 sm:mb-2 leading-tight px-1">
-                      {service.title}
-                    </h3>
-                    {service.id !== "dismantle-reassemble" && (
-                      <ul className="space-y-1 mb-2 sm:mb-3 w-full">
-                        {service.features.map((feature, index) => (
-                          <li
-                            key={index}
-                            className="flex items-center justify-center gap-1.5 text-[10px] sm:text-xs text-gray-700"
-                          >
-                            <svg
-                              className="w-3 h-3 text-green-500 flex-shrink-0"
-                              fill="currentColor"
-                              viewBox="0 0 20 20"
-                            >
-                              <path
-                                fillRule="evenodd"
-                                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                clipRule="evenodd"
-                              />
-                            </svg>
-                            <span className="text-center">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    )}
-                    <div className="mt-auto w-full">
-                      <button
-                        onClick={() => handleSelectPackingService(service.id)}
-                        className={`w-full py-2 px-3 rounded-lg font-semibold transition-all text-xs sm:text-sm border-2 ${
-                          isSelected
-                            ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600 shadow-md"
-                            : "bg-white text-orange-500 border-orange-500 hover:bg-orange-50"
-                        }`}
-                      >
-                        {isSelected ? "✓ Selected" : service.buttonText}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Packing Materials Section */}
-          <div className="mt-6 sm:mt-8">
-            {/* Packing Materials Grid */}
-            <div className="grid grid-cols-2 gap-2 sm:gap-4 max-w-xl">
-              {[
-                {
-                  id: "small-boxes",
-                  title: "Small Boxes",
-                  specs: "36cm x 36cm x36cm ~14inch (up to 15kg)",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "large-boxes",
-                  title: "Large boxes",
-                  specs: "46cm x 46cm x46cm ~18 inches (up to 20kg)",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "wardrobe-boxes",
-                  title: "Wardrobe boxes",
-                  specs: "51cm x 45cm x 122cm (up to 20kg)",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM4 8h16M4 12h16M4 16h16"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "tape",
-                  title: "Tape",
-                  specs: "Brown PVC tape: 5cm x 6600cm",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "bubble-wrap",
-                  title: "Bubble wrap(s)",
-                  specs: "30cm x 50m roll",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                      <circle cx="8" cy="8" r="2" />
-                      <circle cx="16" cy="8" r="2" />
-                      <circle cx="8" cy="16" r="2" />
-                      <circle cx="16" cy="16" r="2" />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "paper-pack",
-                  title: "Paper pack",
-                  specs: "White packing paper pack",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  ),
-                },
-                {
-                  id: "stretch-wrap",
-                  title: "Stretch wrap",
-                  specs: "30cm x 50m roll",
-                  icon: (
-                    <svg
-                      className="w-full h-full"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                      />
-                    </svg>
-                  ),
-                },
-              ].map((material) => {
-                const quantity = packingMaterialQuantities[material.id] || 0;
-                const isSelected = quantity > 0;
-
-                return (
-                  <div
-                    key={material.id}
-                    className={`border border-slate-200 hover:shadow-md hover:shadow-slate-200/30 flex relative w-full flex-col items-center justify-center rounded-xl sm:rounded-3xl p-2 sm:p-4 transition duration-300 select-none hover:bg-white ${
-                      isSelected
-                        ? "border-orange-500 shadow-xl bg-orange-50/30"
-                        : "bg-white"
-                    }`}
-                  >
-                    {/* Icon */}
-                    <div
-                      className={`mb-1 sm:mb-3 h-12 w-12 sm:h-20 sm:w-20 bg-gradient-to-br rounded-lg flex items-center justify-center ${
-                        isSelected
-                          ? "from-orange-100 to-orange-50"
-                          : "from-gray-100 to-gray-50"
-                      }`}
-                    >
-                      <div
-                        className={`w-8 h-8 sm:w-12 sm:h-12 ${
-                          isSelected ? "text-orange-500" : "text-gray-400"
-                        }`}
-                      >
-                        {material.icon}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col items-center text-center flex-1 justify-center w-full">
-                      <h3 className="text-xs sm:text-sm font-bold text-gray-900 mb-0.5 sm:mb-1.5 leading-tight">
-                        {material.title}
-                      </h3>
-                      <p className="text-[10px] sm:text-xs text-gray-600 mb-2 sm:mb-3 leading-relaxed hidden sm:block">
-                        {material.specs}
-                      </p>
-                      <div className="mt-auto w-full">
-                        {isSelected ? (
-                          <div className="flex items-center justify-between gap-2">
-                            <button
-                              onClick={() => {
-                                const currentQuantity =
-                                  packingMaterialQuantities[material.id] || 0;
-                                if (currentQuantity <= 1) {
-                                  const newQuantities = {
-                                    ...packingMaterialQuantities,
-                                  };
-                                  delete newQuantities[material.id];
-                                  setPackingMaterialQuantities(newQuantities);
-                                } else {
-                                  setPackingMaterialQuantities({
-                                    ...packingMaterialQuantities,
-                                    [material.id]: currentQuantity - 1,
-                                  });
-                                }
-                              }}
-                              className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700 font-semibold"
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M20 12H4"
-                                />
-                              </svg>
-                            </button>
-                            <span className="text-sm font-bold text-gray-900 min-w-[1.5rem] text-center">
-                              {quantity}
-                            </span>
-                            <button
-                              onClick={() => {
-                                setPackingMaterialQuantities({
-                                  ...packingMaterialQuantities,
-                                  [material.id]:
-                                    (packingMaterialQuantities[material.id] ||
-                                      0) + 1,
-                                });
-                              }}
-                              className="w-11 h-11 rounded-full bg-gray-200 hover:bg-gray-300 flex items-center justify-center transition-colors text-gray-700 font-semibold"
-                            >
-                              <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth={2}
-                                  d="M12 4v16m8-8H4"
-                                />
-                              </svg>
-                            </button>
-                          </div>
-                        ) : (
-                          <button
-                            onClick={() => {
-                              setPackingMaterialQuantities({
-                                ...packingMaterialQuantities,
-                                [material.id]: 1,
-                              });
-                            }}
-                            className="w-full py-1.5 px-3 rounded-lg font-semibold transition-all text-xs bg-white text-orange-500 border-2 border-orange-500 hover:bg-orange-50"
-                          >
-                            Add
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+          {/* Features List with Green Ticks */}
+          <div className="mb-8 space-y-4">
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Professional packing service</h3>
+                <p className="text-sm text-gray-600 mt-1">Expert packers handle all your belongings with care</p>
+              </div>
             </div>
+
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">Furniture assembly and dismantle</h3>
+                <p className="text-sm text-gray-600 mt-1">We'll carefully disassemble and reassemble your furniture</p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+              </svg>
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-gray-900">High quality packing materials included</h3>
+                <p className="text-sm text-gray-600 mt-1">All boxes, bubble wrap, tape, and protective materials provided</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Action Buttons */}
+          <div className="space-y-3 mb-6">
+            <button
+              onClick={() => {
+                setSelectedPackingService("all-inclusive");
+                setSelectedDismantlePackage(true);
+              }}
+              className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${
+                selectedPackingService === "all-inclusive"
+                  ? "bg-orange-500 text-white border-orange-500 hover:bg-orange-600 shadow-lg"
+                  : "bg-white text-orange-500 border-orange-500 hover:bg-orange-50"
+              }`}
+            >
+              {selectedPackingService === "all-inclusive" ? "✓ " : ""}Yes, I need the packing service
+            </button>
+
+            <button
+              onClick={() => {
+                setSelectedPackingService("");
+                setSelectedDismantlePackage(false);
+              }}
+              className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${
+                selectedPackingService === ""
+                  ? "bg-gray-700 text-white border-gray-700 hover:bg-gray-800 shadow-lg"
+                  : "bg-white text-gray-700 border-gray-300 hover:bg-gray-50"
+              }`}
+            >
+              {selectedPackingService === "" ? "✓ " : ""}No thank you
+            </button>
           </div>
 
           {/* Navigation Buttons - Full width stacked on mobile */}
