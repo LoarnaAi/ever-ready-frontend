@@ -746,7 +746,7 @@ export default function Step6ContactDetails({
 
           {/* Logo */}
           <div className="mb-4">
-            <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name}"}</h1>
+            <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
           </div>
 
           {/* Quote Summary Card */}

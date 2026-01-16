@@ -154,12 +154,20 @@ export default function ConfirmationModal({
 
           {/* Actions */}
           <div className="space-y-3">
-            <button
-              onClick={onViewSummary}
-              className="w-full py-3 px-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/25"
-            >
-              View Booking Summary
-            </button>
+            <div>
+              <button
+                onClick={onViewSummary}
+                className="w-full py-3 px-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/25"
+              >
+                View Booking Summary
+              </button>
+              {/* Meta communication subtext */}
+              <div className="mt-2 px-3 py-2 bg-purple-50 border border-purple-200 rounded-lg">
+                <p className="text-xs text-purple-700 text-center italic">
+                  See what your business receives. This report will be sent to you on WhatsApp and on Email
+                </p>
+              </div>
+            </div>
             <button
               onClick={onClose}
               className="w-full py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
