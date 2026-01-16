@@ -683,6 +683,11 @@ export default function Step2FurnitureSelection({
             <MobileJobDetailsAccordion title="View pre selected inventory">
               {/* Quote Summary Card - Same as desktop */}
               <div className="bg-white rounded-lg">
+                {/* Logo */}
+                <div className="mb-3">
+                  <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+                </div>
+
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-base font-bold text-gray-900">

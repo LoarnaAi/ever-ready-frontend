@@ -149,16 +149,21 @@ export default function Step4AddressDetails({
 
       // Update collection address with lookup data
       setCollectionAddress((prev) => {
+        // Concatenate street name, city, and county
+        const fullStreetName = [data.street_name, data.city, data.county]
+          .filter(Boolean)
+          .join(", ");
+
         const updated = {
           ...prev,
           postcode: data.postcode,
-          streetName: data.street_name,
+          streetName: fullStreetName,
           city: data.city,
           county: data.county,
           latitude: data.latitude,
           longitude: data.longitude,
-          address: `${data.street_name}, ${data.city}, ${data.postcode}`,
-          // Reset user-editable fields on new lookup
+          address: fullStreetName,
+          // Set to empty strings (will be null in DB)
           houseNumber: "",
           buildingName: "",
         };
@@ -200,16 +205,21 @@ export default function Step4AddressDetails({
 
       // Update delivery address with lookup data
       setDeliveryAddress((prev) => {
+        // Concatenate street name, city, and county
+        const fullStreetName = [data.street_name, data.city, data.county]
+          .filter(Boolean)
+          .join(", ");
+
         const updated = {
           ...prev,
           postcode: data.postcode,
-          streetName: data.street_name,
+          streetName: fullStreetName,
           city: data.city,
           county: data.county,
           latitude: data.latitude,
           longitude: data.longitude,
-          address: `${data.street_name}, ${data.city}, ${data.postcode}`,
-          // Reset user-editable fields on new lookup
+          address: fullStreetName,
+          // Set to empty strings (will be null in DB)
           houseNumber: "",
           buildingName: "",
         };
@@ -578,6 +588,11 @@ export default function Step4AddressDetails({
         <MobileJobDetailsAccordion title="View Job Details">
           {/* Quote Summary Card - Same as desktop */}
           <div className="bg-white rounded-lg">
+            {/* Logo */}
+            <div className="mb-3">
+              <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+            </div>
+
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">
                 {currentService.title}
@@ -1181,70 +1196,13 @@ export default function Step4AddressDetails({
                 {/* Address fields shown after successful lookup */}
                 {collectionAddress.city && (
                   <>
-                    {/* House Number Input */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        House Number
-                      </label>
-                      <input
-                        type="text"
-                        value={collectionAddress.houseNumber}
-                        onChange={(e) => updateCollectionAddress("houseNumber", e.target.value)}
-                        placeholder="e.g. 42"
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                      />
-                    </div>
-
-                    {/* Building Name Input */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        Building Name
-                      </label>
-                      <input
-                        type="text"
-                        value={collectionAddress.buildingName}
-                        onChange={(e) => updateCollectionAddress("buildingName", e.target.value)}
-                        placeholder="e.g. Rose Cottage (optional)"
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                      />
-                    </div>
-
-                    {/* Street Name - Editable if empty, read-only if populated */}
+                    {/* Street Name - Read-only, displays concatenated address */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                       <label className="sm:w-32 text-xs font-medium text-gray-700">
                         Street Name
                       </label>
-                      {collectionAddress.streetName ? (
-                        <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                          {collectionAddress.streetName}
-                        </div>
-                      ) : (
-                        <input
-                          type="text"
-                          value={collectionAddress.streetName}
-                          onChange={(e) => updateCollectionAddress("streetName", e.target.value)}
-                          placeholder="Enter street name manually"
-                          className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                        />
-                      )}
-                    </div>
-
-                    {/* Read-only City and County */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        City
-                      </label>
                       <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                        {collectionAddress.city}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        County
-                      </label>
-                      <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                        {collectionAddress.county || "-"}
+                        {collectionAddress.streetName}
                       </div>
                     </div>
                   </>
@@ -1396,70 +1354,13 @@ export default function Step4AddressDetails({
                 {/* Address fields shown after successful lookup */}
                 {deliveryAddress.city && (
                   <>
-                    {/* House Number Input */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        House Number
-                      </label>
-                      <input
-                        type="text"
-                        value={deliveryAddress.houseNumber}
-                        onChange={(e) => updateDeliveryAddress("houseNumber", e.target.value)}
-                        placeholder="e.g. 42"
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                      />
-                    </div>
-
-                    {/* Building Name Input */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        Building Name
-                      </label>
-                      <input
-                        type="text"
-                        value={deliveryAddress.buildingName}
-                        onChange={(e) => updateDeliveryAddress("buildingName", e.target.value)}
-                        placeholder="e.g. Rose Cottage (optional)"
-                        className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                      />
-                    </div>
-
-                    {/* Street Name - Editable if empty, read-only if populated */}
+                    {/* Street Name - Read-only, displays concatenated address */}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                       <label className="sm:w-32 text-xs font-medium text-gray-700">
                         Street Name
                       </label>
-                      {deliveryAddress.streetName ? (
-                        <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                          {deliveryAddress.streetName}
-                        </div>
-                      ) : (
-                        <input
-                          type="text"
-                          value={deliveryAddress.streetName}
-                          onChange={(e) => updateDeliveryAddress("streetName", e.target.value)}
-                          placeholder="Enter street name manually"
-                          className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                        />
-                      )}
-                    </div>
-
-                    {/* Read-only City and County */}
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        City
-                      </label>
                       <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                        {deliveryAddress.city}
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-                      <label className="sm:w-32 text-xs font-medium text-gray-700">
-                        County
-                      </label>
-                      <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
-                        {deliveryAddress.county || "-"}
+                        {deliveryAddress.streetName}
                       </div>
                     </div>
                   </>
