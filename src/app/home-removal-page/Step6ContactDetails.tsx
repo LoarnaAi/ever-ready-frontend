@@ -452,6 +452,11 @@ export default function Step6ContactDetails({
         <MobileJobDetailsAccordion title="View Job Details">
           {/* Quote Summary Card - Same as desktop */}
           <div className="bg-white rounded-lg">
+            {/* Logo */}
+            <div className="mb-3">
+              <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+            </div>
+
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">{currentService.title}</h3>
             </div>
