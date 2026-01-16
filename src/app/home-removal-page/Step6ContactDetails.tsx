@@ -1039,7 +1039,7 @@ export default function Step6ContactDetails({
           <div className="space-y-3 sm:space-y-2">
             {/* First Name */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-              <label className="sm:w-24 text-xs font-medium text-gray-700">First name</label>
+              <label className="sm:w-24 text-xs font-medium text-gray-700">First name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={contactData.firstName}
@@ -1051,7 +1051,7 @@ export default function Step6ContactDetails({
 
             {/* Last Name */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-              <label className="sm:w-24 text-xs font-medium text-gray-700">Last name</label>
+              <label className="sm:w-24 text-xs font-medium text-gray-700">Last name <span className="text-red-500">*</span></label>
               <input
                 type="text"
                 value={contactData.lastName}
@@ -1063,7 +1063,7 @@ export default function Step6ContactDetails({
 
             {/* Email */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-              <label className="sm:w-24 text-xs font-medium text-gray-700">Email</label>
+              <label className="sm:w-24 text-xs font-medium text-gray-700">Email <span className="text-red-500">*</span></label>
               <input
                 type="email"
                 value={contactData.email}
@@ -1075,7 +1075,7 @@ export default function Step6ContactDetails({
 
             {/* Phone */}
             <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
-              <label className="sm:w-24 text-xs font-medium text-gray-700">Phone</label>
+              <label className="sm:w-24 text-xs font-medium text-gray-700">Phone <span className="text-red-500">*</span></label>
               <div className="flex-1 flex flex-col sm:flex-row gap-2">
                 <select
                   value={contactData.countryCode}
@@ -1157,7 +1157,7 @@ export default function Step6ContactDetails({
                 )}
               </div>
               <span className="text-sm text-gray-700">
-                I agree with the{" "}
+                <span className="text-red-500">* </span>I agree with the{" "}
                 <a href="/terms-and-conditions" className="text-orange-500 hover:underline">
                   Terms & Conditions
                 </a>
