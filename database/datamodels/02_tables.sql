@@ -1,10 +1,55 @@
 -- ============================================================================
+-- BUSINESSES TABLE (Multi-tenant root)
+-- ============================================================================
+create table businesses (
+  id uuid primary key default gen_random_uuid(),
+  slug varchar(100) unique not null,
+  name varchar(255) not null,
+  config jsonb not null default '{}',
+  is_active boolean not null default true,
+  created_at timestamptz not null default now()
+);
+
+comment on table businesses is 'Tenant businesses for multi-tenant support';
+comment on column businesses.slug is 'Unique business slug used in URLs and lookups';
+comment on column businesses.config is 'Business configuration JSON (theme, feature flags, etc.)';
+
+-- Insert demo business for development/testing
+insert into businesses (id, slug, name, config, is_active)
+values (
+  'demo-0000-0000-0000-000000000000'::uuid,
+  'demo',
+  'Demo Removals',
+  '{
+    "theme": {
+      "primary": "#f97316",
+      "primaryHover": "#ea580c",
+      "primaryLight": "#fff7ed",
+      "primaryBorder": "#fdba74",
+      "brandText": "#9333ea",
+      "primaryRing": "#fed7aa"
+    },
+    "features": {
+      "showTrustpilot": true,
+      "showNewsletterCheckbox": true,
+      "showPoweredBy": true
+    }
+  }',
+  true
+)
+on conflict (slug) do nothing;
+
+
+-- ============================================================================
 -- JOBS TABLE (Root entity)
 -- ============================================================================
 create table jobs (
   job_id uuid primary key default gen_random_uuid(),
   created_at timestamptz not null default now(),
   status text not null default 'pending',
+
+  -- Multi-tenant support (nullable for backwards compatibility)
+  business_id uuid null references businesses(id),
 
   -- Step 1: Home size selection
   home_size text not null,
@@ -25,6 +70,7 @@ create table jobs (
 );
 
 comment on table jobs is 'Root table for home removal job bookings';
+comment on column jobs.business_id is 'Owning business for multi-tenant support';
 comment on column jobs.home_size is 'Selected home size: 1-bedroom, 2-bedrooms, 3-bedrooms, 4-bedrooms';
 comment on column jobs.packing_service is 'Selected packing service option (e.g., all-inclusive)';
 comment on column jobs.extras is 'JSONB field for future form fields without schema migration';
