@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import { useTheme } from "@/lib/business";
 
 // Response from postcode lookup API
 interface PostcodeLookupData {
@@ -57,6 +58,7 @@ export default function Step4AddressDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step4AddressDetailsProps) {
+  const { businessName, styles } = useTheme();
   // Default address data
   const getDefaultAddressData = (): AddressData => ({
     postcode: "",
@@ -580,7 +582,7 @@ export default function Step4AddressDetails({
             <span className="text-sm text-gray-500">Addresses</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '66.66%' }}></div>
+            <div className="h-2 rounded-full" style={{ ...styles.progressBar, width: "66.66%" }}></div>
           </div>
         </div>
 
@@ -590,7 +592,7 @@ export default function Step4AddressDetails({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -607,8 +609,8 @@ export default function Step4AddressDetails({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-orange-500 h-1.5 rounded-full transition-all"
-                  style={{ width: "66.67%" }}
+                  className="h-1.5 rounded-full transition-all"
+                  style={{ ...styles.progressBar, width: "66.67%" }}
                 ></div>
               </div>
             </div>
@@ -619,7 +621,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>1. PrePopulated Items</span>
                   <svg
@@ -681,7 +683,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>2. Additional Items</span>
                   <svg
@@ -729,7 +731,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>3. Additional Services</span>
                   <svg
@@ -796,7 +798,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>4. Move Details</span>
                   <svg
@@ -869,7 +871,7 @@ export default function Step4AddressDetails({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
             </div>
 
             {/* Quote Summary Card */}
@@ -878,7 +880,7 @@ export default function Step4AddressDetails({
                 <h3 className="text-base font-semibold text-gray-900">
                   {currentService.title}
                 </h3>
-                <button className="text-xs text-orange-500 hover:text-orange-600">
+                <button className="text-xs font-medium transition-colors hover:opacity-80" style={styles.primaryText}>
                   Details
                 </button>
               </div>
@@ -890,8 +892,8 @@ export default function Step4AddressDetails({
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-1.5">
                   <div
-                    className="bg-orange-500 h-1.5 rounded-full transition-all"
-                    style={{ width: "66.67%" }}
+                    className="h-1.5 rounded-full transition-all"
+                    style={{ ...styles.progressBar, width: "66.67%" }}
                   ></div>
                 </div>
               </div>
@@ -902,7 +904,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>1. PrePopulated Items</span>
                     <svg
@@ -964,7 +966,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>2. Additional Items</span>
                     <svg
@@ -1012,7 +1014,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>3. Additional Services</span>
                     <svg
@@ -1079,7 +1081,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>4. Move Details</span>
                     <svg
@@ -1154,14 +1156,16 @@ export default function Step4AddressDetails({
                       }
                       onKeyDown={handleCollectionKeyDown}
                       placeholder="e.g. SW1A 1AA"
-                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      style={styles.focusRing}
                       autoComplete="off"
                     />
                     <button
                       type="button"
                       onClick={handleCollectionLookup}
                       disabled={isLookingUpCollection}
-                      className="px-4 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                      className="px-4 py-2 text-white font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      style={styles.primaryButton}
                     >
                       {isLookingUpCollection ? (
                         <>
@@ -1216,7 +1220,8 @@ export default function Step4AddressDetails({
                   <select
                     value={collectionAddress.floor}
                     onChange={(e) => updateCollectionAddress("floor", e.target.value)}
-                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    style={styles.focusRing}
                   >
                     {floorOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -1231,9 +1236,10 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${collectionAddress.hasParking
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={collectionAddress.hasParking ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateCollectionAddress("hasParking", !collectionAddress.hasParking)
                       }
@@ -1260,9 +1266,10 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${collectionAddress.hasLift
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={collectionAddress.hasLift ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateCollectionAddress("hasLift", !collectionAddress.hasLift)
                       }
@@ -1312,14 +1319,16 @@ export default function Step4AddressDetails({
                       }
                       onKeyDown={handleDeliveryKeyDown}
                       placeholder="e.g. SW1A 1AA"
-                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      style={styles.focusRing}
                       autoComplete="off"
                     />
                     <button
                       type="button"
                       onClick={handleDeliveryLookup}
                       disabled={isLookingUpDelivery}
-                      className="px-4 py-2 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm"
+                      className="px-4 py-2 text-white font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      style={styles.primaryButton}
                     >
                       {isLookingUpDelivery ? (
                         <>
@@ -1374,7 +1383,8 @@ export default function Step4AddressDetails({
                   <select
                     value={deliveryAddress.floor}
                     onChange={(e) => updateDeliveryAddress("floor", e.target.value)}
-                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    style={styles.focusRing}
                   >
                     {floorOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -1389,9 +1399,10 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${deliveryAddress.hasParking
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={deliveryAddress.hasParking ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateDeliveryAddress("hasParking", !deliveryAddress.hasParking)
                       }
@@ -1418,9 +1429,10 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${deliveryAddress.hasLift
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={deliveryAddress.hasLift ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateDeliveryAddress("hasLift", !deliveryAddress.hasLift)
                       }
@@ -1489,9 +1501,10 @@ export default function Step4AddressDetails({
                 onClick={onContinue}
                 disabled={!collectionAddress.city || !deliveryAddress.city}
                 className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${collectionAddress.city && deliveryAddress.city
-                  ? "bg-orange-500 text-white hover:bg-orange-600"
+                  ? "text-white hover:opacity-90"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
+                style={collectionAddress.city && deliveryAddress.city ? styles.primaryButton : undefined}
               >
                 Continue
               </button>
@@ -1514,5 +1527,3 @@ export default function Step4AddressDetails({
     </div>
   );
 }
-
-

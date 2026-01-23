@@ -35,6 +35,7 @@ export async function createJobAction(
         dismantle_package: data.dismantlePackage,
         status: "pending",
         internal_notes: "",
+        business_id: data.businessId || null,
       })
       .select("job_id")
       .single();
@@ -303,6 +304,7 @@ export async function getJobAction(
       contact: transformContact(contact),
       internalNotes: job.internal_notes,
       costBreakdown: transformCostBreakdown(costBreakdown),
+      businessId: job.business_id || null,
     };
 
     return { success: true, data: jobData };

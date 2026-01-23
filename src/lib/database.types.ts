@@ -11,6 +11,15 @@ export type DateType = 'collection' | 'materials_delivery';
 export type FurnitureListType = 'current' | 'initial';
 
 // Database row types
+export interface DbBusiness {
+  id: string;
+  slug: string;
+  name: string;
+  config: Record<string, unknown>;
+  is_active: boolean;
+  created_at: string;
+}
+
 export interface DbJob {
   job_id: string;
   created_at: string;
@@ -20,6 +29,7 @@ export interface DbJob {
   dismantle_package: boolean;
   internal_notes: string;
   user_id: string | null;
+  business_id: string | null;
   schema_version: number;
   extras: Record<string, unknown>;
 }
@@ -157,7 +167,10 @@ export interface JobData {
   contact: ContactDetails;
   internalNotes: string;
   costBreakdown: CostBreakdown | null;
+  businessId: string | null;
 }
 
 // Input type for creating a job (excludes auto-generated fields)
-export type CreateJobInput = Omit<JobData, 'job_id' | 'created_at' | 'status' | 'internalNotes' | 'costBreakdown'>;
+export type CreateJobInput = Omit<JobData, 'job_id' | 'created_at' | 'status' | 'internalNotes' | 'costBreakdown' | 'businessId'> & {
+  businessId?: string | null;
+};
