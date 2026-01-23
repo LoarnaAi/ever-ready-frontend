@@ -27,7 +27,7 @@ export interface BusinessFeatures {
 }
 
 export interface BusinessConfig {
-  /** UUID for database reference */
+  /** URL slug used as business identifier in the database */
   id: string;
   /** URL path slug (e.g., "acme-removals") */
   slug: string;

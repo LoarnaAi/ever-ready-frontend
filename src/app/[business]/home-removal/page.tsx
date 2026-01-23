@@ -344,7 +344,7 @@ export default function BusinessHomeRemoval() {
         collectionDate: savedData.collectionDate,
         materialsDeliveryDate: savedData.materialsDeliveryDate,
         contact: contactData,
-        businessId: config.id !== 'demo' ? config.id : null,
+        businessId: config.slug !== 'demo' ? config.slug : null,
       });
 
       if (result.success && result.jobId) {
@@ -562,11 +562,10 @@ export default function BusinessHomeRemoval() {
                 <div
                   key={service.id}
                   onClick={() => handleServiceSelect(service.id)}
-                  className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${
-                    selectedService === service.id
+                  className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${selectedService === service.id
                       ? "shadow-lg"
                       : "border-gray-200 hover:border-gray-300 hover:shadow-md"
-                  }`}
+                    }`}
                   style={selectedService === service.id ? { borderColor: theme.primary, backgroundColor: theme.primaryLight } : {}}
                 >
                   {/* House Icon */}
@@ -617,9 +616,8 @@ export default function BusinessHomeRemoval() {
               <button
                 onClick={handleContinue}
                 disabled={!selectedService}
-                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${
-                  !selectedService ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "text-white shadow-lg"
-                }`}
+                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${!selectedService ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "text-white shadow-lg"
+                  }`}
                 style={selectedService ? primaryBgStyle : {}}
                 onMouseOver={(e) => { if (selectedService) e.currentTarget.style.backgroundColor = theme.primaryHover; }}
                 onMouseOut={(e) => { if (selectedService) e.currentTarget.style.backgroundColor = theme.primary; }}

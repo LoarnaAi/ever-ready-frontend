@@ -6,7 +6,7 @@ import { DEFAULT_THEME, DEFAULT_FEATURES } from '../types';
  * Matches the current orange theme for backwards compatibility
  */
 export const demoConfig: BusinessConfig = {
-  id: 'demo-000-000-000',
+  id: 'demo',
   slug: 'demo',
   name: 'Your Business Name Goes Here',
   theme: DEFAULT_THEME,

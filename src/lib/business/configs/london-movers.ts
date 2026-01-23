@@ -5,7 +5,7 @@ import type { BusinessConfig } from '../types';
  * Example of a customer with a blue theme
  */
 export const londonMoversConfig: BusinessConfig = {
-  id: 'london-movers-001',
+  id: 'london-movers',
   slug: 'london-movers',
   name: 'London Movers',
   theme: {
