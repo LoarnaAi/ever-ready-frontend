@@ -596,20 +596,6 @@ export default function BusinessHomeRemoval() {
                   <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 text-center">
                     {service.title}
                   </h3>
-
-                  {/* Select Button */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleServiceSelect(service.id);
-                    }}
-                    className="w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base min-h-[44px]"
-                    style={selectedService === service.id ? { ...primaryBgStyle, color: 'white' } : { backgroundColor: '#f3f4f6', color: '#374151' }}
-                    onMouseOver={(e) => { if (selectedService === service.id) e.currentTarget.style.backgroundColor = theme.primaryHover; }}
-                    onMouseOut={(e) => { if (selectedService === service.id) e.currentTarget.style.backgroundColor = theme.primary; }}
-                  >
-                    {selectedService === service.id ? "Selected" : "Select"}
-                  </button>
                 </div>
               ))}
             </div>
