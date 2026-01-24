@@ -2,15 +2,23 @@
 
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
+import { useTheme } from "@/lib/business";
 
-declare global {
-  interface Window {
-    google: any;
-    initGooglePlaces: () => void;
-  }
+// Response from postcode lookup API
+interface PostcodeLookupData {
+  house_number: string | null;
+  building_name: string | null;
+  street_name: string;
+  city: string;
+  county: string;
+  postcode: string;
+  country: string;
+  latitude: number;
+  longitude: number;
 }
 
 interface Step4AddressDetailsProps {
@@ -31,6 +39,14 @@ interface AddressData {
   hasParking: boolean;
   hasLift: boolean;
   hasAdditionalAddress: boolean;
+  // New fields from postcode lookup
+  houseNumber: string;
+  buildingName: string;
+  streetName: string;
+  city: string;
+  county: string;
+  latitude: number;
+  longitude: number;
 }
 
 export default function Step4AddressDetails({
@@ -43,26 +59,38 @@ export default function Step4AddressDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step4AddressDetailsProps) {
+  const { busRef, styles } = useTheme();
+  // Default address data
+  const getDefaultAddressData = (): AddressData => ({
+    postcode: "",
+    address: "",
+    floor: "",
+    hasParking: true,
+    hasLift: true,
+    hasAdditionalAddress: false,
+    houseNumber: "",
+    buildingName: "",
+    streetName: "",
+    city: "",
+    county: "",
+    latitude: 0,
+    longitude: 0,
+  });
+
   // Load saved address data from localStorage
   const loadSavedCollectionData = (): AddressData => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("step4_collectionAddress");
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          return { ...getDefaultAddressData(), ...parsed };
         } catch (e) {
           // If parsing fails, return default
         }
       }
     }
-    return {
-      postcode: "",
-      address: "",
-      floor: "",
-      hasParking: true,
-      hasLift: true,
-      hasAdditionalAddress: false,
-    };
+    return getDefaultAddressData();
   };
 
   const loadSavedDeliveryData = (): AddressData => {
@@ -70,20 +98,14 @@ export default function Step4AddressDetails({
       const saved = localStorage.getItem("step4_deliveryAddress");
       if (saved) {
         try {
-          return JSON.parse(saved);
+          const parsed = JSON.parse(saved);
+          return { ...getDefaultAddressData(), ...parsed };
         } catch (e) {
           // If parsing fails, return default
         }
       }
     }
-    return {
-      postcode: "",
-      address: "",
-      floor: "",
-      hasParking: true,
-      hasLift: true,
-      hasAdditionalAddress: false,
-    };
+    return getDefaultAddressData();
   };
 
   const [collectionAddress, setCollectionAddress] = useState<AddressData>(loadSavedCollectionData());
@@ -100,147 +122,136 @@ export default function Step4AddressDetails({
     moveDetails: false,
   });
 
-  // Refs for Google Places autocomplete (attached to postcode inputs)
-  const collectionPostcodeInputRef = useRef<HTMLInputElement>(null);
-  const deliveryPostcodeInputRef = useRef<HTMLInputElement>(null);
-  const collectionAutocompleteRef = useRef<any>(null);
-  const deliveryAutocompleteRef = useRef<any>(null);
+  // Postcode lookup states
+  const [isLookingUpCollection, setIsLookingUpCollection] = useState(false);
+  const [isLookingUpDelivery, setIsLookingUpDelivery] = useState(false);
+  const [lookupErrorCollection, setLookupErrorCollection] = useState<string | null>(null);
+  const [lookupErrorDelivery, setLookupErrorDelivery] = useState<string | null>(null);
 
-  // Initialize Google Places Autocomplete
-  useEffect(() => {
-    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
-
-    // Skip if no API key
-    if (!apiKey || apiKey === "your_google_places_api_key_here") {
+  // Postcode lookup function for collection address
+  const handleCollectionLookup = async () => {
+    const postcode = collectionAddress.postcode.trim();
+    if (!postcode) {
+      setLookupErrorCollection("Please enter a postcode");
       return;
     }
 
-    // Extract postcode from address components or formatted address
-    const extractPostcode = (place: any): string => {
-      let postcode = "";
+    setIsLookingUpCollection(true);
+    setLookupErrorCollection(null);
 
-      if (place.address_components && Array.isArray(place.address_components)) {
-        const postcodeComponent = place.address_components.find(
-          (component: any) =>
-            component.types &&
-            Array.isArray(component.types) &&
-            component.types.includes("postal_code")
-        );
-
-        if (postcodeComponent?.long_name) {
-          postcode = postcodeComponent.long_name;
-        }
-      }
-
-      // Fallback: Extract postcode from formatted address using regex
-      if (!postcode && place.formatted_address) {
-        const postcodeMatch = place.formatted_address.match(
-          /[A-Z]{1,2}\d[A-Z\d]?\s*\d[A-Z]{2}/i
-        );
-        if (postcodeMatch) {
-          postcode = postcodeMatch[0].toUpperCase();
-        }
-      }
-
-      return postcode;
-    };
-
-    // Function to initialize autocomplete for an input
-    const initAutocomplete = (
-      inputRef: React.RefObject<HTMLInputElement>,
-      autocompleteRef: React.MutableRefObject<any>,
-      updateAddress: (field: keyof AddressData, value: string | boolean) => void
-    ) => {
-      if (!window.google?.maps?.places || !inputRef.current) {
-        return;
-      }
-
-      // Clean up existing instance
-      if (autocompleteRef.current) {
-        window.google.maps.event.clearInstanceListeners(autocompleteRef.current);
-      }
-
-      // Create new autocomplete instance
-      autocompleteRef.current = new window.google.maps.places.Autocomplete(
-        inputRef.current,
-        {
-          types: ["address"],
-          componentRestrictions: { country: "gb" },
-          fields: ["formatted_address", "address_components"],
-        }
+    try {
+      const response = await fetch(
+        `/api/postcode-lookup-google-api/${encodeURIComponent(postcode)}`
       );
 
-      // Listen for place selection
-      autocompleteRef.current.addListener("place_changed", () => {
-        const place = autocompleteRef.current.getPlace();
+      if (!response.ok) {
+        throw new Error("Postcode not found or invalid");
+      }
 
-        if (place.formatted_address) {
-          // Store the full address
-          updateAddress("address", place.formatted_address);
+      const data: PostcodeLookupData = await response.json();
 
-          // Extract postcode
-          const postcode = extractPostcode(place);
-          if (postcode) {
-            // Update postcode state
-            updateAddress("postcode", postcode);
-            // Set the input value to just the postcode
-            if (inputRef.current) {
-              inputRef.current.value = postcode;
-            }
-          }
+      // Update collection address with lookup data
+      setCollectionAddress((prev) => {
+        // Concatenate street name, city, and county
+        const fullStreetName = [data.street_name, data.city, data.county]
+          .filter(Boolean)
+          .join(", ");
+
+        const updated = {
+          ...prev,
+          postcode: data.postcode,
+          streetName: fullStreetName,
+          city: data.city,
+          county: data.county,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          address: fullStreetName,
+          // Set to empty strings (will be null in DB)
+          houseNumber: "",
+          buildingName: "",
+        };
+        if (typeof window !== "undefined") {
+          localStorage.setItem("step4_collectionAddress", JSON.stringify(updated));
         }
+        return updated;
       });
-    };
+    } catch (err) {
+      setLookupErrorCollection(
+        err instanceof Error ? err.message : "Failed to lookup postcode"
+      );
+    } finally {
+      setIsLookingUpCollection(false);
+    }
+  };
 
-    // Load Google Maps API if not already loaded
-    if (!window.google?.maps) {
-      const script = document.createElement("script");
-      script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
-      script.async = true;
-      script.onload = () => {
-        // Small delay to ensure everything is ready
-        setTimeout(() => {
-          initAutocomplete(
-            collectionPostcodeInputRef,
-            collectionAutocompleteRef,
-            updateCollectionAddress
-          );
-          initAutocomplete(
-            deliveryPostcodeInputRef,
-            deliveryAutocompleteRef,
-            updateDeliveryAddress
-          );
-        }, 100);
-      };
-      document.head.appendChild(script);
-    } else {
-      // API already loaded, initialize immediately
-      initAutocomplete(
-        collectionPostcodeInputRef,
-        collectionAutocompleteRef,
-        updateCollectionAddress
-      );
-      initAutocomplete(
-        deliveryPostcodeInputRef,
-        deliveryAutocompleteRef,
-        updateDeliveryAddress
-      );
+  // Postcode lookup function for delivery address
+  const handleDeliveryLookup = async () => {
+    const postcode = deliveryAddress.postcode.trim();
+    if (!postcode) {
+      setLookupErrorDelivery("Please enter a postcode");
+      return;
     }
 
-    // Cleanup on unmount
-    return () => {
-      if (collectionAutocompleteRef.current && window.google?.maps?.event) {
-        window.google.maps.event.clearInstanceListeners(
-          collectionAutocompleteRef.current
-        );
+    setIsLookingUpDelivery(true);
+    setLookupErrorDelivery(null);
+
+    try {
+      const response = await fetch(
+        `/api/postcode-lookup-google-api/${encodeURIComponent(postcode)}`
+      );
+
+      if (!response.ok) {
+        throw new Error("Postcode not found or invalid");
       }
-      if (deliveryAutocompleteRef.current && window.google?.maps?.event) {
-        window.google.maps.event.clearInstanceListeners(
-          deliveryAutocompleteRef.current
-        );
-      }
-    };
-  }, []);
+
+      const data: PostcodeLookupData = await response.json();
+
+      // Update delivery address with lookup data
+      setDeliveryAddress((prev) => {
+        // Concatenate street name, city, and county
+        const fullStreetName = [data.street_name, data.city, data.county]
+          .filter(Boolean)
+          .join(", ");
+
+        const updated = {
+          ...prev,
+          postcode: data.postcode,
+          streetName: fullStreetName,
+          city: data.city,
+          county: data.county,
+          latitude: data.latitude,
+          longitude: data.longitude,
+          address: fullStreetName,
+          // Set to empty strings (will be null in DB)
+          houseNumber: "",
+          buildingName: "",
+        };
+        if (typeof window !== "undefined") {
+          localStorage.setItem("step4_deliveryAddress", JSON.stringify(updated));
+        }
+        return updated;
+      });
+    } catch (err) {
+      setLookupErrorDelivery(
+        err instanceof Error ? err.message : "Failed to lookup postcode"
+      );
+    } finally {
+      setIsLookingUpDelivery(false);
+    }
+  };
+
+  // Handle Enter key for postcode lookup
+  const handleCollectionKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleCollectionLookup();
+    }
+  };
+
+  const handleDeliveryKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      handleDeliveryLookup();
+    }
+  };
 
   const floorOptions = [
     { value: "", label: "Select floor" },
@@ -572,7 +583,7 @@ export default function Step4AddressDetails({
             <span className="text-sm text-gray-500">Addresses</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '66.66%' }}></div>
+            <div className="h-2 rounded-full" style={{ ...styles.progressBar, width: "66.66%" }}></div>
           </div>
         </div>
 
@@ -594,8 +605,8 @@ export default function Step4AddressDetails({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-orange-500 h-1.5 rounded-full transition-all"
-                  style={{ width: "66.67%" }}
+                  className="h-1.5 rounded-full transition-all"
+                  style={{ ...styles.progressBar, width: "66.67%" }}
                 ></div>
               </div>
             </div>
@@ -606,7 +617,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>1. PrePopulated Items</span>
                   <svg
@@ -668,7 +679,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>2. Additional Items</span>
                   <svg
@@ -716,7 +727,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>3. Additional Services</span>
                   <svg
@@ -783,7 +794,7 @@ export default function Step4AddressDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>4. Move Details</span>
                   <svg
@@ -856,7 +867,7 @@ export default function Step4AddressDetails({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold text-orange-500">Ever Ready</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -865,7 +876,7 @@ export default function Step4AddressDetails({
                 <h3 className="text-base font-semibold text-gray-900">
                   {currentService.title}
                 </h3>
-                <button className="text-xs text-orange-500 hover:text-orange-600">
+                <button className="text-xs font-medium transition-colors hover:opacity-80" style={styles.primaryText}>
                   Details
                 </button>
               </div>
@@ -877,8 +888,8 @@ export default function Step4AddressDetails({
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-1.5">
                   <div
-                    className="bg-orange-500 h-1.5 rounded-full transition-all"
-                    style={{ width: "66.67%" }}
+                    className="h-1.5 rounded-full transition-all"
+                    style={{ ...styles.progressBar, width: "66.67%" }}
                   ></div>
                 </div>
               </div>
@@ -889,7 +900,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>1. PrePopulated Items</span>
                     <svg
@@ -951,7 +962,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>2. Additional Items</span>
                     <svg
@@ -999,7 +1010,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>3. Additional Services</span>
                     <svg
@@ -1066,7 +1077,7 @@ export default function Step4AddressDetails({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>4. Move Details</span>
                     <svg
@@ -1127,34 +1138,74 @@ export default function Step4AddressDetails({
               </h2>
 
               <div className="space-y-3 sm:space-y-2">
-                {/* Postcode Input with Address Autocomplete */}
+                {/* Postcode Input with Search Button */}
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                   <label className="sm:w-32 text-xs font-medium text-gray-700">
-                    Search Street Name or Address
+                    Postcode
                   </label>
-                  <input
-                    ref={collectionPostcodeInputRef}
-                    type="text"
-                    value={collectionAddress.postcode}
-                    onChange={(e) =>
-                      updateCollectionAddress("postcode", e.target.value.toUpperCase())
-                    }
-                    placeholder="Start typing address or postcode..."
-                    className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                    autoComplete="off"
-                  />
+                  <div className="flex-1 flex gap-2">
+                    <input
+                      type="text"
+                      value={collectionAddress.postcode}
+                      onChange={(e) =>
+                        updateCollectionAddress("postcode", e.target.value.toUpperCase())
+                      }
+                      onKeyDown={handleCollectionKeyDown}
+                      placeholder="e.g. SW1A 1AA"
+                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      style={styles.focusRing}
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleCollectionLookup}
+                      disabled={isLookingUpCollection}
+                      className="px-4 py-2 font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      style={styles.primaryButton}
+                    >
+                      {isLookingUpCollection ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>Searching...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          <span>Search</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
-                {/* Display selected address */}
-                {collectionAddress.address && (
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
-                    <label className="sm:w-32 text-xs font-medium text-gray-700">
-                      Street Name & Address
-                    </label>
-                    <div className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
-                      {collectionAddress.address}
+                {/* Lookup Error */}
+                {lookupErrorCollection && (
+                  <p className="text-red-600 text-xs flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {lookupErrorCollection}
+                  </p>
+                )}
+
+                {/* Address fields shown after successful lookup */}
+                {collectionAddress.city && (
+                  <>
+                    {/* Street Name - Read-only, displays concatenated address */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                      <label className="sm:w-32 text-xs font-medium text-gray-700">
+                        Street Name
+                      </label>
+                      <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+                        {collectionAddress.streetName}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
 
                 {/* Floor Select */}
@@ -1165,7 +1216,8 @@ export default function Step4AddressDetails({
                   <select
                     value={collectionAddress.floor}
                     onChange={(e) => updateCollectionAddress("floor", e.target.value)}
-                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    style={styles.focusRing}
                   >
                     {floorOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -1180,16 +1232,18 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${collectionAddress.hasParking
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={collectionAddress.hasParking ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateCollectionAddress("hasParking", !collectionAddress.hasParking)
                       }
                     >
                       {collectionAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1209,16 +1263,18 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${collectionAddress.hasLift
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={collectionAddress.hasLift ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateCollectionAddress("hasLift", !collectionAddress.hasLift)
                       }
                     >
                       {collectionAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1247,34 +1303,74 @@ export default function Step4AddressDetails({
               </h2>
 
               <div className="space-y-3 sm:space-y-2">
-                {/* Postcode Input with Address Autocomplete */}
+                {/* Postcode Input with Search Button */}
                 <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
                   <label className="sm:w-32 text-xs font-medium text-gray-700">
-                    Search Street Name or Address
+                    Postcode
                   </label>
-                  <input
-                    ref={deliveryPostcodeInputRef}
-                    type="text"
-                    value={deliveryAddress.postcode}
-                    onChange={(e) =>
-                      updateDeliveryAddress("postcode", e.target.value.toUpperCase())
-                    }
-                    placeholder="Start typing address or postcode..."
-                    className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
-                    autoComplete="off"
-                  />
+                  <div className="flex-1 flex gap-2">
+                    <input
+                      type="text"
+                      value={deliveryAddress.postcode}
+                      onChange={(e) =>
+                        updateDeliveryAddress("postcode", e.target.value.toUpperCase())
+                      }
+                      onKeyDown={handleDeliveryKeyDown}
+                      placeholder="e.g. SW1A 1AA"
+                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      style={styles.focusRing}
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      onClick={handleDeliveryLookup}
+                      disabled={isLookingUpDelivery}
+                      className="px-4 py-2 font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      style={styles.primaryButton}
+                    >
+                      {isLookingUpDelivery ? (
+                        <>
+                          <svg className="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          </svg>
+                          <span>Searching...</span>
+                        </>
+                      ) : (
+                        <>
+                          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                          <span>Search</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
                 </div>
 
-                {/* Display selected address */}
-                {deliveryAddress.address && (
-                  <div className="flex flex-col sm:flex-row sm:items-start gap-1 sm:gap-3">
-                    <label className="sm:w-32 text-xs font-medium text-gray-700">
-                      Street Name & Address
-                    </label>
-                    <div className="flex-1 px-3 py-2 text-sm bg-gray-50 border border-gray-200 rounded-lg text-gray-700">
-                      {deliveryAddress.address}
+                {/* Lookup Error */}
+                {lookupErrorDelivery && (
+                  <p className="text-red-600 text-xs flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    {lookupErrorDelivery}
+                  </p>
+                )}
+
+                {/* Address fields shown after successful lookup */}
+                {deliveryAddress.city && (
+                  <>
+                    {/* Street Name - Read-only, displays concatenated address */}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3">
+                      <label className="sm:w-32 text-xs font-medium text-gray-700">
+                        Street Name
+                      </label>
+                      <div className="flex-1 px-3 py-2 text-sm bg-gray-100 border border-gray-200 rounded-lg text-gray-700">
+                        {deliveryAddress.streetName}
+                      </div>
                     </div>
-                  </div>
+                  </>
                 )}
 
                 {/* Floor Select */}
@@ -1285,7 +1381,8 @@ export default function Step4AddressDetails({
                   <select
                     value={deliveryAddress.floor}
                     onChange={(e) => updateDeliveryAddress("floor", e.target.value)}
-                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    className="w-full sm:w-auto px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                    style={styles.focusRing}
                   >
                     {floorOptions.map((option) => (
                       <option key={option.value} value={option.value}>
@@ -1300,16 +1397,18 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${deliveryAddress.hasParking
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={deliveryAddress.hasParking ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateDeliveryAddress("hasParking", !deliveryAddress.hasParking)
                       }
                     >
                       {deliveryAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1329,16 +1428,18 @@ export default function Step4AddressDetails({
                   <label className="flex items-center gap-2 cursor-pointer group">
                     <div
                       className={`w-5 h-5 rounded flex items-center justify-center transition-all ${deliveryAddress.hasLift
-                        ? "bg-orange-500"
+                        ? ""
                         : "bg-white border-2 border-gray-300 group-hover:border-gray-400"
                         }`}
+                      style={deliveryAddress.hasLift ? styles.primaryButton : undefined}
                       onClick={() =>
                         updateDeliveryAddress("hasLift", !deliveryAddress.hasLift)
                       }
                     >
                       {deliveryAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1359,18 +1460,6 @@ export default function Step4AddressDetails({
 
             {/* Divider */}
             <hr className="border-gray-200 my-4" />
-
-            {/* API Key Warning */}
-            {(!process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ||
-              process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY ===
-              "your_google_places_api_key_here") && (
-                <div className="text-sm text-amber-600 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
-                  <div className="font-medium mb-1">Google Places API Key Required</div>
-                  <div className="text-xs">
-                    Add your Google Places API key to .env.local for address autocomplete
-                  </div>
-                </div>
-              )}
 
             {/* Please Note Section */}
             <div className="bg-gray-50 border border-gray-200 rounded-lg p-3 mb-4">
@@ -1410,11 +1499,12 @@ export default function Step4AddressDetails({
               <button
                 type="button"
                 onClick={onContinue}
-                disabled={!collectionAddress.postcode || !deliveryAddress.postcode}
-                className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${collectionAddress.postcode && deliveryAddress.postcode
-                  ? "bg-orange-500 text-white hover:bg-orange-600"
+                disabled={!collectionAddress.city || !deliveryAddress.city}
+                className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${collectionAddress.city && deliveryAddress.city
+                  ? "hover:opacity-90"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
+                style={collectionAddress.city && deliveryAddress.city ? styles.primaryButton : undefined}
               >
                 Continue
               </button>
@@ -1437,5 +1527,3 @@ export default function Step4AddressDetails({
     </div>
   );
 }
-
-

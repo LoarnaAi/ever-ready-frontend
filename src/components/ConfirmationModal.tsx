@@ -3,11 +3,14 @@
 "use client";
 
 import { useState } from "react";
-import { formatJobId } from "@/lib/tempDb";
+import { formatJobId } from "@/lib/utils/jobUtils";
+import { useTheme } from "@/lib/business";
+import BusinessLogo from "@/components/BusinessLogo";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   jobId: string;
+  displayJobId?: string | null;
   onClose: () => void;
   onViewSummary: () => void;
 }
@@ -15,14 +18,16 @@ interface ConfirmationModalProps {
 export default function ConfirmationModal({
   isOpen,
   jobId,
+  displayJobId,
   onClose,
   onViewSummary,
 }: ConfirmationModalProps) {
   const [copied, setCopied] = useState(false);
+  const { theme, styles } = useTheme();
 
   if (!isOpen) return null;
 
-  const formattedJobId = formatJobId(jobId);
+  const formattedJobId = formatJobId(jobId, displayJobId);
 
   const handleCopyJobId = async () => {
     try {
@@ -53,10 +58,17 @@ export default function ConfirmationModal({
       {/* Modal */}
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
         {/* Success Header */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 px-6 py-8 text-center">
+        <div className="px-6 py-8 text-center" style={{ background: `linear-gradient(to right, ${theme.primary}, ${theme.primaryHover})` }}>
+          {/* Business Logo */}
+          <div className="mb-4 flex justify-center">
+            <div className="bg-white rounded-lg px-3 py-2">
+              <BusinessLogo variant="full" width={120} height={36} />
+            </div>
+          </div>
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
-              className="w-10 h-10 text-orange-500"
+              className="w-10 h-10"
+              style={styles.primaryText}
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -69,10 +81,10 @@ export default function ConfirmationModal({
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-bold mb-2" style={styles.primaryButtonText}>
             Job Submitted Successfully!
           </h2>
-          <p className="text-orange-100 text-sm">
+          <p className="text-sm opacity-80" style={styles.primaryButtonText}>
             Your booking request has been received
           </p>
         </div>
@@ -90,7 +102,8 @@ export default function ConfirmationModal({
               </span>
               <button
                 onClick={handleCopyJobId}
-                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-orange-600 hover:text-orange-700 hover:bg-orange-50 rounded-lg transition-colors"
+                className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors hover:opacity-80"
+                style={styles.primaryText}
               >
                 {copied ? (
                   <>
@@ -129,43 +142,27 @@ export default function ConfirmationModal({
             </div>
           </div>
 
-          {/* Info Message */}
-          <div className="flex items-start gap-3 mb-6">
-            <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center flex-shrink-0">
-              <svg
-                className="w-5 h-5 text-blue-600"
-                fill="currentColor"
-                viewBox="0 0 20 20"
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm text-gray-700">
-                Our team will review your request and contact you shortly to confirm
-                the details and finalize your booking.
-              </p>
-            </div>
-          </div>
-
           {/* Actions */}
           <div className="space-y-3">
             <button
               onClick={onViewSummary}
-              className="w-full py-3 px-4 bg-orange-500 text-white font-semibold rounded-xl hover:bg-orange-600 transition-colors shadow-lg shadow-orange-500/25"
+              className="w-full py-3 px-4 font-semibold rounded-xl transition-colors shadow-lg hover:opacity-90"
+              style={{ ...styles.primaryButton, boxShadow: `0 10px 15px -3px ${theme.primary}40` }}
             >
               View Booking Summary
             </button>
+            <p className="text-xs text-center mt-1" style={styles.primaryText}>
+              <span className="inline-block">↑</span> Note: View the report that will be sent to your business over Email or WhatsApp
+            </p>
             <button
               onClick={onClose}
               className="w-full py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
             >
               Close
             </button>
+            <p className="text-sm text-gray-600 text-center">
+              Our team will review your request and contact you shortly to confirm the details and finalize your booking.
+            </p>
           </div>
         </div>
 

@@ -5,6 +5,8 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
+import { useTheme } from "@/lib/business";
 
 interface Step2FurnitureSelectionProps {
   serviceParam: string | null;
@@ -21,6 +23,8 @@ export default function Step2FurnitureSelection({
   onPrevious,
   initialFurnitureQuantities = {},
 }: Step2FurnitureSelectionProps) {
+  const { theme, busRef, styles } = useTheme();
+
   // Helper function to convert name to ID
   const nameToId = (name: string): string => {
     return name
@@ -423,7 +427,7 @@ export default function Step2FurnitureSelection({
             <span className="text-sm text-gray-500">Inventory</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '33.33%' }}></div>
+            <div className="h-2 rounded-full" style={{ ...styles.progressBar, width: '33.33%' }}></div>
           </div>
         </div>
 
@@ -452,7 +456,7 @@ export default function Step2FurnitureSelection({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold text-orange-500">Ever Ready</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -464,7 +468,7 @@ export default function Step2FurnitureSelection({
                   </h3>
                   <p className="text-xs text-gray-500 mt-0.5">Base package</p>
                 </div>
-                <button className="text-xs text-orange-500 hover:text-orange-600 font-medium transition-colors">
+                <button className="text-xs hover:opacity-80 font-medium transition-colors" style={styles.primaryText}>
                   Details
                 </button>
               </div>
@@ -477,8 +481,8 @@ export default function Step2FurnitureSelection({
                 </div>
                 <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                   <div
-                    className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-300"
-                    style={{ width: "33.33%" }}
+                    className="h-2 rounded-full transition-all duration-300"
+                    style={{ ...styles.progressBarGradient, width: "33.33%" }}
                   ></div>
                 </div>
               </div>
@@ -489,7 +493,7 @@ export default function Step2FurnitureSelection({
                 <div className="space-y-2">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>1. PrePopulated Items</span>
                     <svg
@@ -521,7 +525,7 @@ export default function Step2FurnitureSelection({
                                       className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
                                     >
                                       <div className="mt-0.5">
-                                        {getFurnitureIcon(item.id, item.name, 14)}
+                                        {getFurnitureIcon(item.id, item.name, 14, "text-gray-600")}
                                       </div>
                                       <span className="flex-1">
                                         <span className="text-gray-800 font-medium">{item.name}</span>
@@ -551,7 +555,7 @@ export default function Step2FurnitureSelection({
                 <div className="space-y-2 pt-3 border-t border-gray-200">
                   <button
                     onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                    className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                   >
                     <span>2. Additional Items</span>
                     <svg
@@ -573,7 +577,7 @@ export default function Step2FurnitureSelection({
                               className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
                             >
                               <div className="mt-0.5">
-                                {getFurnitureIcon(item.id, item.name, 14)}
+                                {getFurnitureIcon(item.id, item.name, 14, "text-gray-600")}
                               </div>
                               <span className="flex-1">
                                 <span className="text-gray-800 font-medium">{item.name}</span>
@@ -700,8 +704,8 @@ export default function Step2FurnitureSelection({
                   </div>
                   <div className="w-full bg-gray-200 rounded-full h-2 overflow-hidden">
                     <div
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 h-2 rounded-full transition-all duration-300"
-                      style={{ width: "33.33%" }}
+                      className="h-2 rounded-full transition-all duration-300"
+                      style={{ ...styles.progressBarGradient, width: "33.33%" }}
                     ></div>
                   </div>
                 </div>
@@ -712,7 +716,7 @@ export default function Step2FurnitureSelection({
                   <div className="space-y-2">
                     <button
                       onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                      className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                      className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                     >
                       <span>1. PrePopulated Items</span>
                       <svg
@@ -744,7 +748,7 @@ export default function Step2FurnitureSelection({
                                         className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
                                       >
                                         <div className="mt-0.5">
-                                          {getFurnitureIcon(item.id, item.name, 14)}
+                                          {getFurnitureIcon(item.id, item.name, 14, "text-gray-600")}
                                         </div>
                                         <span className="flex-1">
                                           <span className="text-gray-800 font-medium">{item.name}</span>
@@ -774,7 +778,7 @@ export default function Step2FurnitureSelection({
                   <div className="space-y-2 pt-3 border-t border-gray-200">
                     <button
                       onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                      className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                      className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                     >
                       <span>2. Additional Items</span>
                       <svg
@@ -796,7 +800,7 @@ export default function Step2FurnitureSelection({
                                 className="flex items-start gap-2 text-xs text-gray-700 leading-relaxed"
                               >
                                 <div className="mt-0.5">
-                                  {getFurnitureIcon(item.id, item.name, 14)}
+                                  {getFurnitureIcon(item.id, item.name, 14, "text-gray-600")}
                                 </div>
                                 <span className="flex-1">
                                   <span className="text-gray-800 font-medium">{item.name}</span>
@@ -916,7 +920,10 @@ export default function Step2FurnitureSelection({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="e.g. sofa, wardrobe, bicycle..."
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:border-orange-500 focus:ring-2 focus:ring-orange-200 outline-none transition-all text-sm sm:text-base"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 outline-none transition-all text-sm sm:text-base"
+                  style={{ '--tw-ring-color': theme.primaryRing } as React.CSSProperties}
+                  onFocus={(e) => e.target.style.borderColor = theme.primary}
+                  onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}
                 />
                 {searchQuery && (
                   <button
@@ -1007,27 +1014,34 @@ export default function Step2FurnitureSelection({
                   const isSelected = quantity > 0;
                   const isPrepopulated = initialQuantity > 0;
 
+                  const cardStyle = isPrepopulated && !isSelected
+                    ? {}
+                    : isSelected
+                      ? { borderColor: theme.primary, backgroundColor: `${theme.primaryLight}80` }
+                      : {};
+
                   return (
                     <div
                       key={item.id}
                       className={`border-2 rounded-lg p-4 transition-all ${isPrepopulated && !isSelected
                         ? "border-red-200 bg-red-50/30"
                         : isSelected
-                          ? "border-orange-500 bg-orange-50/30"
-                          : "border-gray-200 bg-white hover:border-orange-300 hover:shadow-sm"
+                          ? ""
+                          : "border-gray-200 bg-white hover:shadow-sm"
                         }`}
+                      style={cardStyle}
                     >
                       <div className="flex items-center justify-between">
                         <div className="flex-1 flex items-start gap-3">
-                          <div className="mt-0.5">
-                            {getFurnitureIcon(item.id, item.title, 20)}
+                          <div className="mt-0.5" style={styles.primaryText}>
+                            {getFurnitureIcon(item.id, item.title, 20, "text-current")}
                           </div>
                           <div className="flex-1">
                             <h3 className="text-sm font-semibold text-gray-900 mb-1">
                               {item.title}
                             </h3>
                             {isPrepopulated && isSelected && (
-                              <div className="text-xs text-orange-600 font-medium mt-1 flex items-center gap-1">
+                              <div className="text-xs font-medium mt-1 flex items-center gap-1" style={styles.primaryText}>
                                 <svg
                                   className="w-3 h-3"
                                   fill="none"
@@ -1069,7 +1083,7 @@ export default function Step2FurnitureSelection({
                             )}
                             {!isPrepopulated && isSelected && additionalQuantity > 0 && (
                               <div className="text-xs text-gray-600 mt-1">
-                                <span className="text-orange-600 font-medium">
+                                <span className="font-medium" style={styles.primaryText}>
                                   {additionalQuantity} additional item{additionalQuantity > 1 ? "s" : ""} added
                                 </span>
                               </div>
@@ -1112,7 +1126,8 @@ export default function Step2FurnitureSelection({
                                     e.stopPropagation();
                                     handleAddFurniture(item.id);
                                   }}
-                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
+                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs hover:opacity-90 shadow-sm"
+                                  style={styles.primaryButton}
                                 >
                                   Add More
                                 </button>
@@ -1172,7 +1187,8 @@ export default function Step2FurnitureSelection({
                                 e.stopPropagation();
                                 handleAddFurniture(item.id);
                               }}
-                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm bg-orange-500 text-white hover:bg-orange-600 shadow-sm"
+                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm hover:opacity-90 shadow-sm"
+                              style={styles.primaryButton}
                             >
                               Add
                             </button>
@@ -1186,8 +1202,11 @@ export default function Step2FurnitureSelection({
             </div>
 
             {/* Quick Add Suggestions */}
-            <div className="bg-gradient-to-r from-orange-50 to-amber-50 border border-orange-200 rounded-xl p-4 mt-6">
-              <p className="text-xs font-semibold text-orange-700 uppercase tracking-wide mb-3">
+            <div
+              className="border rounded-xl p-4 mt-6"
+              style={{ backgroundColor: `${theme.primaryLight}`, borderColor: theme.primaryBorder }}
+            >
+              <p className="text-xs font-semibold uppercase tracking-wide mb-3" style={styles.primaryText}>
                 Popular items to add
               </p>
               <div className="flex flex-wrap gap-2">
@@ -1197,7 +1216,8 @@ export default function Step2FurnitureSelection({
                     onClick={() => {
                       setSearchQuery(item);
                     }}
-                    className="px-3 py-1.5 bg-white border border-orange-300 rounded-full text-xs font-medium text-orange-700 hover:bg-orange-100 hover:border-orange-400 transition-all shadow-sm"
+                    className="px-3 py-1.5 bg-white rounded-full text-xs font-medium text-gray-900 hover:opacity-80 transition-all shadow-sm"
+                    style={{ borderColor: theme.primaryBorder, borderWidth: "1px" }}
                   >
                     + {item}
                   </button>
@@ -1218,7 +1238,8 @@ export default function Step2FurnitureSelection({
               </button>
               <button
                 onClick={() => onContinue(furnitureQuantities)}
-                className="w-full sm:w-auto px-6 py-3 bg-orange-500 text-white rounded-lg font-medium hover:bg-orange-600 shadow-lg transition-all text-base min-h-[48px]"
+                className="w-full sm:w-auto px-6 py-3 rounded-lg font-medium hover:opacity-90 shadow-lg transition-all text-base min-h-[48px]"
+                style={styles.primaryButton}
               >
                 Continue
               </button>

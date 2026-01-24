@@ -37,9 +37,9 @@ button svg {
   color: inherit !important;
 }
 
-/* Ensure button text is always visible */
+/* Ensure button text is always visible (no !important to allow inline style overrides) */
 button {
-  color: inherit !important;
+  color: inherit;
 }
 
 /* Specific styling for green buttons */
