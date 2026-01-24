@@ -566,8 +566,8 @@ export default function BusinessHomeRemoval() {
                   key={service.id}
                   onClick={() => handleServiceSelect(service.id)}
                   className={`bg-white border-2 rounded-xl p-3 sm:p-4 cursor-pointer transition-all relative ${selectedService === service.id
-                      ? "shadow-lg"
-                      : "border-gray-200 hover:border-gray-300 hover:shadow-md"
+                    ? "shadow-lg"
+                    : "border-gray-200 hover:border-gray-300 hover:shadow-md"
                     }`}
                   style={selectedService === service.id ? { borderColor: theme.primary, backgroundColor: theme.primaryLight } : {}}
                 >
@@ -585,7 +585,7 @@ export default function BusinessHomeRemoval() {
                       </svg>
                       <span
                         className="absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold"
-                        style={selectedService === service.id ? { ...primaryBgStyle, color: 'white' } : { backgroundColor: '#e5e7eb', color: '#4b5563' }}
+                        style={selectedService === service.id ? { ...primaryBgStyle, color: theme.primaryButtonText } : { backgroundColor: '#e5e7eb', color: '#4b5563' }}
                       >
                         {service.bedrooms}
                       </span>
@@ -605,9 +605,9 @@ export default function BusinessHomeRemoval() {
               <button
                 onClick={handleContinue}
                 disabled={!selectedService}
-                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${!selectedService ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "text-white shadow-lg"
+                className={`w-full py-4 rounded-lg font-medium transition-all text-base min-h-[52px] ${!selectedService ? "bg-gray-200 text-gray-400 cursor-not-allowed" : "shadow-lg"
                   }`}
-                style={selectedService ? primaryBgStyle : {}}
+                style={selectedService ? { ...primaryBgStyle, color: theme.primaryButtonText } : {}}
                 onMouseOver={(e) => { if (selectedService) e.currentTarget.style.backgroundColor = theme.primaryHover; }}
                 onMouseOut={(e) => { if (selectedService) e.currentTarget.style.backgroundColor = theme.primary; }}
               >

@@ -15,6 +15,8 @@ export interface BusinessTheme {
   brandText: string;
   /** Ring/focus color */
   primaryRing: string;
+  /** Text color for buttons with primary background (for contrast) */
+  primaryButtonText: string;
 }
 
 export interface BusinessFeatures {
@@ -26,6 +28,17 @@ export interface BusinessFeatures {
   showPoweredBy: boolean;
 }
 
+export interface BusinessLogoConfig {
+  /** Path to full/wide logo (local path or URL) */
+  logo: string;
+  /** Path to square/icon logo (optional, falls back to logo) */
+  logoSquare?: string;
+  /** Path to favicon (local path) */
+  favicon: string;
+  /** Alt text for the logo */
+  alt: string;
+}
+
 export interface BusinessConfig {
   /** 4-char business reference - serves as both DB key and URL slug */
   busRef: string;
@@ -33,8 +46,10 @@ export interface BusinessConfig {
   theme: BusinessTheme;
   /** Feature flags */
   features: BusinessFeatures;
-  /** Optional logo URL */
+  /** Optional logo URL (legacy, prefer using logos) */
   logoUrl?: string;
+  /** Logo configuration for local images */
+  logos?: BusinessLogoConfig;
 }
 
 /**
@@ -47,13 +62,14 @@ export const DEFAULT_THEME: BusinessTheme = {
   primaryBorder: '#fdba74', // orange-300
   brandText: '#9333ea',    // purple-600
   primaryRing: '#fed7aa',  // orange-200
+  primaryButtonText: '#ffffff', // white text for orange buttons
 };
 
 /**
  * Default feature flags
  */
 export const DEFAULT_FEATURES: BusinessFeatures = {
-  showTrustpilot: true,
+  showTrustpilot: false,
   showNewsletterCheckbox: true,
   showPoweredBy: true,
 };

@@ -74,6 +74,12 @@ values
   ('LNDN', 'LNDN-000001', 'London Movers', 'info@london-movers.example.com', '10', 'Moving Lane', 'London', 'SW1A 1AA', 51.5014, -0.1419)
 on conflict (bus_ref) do nothing;
 
+-- Seed initial businesses
+insert into business_master (bus_ref, bus_id, bus_name, bus_email, admins, house_number, street_name, city, postcode, lat, lon)
+values
+  ('LIMO', 'LIMO-000001', 'Lions Moves Van', 'Removals@lionsmoves.co.uk',Array['447936432077'], '1', 'Limo Street', 'London', 'E1 1AA', 51.5074, -0.1278),
+  ('LNDN', 'LNDN-000001', 'London Movers', 'info@london-movers.example.com',Array['447936432077'], '10', 'Moving Lane', 'London', 'SW1A 1AA', 51.5014, -0.1419)
+on conflict (bus_ref) do nothing;
 
 -- ============================================================================
 -- JOB_SEQUENCES TABLE (Sequential job ID generation per business)

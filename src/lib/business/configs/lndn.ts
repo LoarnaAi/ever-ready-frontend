@@ -7,6 +7,11 @@ import type { BusinessConfig } from '../types';
  */
 export const lndnConfig: BusinessConfig = {
   busRef: 'LNDN',
+  logos: {
+    logo: '/images/business/LNDN/logo.svg',
+    favicon: '/images/business/LNDN/favicon.svg',
+    alt: 'London Movers',
+  },
   theme: {
     primary: '#2563eb',      // blue-600
     primaryHover: '#1d4ed8', // blue-700
@@ -14,6 +19,7 @@ export const lndnConfig: BusinessConfig = {
     primaryBorder: '#93c5fd', // blue-300
     brandText: '#7c3aed',    // violet-600
     primaryRing: '#bfdbfe',  // blue-200
+    primaryButtonText: '#ffffff', // white text for blue buttons
   },
   features: {
     showTrustpilot: true,

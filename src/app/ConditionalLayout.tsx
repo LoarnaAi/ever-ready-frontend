@@ -12,7 +12,7 @@ export default function ConditionalLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const hideNavbarFooter = pathname?.startsWith("/home-removal");
+  const hideNavbarFooter = pathname?.startsWith("/home-removal") || pathname?.includes("/home-removal");
 
   if (hideNavbarFooter) {
     return <>{children}</>;

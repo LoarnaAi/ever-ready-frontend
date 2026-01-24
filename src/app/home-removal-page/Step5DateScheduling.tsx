@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
 
 interface Step5DateSchedulingProps {
@@ -470,7 +471,7 @@ export default function Step5DateScheduling({
                 type="button"
                 onClick={() => setSchedule({ ...schedule, timeSlot: slot, intervalType: "6hours" })}
                 className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${schedule.intervalType === "6hours" && schedule.timeSlot === slot
-                  ? "text-white"
+                  ? ""
                   : "bg-white text-gray-700 border-gray-300"
                   }`}
                 style={
@@ -537,11 +538,6 @@ export default function Step5DateScheduling({
         <MobileJobDetailsAccordion title="View Job Details">
           {/* Quote Summary Card - Same as desktop */}
           <div className="bg-white rounded-lg">
-            {/* Logo */}
-            <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
-            </div>
-
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">{currentService.title}</h3>
             </div>
@@ -826,7 +822,7 @@ export default function Step5DateScheduling({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -1193,7 +1189,7 @@ export default function Step5DateScheduling({
                 onClick={onContinue}
                 disabled={!materialsDelivery.date || !collectionDate.date}
                 className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${materialsDelivery.date && collectionDate.date
-                  ? "text-white hover:opacity-90"
+                  ? "hover:opacity-90"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 style={materialsDelivery.date && collectionDate.date ? styles.primaryButton : undefined}

@@ -41,3 +41,9 @@
 - Add tenant-specific assets in `public/images/` and reference them from the new page using the established marketing components.
 - Wire any tenant-specific constants or helpers in `src/lib/` and keep styling aligned with `tailwind.config.js` theme tokens.
 - Run `npm run lint`, then review the page locally with `npm run dev` before handoff.
+
+## Browser Debugging Note
+Assume that the npm run command is already executed and the server is running.
+If you need to launch Chrome for antigravity with remote debugging enabled, use this command:
+```bash
+DISPLAY=:0 google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug-session --no-first-run --no-default-browser-check {{URL}} > /dev/null 2>&1 &

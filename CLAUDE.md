@@ -92,3 +92,10 @@ Components requiring browser APIs or hooks must use `'use client'` directive. Ex
 2. **Address Autocomplete**: Google Maps integration for accurate location input
 3. **Dynamic Pricing**: Database-driven pricing for furniture items and packing materials
 4. **Mobile Responsive**: Custom mobile components (BottomSheet, Accordion) for better UX
+
+
+## Browser Debugging Note
+Assume that the npm run command is already executed and the server is running.
+If you need to launch Chrome for antigravity with remote debugging enabled, use this command:
+```bash
+DISPLAY=:0 google-chrome --remote-debugging-port=9222 --user-data-dir=/tmp/chrome-debug-session --no-first-run --no-default-browser-check {{URL}} > /dev/null 2>&1 &

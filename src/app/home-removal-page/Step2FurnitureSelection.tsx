@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
 
 interface Step2FurnitureSelectionProps {
@@ -455,7 +456,7 @@ export default function Step2FurnitureSelection({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -686,11 +687,6 @@ export default function Step2FurnitureSelection({
             <MobileJobDetailsAccordion title="View pre selected inventory">
               {/* Quote Summary Card - Same as desktop */}
               <div className="bg-white rounded-lg">
-                {/* Logo */}
-                <div className="mb-3">
-                  <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
-                </div>
-
                 <div className="flex items-center justify-between mb-4">
                   <div>
                     <h3 className="text-base font-bold text-gray-900">
@@ -1130,7 +1126,7 @@ export default function Step2FurnitureSelection({
                                     e.stopPropagation();
                                     handleAddFurniture(item.id);
                                   }}
-                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs text-white hover:opacity-90 shadow-sm"
+                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs hover:opacity-90 shadow-sm"
                                   style={styles.primaryButton}
                                 >
                                   Add More
@@ -1191,7 +1187,7 @@ export default function Step2FurnitureSelection({
                                 e.stopPropagation();
                                 handleAddFurniture(item.id);
                               }}
-                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm text-white hover:opacity-90 shadow-sm"
+                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm hover:opacity-90 shadow-sm"
                               style={styles.primaryButton}
                             >
                               Add
@@ -1242,7 +1238,7 @@ export default function Step2FurnitureSelection({
               </button>
               <button
                 onClick={() => onContinue(furnitureQuantities)}
-                className="w-full sm:w-auto px-6 py-3 text-white rounded-lg font-medium hover:opacity-90 shadow-lg transition-all text-base min-h-[48px]"
+                className="w-full sm:w-auto px-6 py-3 rounded-lg font-medium hover:opacity-90 shadow-lg transition-all text-base min-h-[48px]"
                 style={styles.primaryButton}
               >
                 Continue

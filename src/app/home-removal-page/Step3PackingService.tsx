@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
 
 interface Step3PackingServiceProps {
@@ -350,11 +351,6 @@ export default function Step3PackingService({
         <MobileJobDetailsAccordion title="View Job Details">
           {/* Quote Summary Card - Same as desktop */}
           <div className="bg-white rounded-lg">
-            {/* Logo */}
-            <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
-            </div>
-
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">
                 {currentService.title}
@@ -565,7 +561,7 @@ export default function Step3PackingService({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -813,7 +809,7 @@ export default function Step3PackingService({
                   setSelectedPackingService("all-inclusive");
                   setSelectedDismantlePackage(true);
                 }}
-                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "text-white shadow-lg" : "bg-white text-gray-900 hover:opacity-90"
+                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "shadow-lg" : "bg-white text-gray-900 hover:opacity-90"
                   }`}
                 style={isAllInclusive ? { ...styles.primaryButton, ...styles.primaryBorder } : styles.primaryBorder}
               >

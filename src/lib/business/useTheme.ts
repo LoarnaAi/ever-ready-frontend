@@ -24,7 +24,7 @@ export function useTheme() {
       // Primary button style
       primaryButton: {
         backgroundColor: theme.primary,
-        color: 'white',
+        color: theme.primaryButtonText,
       } as React.CSSProperties,
       // Primary button hover (use with onMouseEnter/onMouseLeave)
       primaryButtonHover: {
@@ -67,6 +67,10 @@ export function useTheme() {
       focusRing: {
         '--tw-ring-color': theme.primary,
         borderColor: theme.primary,
+      } as React.CSSProperties,
+      // Primary button text color (for icons/checkmarks inside primary buttons)
+      primaryButtonText: {
+        color: theme.primaryButtonText,
       } as React.CSSProperties,
     },
   };

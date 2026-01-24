@@ -1,6 +1,10 @@
 // Types
-export type { BusinessConfig, BusinessTheme, BusinessFeatures } from './types';
+export type { BusinessConfig, BusinessTheme, BusinessFeatures, BusinessLogoConfig } from './types';
 export { DEFAULT_THEME, DEFAULT_FEATURES } from './types';
+
+// Logo utilities
+export { getBusinessLogos, getFaviconMetadata } from './logo-utils';
+export type { ResolvedLogos } from './logo-utils';
 
 // Context
 export {

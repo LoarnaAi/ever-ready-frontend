@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
 
 // Response from postcode lookup API
@@ -590,11 +591,6 @@ export default function Step4AddressDetails({
         <MobileJobDetailsAccordion title="View Job Details">
           {/* Quote Summary Card - Same as desktop */}
           <div className="bg-white rounded-lg">
-            {/* Logo */}
-            <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
-            </div>
-
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">
                 {currentService.title}
@@ -871,7 +867,7 @@ export default function Step4AddressDetails({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
+              <BusinessLogo variant="full" width={160} height={50} priority />
             </div>
 
             {/* Quote Summary Card */}
@@ -1164,7 +1160,7 @@ export default function Step4AddressDetails({
                       type="button"
                       onClick={handleCollectionLookup}
                       disabled={isLookingUpCollection}
-                      className="px-4 py-2 text-white font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      className="px-4 py-2 font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
                       style={styles.primaryButton}
                     >
                       {isLookingUpCollection ? (
@@ -1246,7 +1242,8 @@ export default function Step4AddressDetails({
                     >
                       {collectionAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1276,7 +1273,8 @@ export default function Step4AddressDetails({
                     >
                       {collectionAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1327,7 +1325,7 @@ export default function Step4AddressDetails({
                       type="button"
                       onClick={handleDeliveryLookup}
                       disabled={isLookingUpDelivery}
-                      className="px-4 py-2 text-white font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
+                      className="px-4 py-2 font-medium rounded-lg transition-all disabled:opacity-60 disabled:cursor-not-allowed flex items-center gap-2 text-sm hover:opacity-90"
                       style={styles.primaryButton}
                     >
                       {isLookingUpDelivery ? (
@@ -1409,7 +1407,8 @@ export default function Step4AddressDetails({
                     >
                       {deliveryAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1439,7 +1438,8 @@ export default function Step4AddressDetails({
                     >
                       {deliveryAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1501,7 +1501,7 @@ export default function Step4AddressDetails({
                 onClick={onContinue}
                 disabled={!collectionAddress.city || !deliveryAddress.city}
                 className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${collectionAddress.city && deliveryAddress.city
-                  ? "text-white hover:opacity-90"
+                  ? "hover:opacity-90"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 style={collectionAddress.city && deliveryAddress.city ? styles.primaryButton : undefined}
