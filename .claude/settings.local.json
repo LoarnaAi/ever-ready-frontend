@@ -13,7 +13,8 @@
       "Bash(tree:*)",
       "Bash(find:*)",
       "Bash(npx tsc:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "WebFetch(domain:lionsmovesvan.com)"
     ]
   }
 }

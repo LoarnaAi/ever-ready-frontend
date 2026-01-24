@@ -1,6 +1,7 @@
 import type { BusinessConfig } from './types';
 import { demoConfig } from './configs/demo';
 import { lndnConfig } from './configs/lndn';
+import { limoConfig } from './configs/limo';
 
 /**
  * Registry of all business configurations
@@ -10,6 +11,7 @@ import { lndnConfig } from './configs/lndn';
 const configRegistry: Record<string, BusinessConfig> = {
   DEMO: demoConfig,
   LNDN: lndnConfig,
+  LIMO: limoConfig,
 };
 
 /**
