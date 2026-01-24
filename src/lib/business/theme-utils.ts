@@ -13,6 +13,7 @@ export function getThemeCSSVariables(theme: BusinessTheme): React.CSSProperties 
     '--theme-primary-border': theme.primaryBorder,
     '--theme-brand-text': theme.brandText,
     '--theme-primary-ring': theme.primaryRing,
+    '--theme-primary-button-text': theme.primaryButtonText,
   } as React.CSSProperties;
 }
 
@@ -61,6 +62,11 @@ export const themedStyles = {
   primaryRing: (theme: BusinessTheme): React.CSSProperties => ({
     // Ring needs special handling with box-shadow
     boxShadow: `0 0 0 3px ${theme.primaryRing}`,
+  }),
+
+  /** Primary button text color (contrasting to primary background) */
+  primaryButtonText: (theme: BusinessTheme): React.CSSProperties => ({
+    color: theme.primaryButtonText,
   }),
 };
 

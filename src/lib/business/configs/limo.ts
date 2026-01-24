@@ -14,6 +14,7 @@ export const limoConfig: BusinessConfig = {
     primaryBorder: '#FDE047', // yellow-300 (border)
     brandText: '#CA8A04',    // yellow-600 (brand text)
     primaryRing: '#FEF08A',  // yellow-200 (focus ring)
+    primaryButtonText: '#000000', // black text for yellow buttons
   },
   features: {
     showTrustpilot: true,

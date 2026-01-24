@@ -1130,7 +1130,7 @@ export default function Step2FurnitureSelection({
                                     e.stopPropagation();
                                     handleAddFurniture(item.id);
                                   }}
-                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs text-white hover:opacity-90 shadow-sm"
+                                  className="px-3 py-1.5 rounded-lg font-medium transition-all text-xs hover:opacity-90 shadow-sm"
                                   style={styles.primaryButton}
                                 >
                                   Add More
@@ -1191,7 +1191,7 @@ export default function Step2FurnitureSelection({
                                 e.stopPropagation();
                                 handleAddFurniture(item.id);
                               }}
-                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm text-white hover:opacity-90 shadow-sm"
+                              className="px-4 py-2 rounded-lg font-medium transition-all text-sm hover:opacity-90 shadow-sm"
                               style={styles.primaryButton}
                             >
                               Add
@@ -1242,7 +1242,7 @@ export default function Step2FurnitureSelection({
               </button>
               <button
                 onClick={() => onContinue(furnitureQuantities)}
-                className="w-full sm:w-auto px-6 py-3 text-white rounded-lg font-medium hover:opacity-90 shadow-lg transition-all text-base min-h-[48px]"
+                className="w-full sm:w-auto px-6 py-3 rounded-lg font-medium hover:opacity-90 shadow-lg transition-all text-base min-h-[48px]"
                 style={styles.primaryButton}
               >
                 Continue

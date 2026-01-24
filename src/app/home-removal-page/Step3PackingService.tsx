@@ -813,7 +813,7 @@ export default function Step3PackingService({
                   setSelectedPackingService("all-inclusive");
                   setSelectedDismantlePackage(true);
                 }}
-                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "text-white shadow-lg" : "bg-white text-gray-900 hover:opacity-90"
+                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "shadow-lg" : "bg-white text-gray-900 hover:opacity-90"
                   }`}
                 style={isAllInclusive ? { ...styles.primaryButton, ...styles.primaryBorder } : styles.primaryBorder}
               >

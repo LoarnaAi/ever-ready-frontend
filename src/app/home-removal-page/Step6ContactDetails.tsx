@@ -1134,7 +1134,7 @@ export default function Step6ContactDetails({
                 onClick={() => updateContactData("signUpForNews", !contactData.signUpForNews)}
               >
                 {contactData.signUpForNews && (
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -1159,7 +1159,7 @@ export default function Step6ContactDetails({
                 onClick={() => updateContactData("agreeToTerms", !contactData.agreeToTerms)}
               >
                 {contactData.agreeToTerms && (
-                  <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path
                       fillRule="evenodd"
                       d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
@@ -1208,7 +1208,7 @@ export default function Step6ContactDetails({
               onClick={handleSubmit}
               disabled={!isFormValid()}
               className={`w-full sm:w-auto px-6 py-3 text-base rounded-lg font-semibold shadow-lg transition-all min-h-[48px] ${isFormValid()
-                ? "text-white hover:opacity-90"
+                ? "hover:opacity-90"
                 : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
               style={isFormValid() ? styles.primaryButton : undefined}

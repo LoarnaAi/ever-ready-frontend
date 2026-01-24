@@ -470,7 +470,7 @@ export default function Step5DateScheduling({
                 type="button"
                 onClick={() => setSchedule({ ...schedule, timeSlot: slot, intervalType: "6hours" })}
                 className={`px-3 py-1.5 text-xs rounded-lg border transition-all ${schedule.intervalType === "6hours" && schedule.timeSlot === slot
-                  ? "text-white"
+                  ? ""
                   : "bg-white text-gray-700 border-gray-300"
                   }`}
                 style={
@@ -1193,7 +1193,7 @@ export default function Step5DateScheduling({
                 onClick={onContinue}
                 disabled={!materialsDelivery.date || !collectionDate.date}
                 className={`w-full sm:w-auto px-6 py-3 rounded-lg font-medium shadow-lg transition-all text-base min-h-[48px] ${materialsDelivery.date && collectionDate.date
-                  ? "text-white hover:opacity-90"
+                  ? "hover:opacity-90"
                   : "bg-gray-300 text-gray-500 cursor-not-allowed"
                   }`}
                 style={materialsDelivery.date && collectionDate.date ? styles.primaryButton : undefined}

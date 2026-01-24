@@ -15,6 +15,8 @@ export interface BusinessTheme {
   brandText: string;
   /** Ring/focus color */
   primaryRing: string;
+  /** Text color for buttons with primary background (for contrast) */
+  primaryButtonText: string;
 }
 
 export interface BusinessFeatures {
@@ -47,6 +49,7 @@ export const DEFAULT_THEME: BusinessTheme = {
   primaryBorder: '#fdba74', // orange-300
   brandText: '#9333ea',    // purple-600
   primaryRing: '#fed7aa',  // orange-200
+  primaryButtonText: '#ffffff', // white text for orange buttons
 };
 
 /**

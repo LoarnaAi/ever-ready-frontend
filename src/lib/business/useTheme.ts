@@ -24,7 +24,7 @@ export function useTheme() {
       // Primary button style
       primaryButton: {
         backgroundColor: theme.primary,
-        color: 'white',
+        color: theme.primaryButtonText,
       } as React.CSSProperties,
       // Primary button hover (use with onMouseEnter/onMouseLeave)
       primaryButtonHover: {

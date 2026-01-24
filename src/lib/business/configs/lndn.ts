@@ -14,6 +14,7 @@ export const lndnConfig: BusinessConfig = {
     primaryBorder: '#93c5fd', // blue-300
     brandText: '#7c3aed',    // violet-600
     primaryRing: '#bfdbfe',  // blue-200
+    primaryButtonText: '#ffffff', // white text for blue buttons
   },
   features: {
     showTrustpilot: true,
