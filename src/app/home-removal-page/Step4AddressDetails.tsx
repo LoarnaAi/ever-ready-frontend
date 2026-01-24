@@ -1246,7 +1246,8 @@ export default function Step4AddressDetails({
                     >
                       {collectionAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1276,7 +1277,8 @@ export default function Step4AddressDetails({
                     >
                       {collectionAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1409,7 +1411,8 @@ export default function Step4AddressDetails({
                     >
                       {deliveryAddress.hasParking && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >
@@ -1439,7 +1442,8 @@ export default function Step4AddressDetails({
                     >
                       {deliveryAddress.hasLift && (
                         <svg
-                          className="w-3 h-3 text-white"
+                          className="w-3 h-3"
+                          style={styles.primaryButtonText}
                           fill="currentColor"
                           viewBox="0 0 20 20"
                         >

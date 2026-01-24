@@ -74,10 +74,10 @@ export default function ConfirmationModal({
               />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-white mb-2">
+          <h2 className="text-2xl font-bold mb-2" style={styles.primaryButtonText}>
             Job Submitted Successfully!
           </h2>
-          <p className="text-sm" style={{ color: 'rgba(255, 255, 255, 0.8)' }}>
+          <p className="text-sm opacity-80" style={styles.primaryButtonText}>
             Your booking request has been received
           </p>
         </div>
@@ -139,7 +139,7 @@ export default function ConfirmationModal({
           <div className="space-y-3">
             <button
               onClick={onViewSummary}
-              className="w-full py-3 px-4 text-white font-semibold rounded-xl transition-colors shadow-lg hover:opacity-90"
+              className="w-full py-3 px-4 font-semibold rounded-xl transition-colors shadow-lg hover:opacity-90"
               style={{ ...styles.primaryButton, boxShadow: `0 10px 15px -3px ${theme.primary}40` }}
             >
               View Booking Summary

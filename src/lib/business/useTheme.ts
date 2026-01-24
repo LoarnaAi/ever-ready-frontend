@@ -68,6 +68,10 @@ export function useTheme() {
         '--tw-ring-color': theme.primary,
         borderColor: theme.primary,
       } as React.CSSProperties,
+      // Primary button text color (for icons/checkmarks inside primary buttons)
+      primaryButtonText: {
+        color: theme.primaryButtonText,
+      } as React.CSSProperties,
     },
   };
 }
