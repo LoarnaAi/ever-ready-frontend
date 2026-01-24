@@ -24,6 +24,7 @@ export default function HomeRemoval() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [submittedJobId, setSubmittedJobId] = useState<string>("");
+  const [displayJobId, setDisplayJobId] = useState<string | null>(null);
   const [furnitureQuantities, setFurnitureQuantities] = useState<{
     [key: string]: number;
   }>({});
@@ -366,6 +367,7 @@ export default function HomeRemoval() {
       const savedData = loadSavedData();
 
       // Create job in Supabase database
+      // Use DEMO as default business reference for non-business-specific route
       const result = await createJobAction({
         homeSize: selectedService,
         furnitureItems: convertToFurnitureItems(furnitureQuantities),
@@ -378,11 +380,13 @@ export default function HomeRemoval() {
         collectionDate: savedData.collectionDate,
         materialsDeliveryDate: savedData.materialsDeliveryDate,
         contact: contactData,
+        busRef: 'DEMO',
       });
 
       if (result.success && result.jobId) {
         // Store job ID and show confirmation modal
         setSubmittedJobId(result.jobId);
+        setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
       } else {
         console.error("Error creating job:", result.error);
@@ -425,6 +429,7 @@ export default function HomeRemoval() {
         <ConfirmationModal
           isOpen={showConfirmationModal}
           jobId={submittedJobId}
+          displayJobId={displayJobId}
           onClose={handleCloseModal}
           onViewSummary={handleViewSummary}
         />
@@ -643,7 +648,7 @@ export default function HomeRemoval() {
                   <div className="mb-2 h-14 flex items-center justify-center">
                     <div className="relative">
                       <svg
-                        className={`w-12 h-12 sm:w-14 sm:h-14 ${selectedService === service.id ? "text-orange-500" : "text-gray-400"
+                        className={`w-12 h-12 sm:w-14 sm:h-14 ${selectedService === service.id ? "text-orange-500" : "text-black"
                           }`}
                         fill="currentColor"
                         viewBox="0 0 24 24"
@@ -653,7 +658,7 @@ export default function HomeRemoval() {
                       </svg>
                       <span className={`absolute -top-1 -right-1 w-6 h-6 sm:w-7 sm:h-7 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold ${selectedService === service.id
                         ? "bg-orange-500 text-white"
-                        : "bg-gray-200 text-gray-600"
+                        : "bg-gray-300 text-black"
                         }`}>
                         {service.bedrooms}
                       </span>
@@ -664,20 +669,6 @@ export default function HomeRemoval() {
                   <h3 className="text-sm sm:text-base font-semibold text-gray-900 mb-2 text-center">
                     {service.title}
                   </h3>
-
-                  {/* Select Button - Larger touch target */}
-                  <button
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      handleServiceSelect(service.id);
-                    }}
-                    className={`w-full py-2.5 sm:py-3 px-3 sm:px-4 rounded-lg font-medium transition-colors text-sm sm:text-base min-h-[44px] ${selectedService === service.id
-                      ? "bg-orange-500 text-white hover:bg-orange-600"
-                      : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                      }`}
-                  >
-                    {selectedService === service.id ? "Selected" : "Select"}
-                  </button>
                 </div>
               ))}
             </div>

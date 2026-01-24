@@ -8,13 +8,20 @@ import Link from "next/link";
 import { getJobAction } from "@/lib/actions/jobActions";
 import { formatJobId } from "@/lib/utils/jobUtils";
 import { JobData } from "@/lib/database.types";
+import { useBusinessConfig } from "@/lib/business";
 
 export default function JobSummaryPage() {
   const params = useParams();
   const jobId = params.job_id as string;
+  const businessSlug = params.business as string;
+  const { config, theme } = useBusinessConfig();
+
   const [job, setJob] = useState<JobData | null>(null);
   const [loading, setLoading] = useState(true);
   const [copied, setCopied] = useState(false);
+
+  const primaryTextStyle = { color: theme.primary };
+  const primaryBgStyle = { backgroundColor: theme.primary };
 
   useEffect(() => {
     async function fetchJob() {
@@ -36,7 +43,7 @@ export default function JobSummaryPage() {
       await navigator.clipboard.writeText(window.location.href);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
+    } catch {
       const textArea = document.createElement("textarea");
       textArea.value = window.location.href;
       document.body.appendChild(textArea);
@@ -103,7 +110,10 @@ export default function JobSummaryPage() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="text-center">
-          <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <div
+            className="w-12 h-12 border-4 border-t-transparent rounded-full animate-spin mx-auto mb-4"
+            style={{ borderColor: theme.primary, borderTopColor: 'transparent' }}
+          ></div>
           <p className="text-gray-600">Loading job details...</p>
         </div>
       </div>
@@ -124,8 +134,9 @@ export default function JobSummaryPage() {
             The job reference you&apos;re looking for doesn&apos;t exist or may have expired.
           </p>
           <Link
-            href="/home-removal"
-            className="inline-flex items-center gap-2 px-6 py-3 bg-orange-500 text-white font-medium rounded-lg hover:bg-orange-600 transition-colors"
+            href={`/${businessSlug}/home-removal`}
+            className="inline-flex items-center gap-2 px-6 py-3 text-white font-medium rounded-lg transition-colors"
+            style={primaryBgStyle}
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -210,7 +221,8 @@ export default function JobSummaryPage() {
               </button>
               <button
                 onClick={handlePrint}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition-colors"
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors"
+                style={primaryBgStyle}
               >
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
@@ -224,7 +236,7 @@ export default function JobSummaryPage() {
         {/* Service Summary */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" style={primaryTextStyle} fill="currentColor" viewBox="0 0 24 24">
               <path d="M12 3L4 9v12h16V9l-8-6zm6 16h-3v-5H9v5H6v-9.5l6-4.5 6 4.5V19z" />
             </svg>
             Service Details
@@ -246,7 +258,7 @@ export default function JobSummaryPage() {
         {/* Furniture List */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" style={primaryTextStyle} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
             </svg>
             Furniture Items
@@ -265,7 +277,7 @@ export default function JobSummaryPage() {
         {(job.packingService || job.dismantlePackage || job.packingMaterials.length > 0) && (
           <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
             <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-              <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" style={primaryTextStyle} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
               </svg>
               Packing Services
@@ -307,7 +319,7 @@ export default function JobSummaryPage() {
         {/* Addresses */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" style={primaryTextStyle} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
             </svg>
@@ -316,7 +328,7 @@ export default function JobSummaryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {job.collectionAddress && (
               <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-medium text-orange-500 uppercase tracking-wide mb-2">Collection From</p>
+                <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Collection From</p>
                 <p className="text-sm font-medium text-gray-900 mb-1">
                   {job.collectionAddress.address || job.collectionAddress.postcode}
                 </p>
@@ -325,7 +337,7 @@ export default function JobSummaryPage() {
             )}
             {job.deliveryAddress && (
               <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-medium text-orange-500 uppercase tracking-wide mb-2">Delivery To</p>
+                <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Delivery To</p>
                 <p className="text-sm font-medium text-gray-900 mb-1">
                   {job.deliveryAddress.address || job.deliveryAddress.postcode}
                 </p>
@@ -338,7 +350,7 @@ export default function JobSummaryPage() {
         {/* Schedule */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" style={primaryTextStyle} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
             Schedule
@@ -346,14 +358,14 @@ export default function JobSummaryPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {job.collectionDate && (
               <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-medium text-orange-500 uppercase tracking-wide mb-2">Collection Date</p>
+                <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Collection Date</p>
                 <p className="text-sm font-medium text-gray-900">{formatDate(job.collectionDate.date)}</p>
                 <p className="text-sm text-gray-600">{job.collectionDate.timeSlot}</p>
               </div>
             )}
             {job.materialsDeliveryDate && (
               <div className="bg-gray-50 rounded-lg p-4">
-                <p className="text-xs font-medium text-orange-500 uppercase tracking-wide mb-2">Materials Delivery</p>
+                <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Materials Delivery</p>
                 <p className="text-sm font-medium text-gray-900">{formatDate(job.materialsDeliveryDate.date)}</p>
                 <p className="text-sm text-gray-600">{job.materialsDeliveryDate.timeSlot}</p>
               </div>
@@ -364,7 +376,7 @@ export default function JobSummaryPage() {
         {/* Contact Information */}
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-            <svg className="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-5 h-5" style={primaryTextStyle} fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             Contact Information
@@ -410,7 +422,7 @@ export default function JobSummaryPage() {
         {/* Back Button */}
         <div className="mt-6 text-center no-print">
           <Link
-            href="/home-removal"
+            href={`/${businessSlug}/home-removal`}
             className="inline-flex items-center gap-2 text-sm text-gray-600 hover:text-gray-900 transition-colors"
           >
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

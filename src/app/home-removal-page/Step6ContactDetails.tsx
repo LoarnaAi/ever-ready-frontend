@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import { useTheme } from "@/lib/business";
 
 interface Step6ContactDetailsProps {
   serviceParam: string | null;
@@ -39,6 +40,7 @@ export default function Step6ContactDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step6ContactDetailsProps) {
+  const { busRef, styles } = useTheme();
   // Load saved contact data from localStorage
   const loadSavedContactData = (): ContactData => {
     if (typeof window !== "undefined") {
@@ -327,10 +329,10 @@ export default function Step6ContactDetails({
   // Calculate additional items (items added beyond initial quantities)
   // Use mergedInitialQuantities like Step 2 to ensure correct comparison
   const additionalItems: { id: string; name: string; quantity: number }[] = [];
-  
+
   Object.entries(furnitureQuantities).forEach(([itemId, currentQuantity]) => {
     const initialQuantity = mergedInitialQuantities[itemId] || 0;
-    
+
     // Show in additional items if current quantity is greater than initial (even if just 1)
     if (currentQuantity > initialQuantity) {
       const additionalQuantity = currentQuantity - initialQuantity;
@@ -399,7 +401,7 @@ export default function Step6ContactDetails({
       return updated;
     });
   };
-  
+
   // Create a setContactData function that works with the state
   const setContactData = (data: ContactData | ((prev: ContactData) => ContactData)) => {
     if (typeof data === "function") {
@@ -444,7 +446,7 @@ export default function Step6ContactDetails({
             <span className="text-sm text-gray-500">Contact</span>
           </div>
           <div className="w-full bg-gray-200 rounded-full h-2">
-            <div className="bg-orange-500 h-2 rounded-full" style={{ width: '100%' }}></div>
+            <div className="h-2 rounded-full" style={{ ...styles.progressBar, width: "100%" }}></div>
           </div>
         </div>
 
@@ -454,7 +456,7 @@ export default function Step6ContactDetails({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -469,8 +471,8 @@ export default function Step6ContactDetails({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-orange-500 h-1.5 rounded-full transition-all"
-                  style={{ width: "100%" }}
+                  className="h-1.5 rounded-full transition-all"
+                  style={{ ...styles.progressBar, width: "100%" }}
                 ></div>
               </div>
             </div>
@@ -481,7 +483,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>1. PrePopulated Items</span>
                   <svg
@@ -543,7 +545,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>2. Additional Items</span>
                   <svg
@@ -591,7 +593,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>3. Additional Services</span>
                   <svg
@@ -658,7 +660,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>4. Move Details</span>
                   <svg
@@ -751,14 +753,14 @@ export default function Step6ContactDetails({
 
           {/* Logo */}
           <div className="mb-4">
-            <h1 className="text-xl font-bold text-purple-600">{"{Your Business Name Goes Here}"}</h1>
+            <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
           </div>
 
           {/* Quote Summary Card */}
           <div className="bg-white border border-gray-200 rounded-lg p-4 mb-3">
             <div className="flex items-center justify-between mb-3">
               <h3 className="text-base font-semibold text-gray-900">{currentService.title}</h3>
-              <button className="text-xs text-orange-500 hover:text-orange-600">Details</button>
+              <button className="text-xs font-medium transition-colors hover:opacity-80" style={styles.primaryText}>Details</button>
             </div>
 
             {/* Progress Indicator */}
@@ -768,8 +770,8 @@ export default function Step6ContactDetails({
               </div>
               <div className="w-full bg-gray-200 rounded-full h-1.5">
                 <div
-                  className="bg-orange-500 h-1.5 rounded-full transition-all"
-                  style={{ width: "100%" }}
+                  className="h-1.5 rounded-full transition-all"
+                  style={{ ...styles.progressBar, width: "100%" }}
                 ></div>
               </div>
             </div>
@@ -780,7 +782,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, prepopulated: !prev.prepopulated }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>1. PrePopulated Items</span>
                   <svg
@@ -842,7 +844,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, additional: !prev.additional }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>2. Additional Items</span>
                   <svg
@@ -890,7 +892,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, services: !prev.services }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>3. Additional Services</span>
                   <svg
@@ -957,7 +959,7 @@ export default function Step6ContactDetails({
               <div className="space-y-2 pt-3 border-t border-gray-200">
                 <button
                   onClick={() => setExpandedSections(prev => ({ ...prev, moveDetails: !prev.moveDetails }))}
-                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:text-orange-500 transition-colors"
+                  className="w-full flex items-center justify-between text-xs font-bold text-gray-900 uppercase tracking-wider border-b-2 border-gray-300 pb-2 hover:opacity-80 transition-colors"
                 >
                   <span>4. Move Details</span>
                   <svg
@@ -1050,7 +1052,8 @@ export default function Step6ContactDetails({
                 value={contactData.firstName}
                 onChange={(e) => updateContactData("firstName", e.target.value)}
                 placeholder="First name"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                style={styles.focusRing}
               />
             </div>
 
@@ -1062,7 +1065,8 @@ export default function Step6ContactDetails({
                 value={contactData.lastName}
                 onChange={(e) => updateContactData("lastName", e.target.value)}
                 placeholder="Last name"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                style={styles.focusRing}
               />
             </div>
 
@@ -1074,7 +1078,8 @@ export default function Step6ContactDetails({
                 value={contactData.email}
                 onChange={(e) => updateContactData("email", e.target.value)}
                 placeholder="Email"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                style={styles.focusRing}
               />
             </div>
 
@@ -1085,7 +1090,8 @@ export default function Step6ContactDetails({
                 <select
                   value={contactData.countryCode}
                   onChange={(e) => updateContactData("countryCode", e.target.value)}
-                  className="px-2 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                  className="px-2 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                  style={styles.focusRing}
                 >
                   <option value="+44">GB +44</option>
                   <option value="+1">US +1</option>
@@ -1098,7 +1104,8 @@ export default function Step6ContactDetails({
                   value={contactData.phone}
                   onChange={(e) => updateContactData("phone", e.target.value)}
                   placeholder="Phone number"
-                  className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500 outline-none transition-all text-gray-600 placeholder-gray-400"
+                  className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                  style={styles.focusRing}
                 />
               </div>
             </div>
@@ -1107,23 +1114,23 @@ export default function Step6ContactDetails({
           {/* Info Text */}
           <p className="mt-4 text-xs text-gray-700">
             Please ensure that you provide us with both a{" "}
-            <span className="text-orange-500 font-medium">valid telephone number</span> and{" "}
-            <span className="text-orange-500 font-medium">email address</span>, as we will use them to
+            <span className="font-medium" style={styles.primaryText}>valid telephone number</span> and{" "}
+            <span className="font-medium" style={styles.primaryText}>email address</span>, as we will use them to
             verify order details and contact you on the date of service. If we are unable to reach you, we
             might have to reschedule or, in some instances, cancel the service.
           </p>
 
           {/* Checkboxes */}
           <div className="mt-4 space-y-2">
-            
+
             {/* Newsletter Checkbox */}
             <label className="flex items-center gap-3 cursor-pointer group min-h-[44px] py-1">
               <div
-                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all flex-shrink-0 ${
-                  contactData.signUpForNews
-                    ? "bg-orange-500 border-orange-500"
-                    : "bg-white border-gray-300 group-hover:border-gray-400"
-                }`}
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all flex-shrink-0 ${contactData.signUpForNews
+                  ? ""
+                  : "bg-white border-gray-300 group-hover:border-gray-400"
+                  }`}
+                style={contactData.signUpForNews ? styles.primaryButton : undefined}
                 onClick={() => updateContactData("signUpForNews", !contactData.signUpForNews)}
               >
                 {contactData.signUpForNews && (
@@ -1144,11 +1151,11 @@ export default function Step6ContactDetails({
             {/* Terms Checkbox */}
             <label className="flex items-start gap-3 cursor-pointer group min-h-[44px] py-1">
               <div
-                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all mt-0.5 flex-shrink-0 ${
-                  contactData.agreeToTerms
-                    ? "bg-orange-500 border-orange-500"
-                    : "bg-white border-gray-300 group-hover:border-gray-400"
-                }`}
+                className={`w-6 h-6 rounded border-2 flex items-center justify-center transition-all mt-0.5 flex-shrink-0 ${contactData.agreeToTerms
+                  ? ""
+                  : "bg-white border-gray-300 group-hover:border-gray-400"
+                  }`}
+                style={contactData.agreeToTerms ? styles.primaryButton : undefined}
                 onClick={() => updateContactData("agreeToTerms", !contactData.agreeToTerms)}
               >
                 {contactData.agreeToTerms && (
@@ -1163,15 +1170,15 @@ export default function Step6ContactDetails({
               </div>
               <span className="text-sm text-gray-700">
                 <span className="text-red-500">* </span>I agree with the{" "}
-                <a href="/terms-and-conditions" className="text-orange-500 hover:underline">
+                <a href="/terms-and-conditions" className="hover:underline" style={styles.primaryText}>
                   Terms & Conditions
                 </a>
                 ,{" "}
-                <a href="/privacy-policy" className="text-orange-500 hover:underline">
+                <a href="/privacy-policy" className="hover:underline" style={styles.primaryText}>
                   Privacy Policy
                 </a>{" "}
                 and{" "}
-                <span className="text-orange-500 hover:underline cursor-pointer">Cookie Preferences</span>
+                <span className="hover:underline cursor-pointer" style={styles.primaryText}>Cookie Preferences</span>
               </span>
             </label>
           </div>
@@ -1179,8 +1186,8 @@ export default function Step6ContactDetails({
           {/* Footer Note */}
           <p className="mt-4 text-xs text-gray-600">
             Please fill in your{" "}
-            <span className="text-orange-500 font-medium">contact details</span> and agree to the{" "}
-            <span className="text-orange-500 font-medium">terms and conditions</span> to finalize your
+            <span className="font-medium" style={styles.primaryText}>contact details</span> and agree to the{" "}
+            <span className="font-medium" style={styles.primaryText}>terms and conditions</span> to finalize your
             order.
           </p>
 
@@ -1200,11 +1207,11 @@ export default function Step6ContactDetails({
               type="button"
               onClick={handleSubmit}
               disabled={!isFormValid()}
-              className={`w-full sm:w-auto px-6 py-3 text-base rounded-lg font-semibold shadow-lg transition-all min-h-[48px] ${
-                isFormValid()
-                  ? "bg-orange-500 text-white hover:bg-orange-600"
-                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
-              }`}
+              className={`w-full sm:w-auto px-6 py-3 text-base rounded-lg font-semibold shadow-lg transition-all min-h-[48px] ${isFormValid()
+                ? "text-white hover:opacity-90"
+                : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                }`}
+              style={isFormValid() ? styles.primaryButton : undefined}
             >
               Submit
             </button>
@@ -1226,4 +1233,3 @@ export default function Step6ContactDetails({
     </div>
   );
 }
-
