@@ -773,10 +773,10 @@ export default function Step3PackingService({
               </p>
             </div>
 
-            {/* Features List with Green Ticks */}
+            {/* Features List with Primary Color Ticks */}
             <div className="mb-8 space-y-4">
               <div className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 flex-shrink-0 mt-0.5" style={styles.primaryText} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -786,7 +786,7 @@ export default function Step3PackingService({
               </div>
 
               <div className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 flex-shrink-0 mt-0.5" style={styles.primaryText} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -796,7 +796,7 @@ export default function Step3PackingService({
               </div>
 
               <div className="flex items-start gap-3">
-                <svg className="w-6 h-6 text-green-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                <svg className="w-6 h-6 flex-shrink-0 mt-0.5" style={styles.primaryText} fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
                 </svg>
                 <div>
@@ -813,9 +813,9 @@ export default function Step3PackingService({
                   setSelectedPackingService("all-inclusive");
                   setSelectedDismantlePackage(true);
                 }}
-                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "text-white shadow-lg" : "bg-white hover:opacity-90"
+                className={`w-full py-4 px-6 rounded-lg font-semibold transition-all text-base border-2 ${isAllInclusive ? "text-white shadow-lg" : "bg-white text-gray-900 hover:opacity-90"
                   }`}
-                style={isAllInclusive ? { ...styles.primaryButton, ...styles.primaryBorder } : { ...styles.primaryText, ...styles.primaryBorder }}
+                style={isAllInclusive ? { ...styles.primaryButton, ...styles.primaryBorder } : styles.primaryBorder}
               >
                 {isAllInclusive ? "✓ " : ""}Yes, I need the packing service
               </button>
