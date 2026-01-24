@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { formatJobId } from "@/lib/utils/jobUtils";
 import { useTheme } from "@/lib/business";
+import BusinessLogo from "@/components/BusinessLogo";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
@@ -58,6 +59,12 @@ export default function ConfirmationModal({
       <div className="relative bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden">
         {/* Success Header */}
         <div className="px-6 py-8 text-center" style={{ background: `linear-gradient(to right, ${theme.primary}, ${theme.primaryHover})` }}>
+          {/* Business Logo */}
+          <div className="mb-4 flex justify-center">
+            <div className="bg-white rounded-lg px-3 py-2">
+              <BusinessLogo variant="full" width={120} height={36} />
+            </div>
+          </div>
           <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center mx-auto mb-4">
             <svg
               className="w-10 h-10"

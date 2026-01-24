@@ -5,6 +5,7 @@
 import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
+import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
 
 interface Step6ContactDetailsProps {
@@ -753,7 +754,7 @@ export default function Step6ContactDetails({
 
           {/* Logo */}
           <div className="mb-4">
-            <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
+            <BusinessLogo variant="full" width={160} height={50} priority />
           </div>
 
           {/* Quote Summary Card */}

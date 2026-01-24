@@ -28,6 +28,17 @@ export interface BusinessFeatures {
   showPoweredBy: boolean;
 }
 
+export interface BusinessLogoConfig {
+  /** Path to full/wide logo (local path or URL) */
+  logo: string;
+  /** Path to square/icon logo (optional, falls back to logo) */
+  logoSquare?: string;
+  /** Path to favicon (local path) */
+  favicon: string;
+  /** Alt text for the logo */
+  alt: string;
+}
+
 export interface BusinessConfig {
   /** 4-char business reference - serves as both DB key and URL slug */
   busRef: string;
@@ -35,8 +46,10 @@ export interface BusinessConfig {
   theme: BusinessTheme;
   /** Feature flags */
   features: BusinessFeatures;
-  /** Optional logo URL */
+  /** Optional logo URL (legacy, prefer using logos) */
   logoUrl?: string;
+  /** Logo configuration for local images */
+  logos?: BusinessLogoConfig;
 }
 
 /**
@@ -56,7 +69,7 @@ export const DEFAULT_THEME: BusinessTheme = {
  * Default feature flags
  */
 export const DEFAULT_FEATURES: BusinessFeatures = {
-  showTrustpilot: true,
+  showTrustpilot: false,
   showNewsletterCheckbox: true,
   showPoweredBy: true,
 };

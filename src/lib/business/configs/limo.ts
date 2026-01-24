@@ -7,6 +7,12 @@ import type { BusinessConfig } from '../types';
  */
 export const limoConfig: BusinessConfig = {
   busRef: 'LIMO',
+  logoUrl: 'https://lionsmovesvan.com/wp-content/uploads/2025/08/Untitled-design-79.png?1769191250',
+  logos: {
+    logo: '/images/business/LIMO/logo.png',
+    favicon: '/images/business/LIMO/favicon.svg',
+    alt: 'Lions Moves',
+  },
   theme: {
     primary: '#FACC15',      // yellow-400 (bright yellow)
     primaryHover: '#EAB308', // yellow-500 (darker on hover)
@@ -17,7 +23,7 @@ export const limoConfig: BusinessConfig = {
     primaryButtonText: '#000000', // black text for yellow buttons
   },
   features: {
-    showTrustpilot: true,
+    showTrustpilot: false,
     showNewsletterCheckbox: true,
     showPoweredBy: true,
   },
