@@ -58,7 +58,7 @@ export default function Step4AddressDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step4AddressDetailsProps) {
-  const { businessName, styles } = useTheme();
+  const { busRef, styles } = useTheme();
   // Default address data
   const getDefaultAddressData = (): AddressData => ({
     postcode: "",
@@ -592,7 +592,7 @@ export default function Step4AddressDetails({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -871,7 +871,7 @@ export default function Step4AddressDetails({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             {/* Quote Summary Card */}

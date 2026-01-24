@@ -13,12 +13,12 @@ export function useTheme() {
 
   const theme: BusinessTheme = context?.theme ?? DEFAULT_THEME;
   const features: BusinessFeatures = context?.config.features ?? DEFAULT_FEATURES;
-  const businessName = context?.config.name ?? 'Your Business Name Goes Here';
+  const busRef = context?.config.busRef ?? 'DEMO';
 
   return {
     theme,
     features,
-    businessName,
+    busRef,
     // Style helpers for common patterns
     styles: {
       // Primary button style

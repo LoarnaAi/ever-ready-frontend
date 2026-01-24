@@ -182,7 +182,7 @@ export default function JobSummaryPage() {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 text-sm text-gray-600">
-                <span className="font-mono font-semibold text-gray-900">{formatJobId(job.job_id)}</span>
+                <span className="font-mono font-semibold text-gray-900">{formatJobId(job.job_id, job.display_job_id)}</span>
                 <span className="hidden sm:inline">|</span>
                 <span>Submitted: {formatCreatedAt(job.created_at)}</span>
               </div>

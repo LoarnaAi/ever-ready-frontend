@@ -27,22 +27,14 @@ export interface BusinessFeatures {
 }
 
 export interface BusinessConfig {
-  /** URL slug used as business identifier in the database */
-  id: string;
-  /** URL path slug (e.g., "acme-removals") */
-  slug: string;
-  /** Display name for the business */
-  name: string;
+  /** 4-char business reference - serves as both DB key and URL slug */
+  busRef: string;
   /** Theme configuration */
   theme: BusinessTheme;
   /** Feature flags */
   features: BusinessFeatures;
   /** Optional logo URL */
   logoUrl?: string;
-  /** Contact email for the business */
-  contactEmail?: string;
-  /** Contact phone for the business */
-  contactPhone?: string;
 }
 
 /**

@@ -1,7 +1,7 @@
 /** @format */
 
 import { notFound } from 'next/navigation';
-import { getBusinessConfig, getAllBusinessSlugs } from '@/lib/business';
+import { getBusinessConfig, getAllBusinessRefs } from '@/lib/business';
 import { BusinessProvider } from '@/lib/business/BusinessContext';
 
 interface LayoutProps {
@@ -10,8 +10,8 @@ interface LayoutProps {
 }
 
 export async function generateStaticParams() {
-  const slugs = getAllBusinessSlugs();
-  return slugs.map((business) => ({ business }));
+  const refs = getAllBusinessRefs();
+  return refs.map((business) => ({ business }));
 }
 
 export default async function BusinessHomeRemovalLayout({

@@ -34,7 +34,7 @@ export default function Step5DateScheduling({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step5DateSchedulingProps) {
-  const { businessName, styles } = useTheme();
+  const { busRef, styles } = useTheme();
   // Get tomorrow's date for materials delivery
   const getTomorrow = () => {
     const tomorrow = new Date();
@@ -539,7 +539,7 @@ export default function Step5DateScheduling({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -826,7 +826,7 @@ export default function Step5DateScheduling({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             {/* Quote Summary Card */}

@@ -23,11 +23,10 @@ const BusinessContext = createContext<BusinessContextValue | null>(null);
 
 /**
  * Default demo business config matching current theme
+ * Business name and contact info are stored in business_master table
  */
 export const DEMO_CONFIG: BusinessConfig = {
-  id: 'demo',
-  slug: 'demo',
-  name: 'Your Business Name Goes Here',
+  busRef: 'DEMO',
   theme: DEFAULT_THEME,
   features: DEFAULT_FEATURES,
 };

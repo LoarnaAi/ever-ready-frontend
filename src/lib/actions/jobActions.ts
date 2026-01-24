@@ -24,9 +24,10 @@ import {
 // Create a new job with all related data
 export async function createJobAction(
   data: CreateJobInput
-): Promise<{ success: boolean; jobId?: string; error?: string }> {
+): Promise<{ success: boolean; jobId?: string; displayJobId?: string; error?: string }> {
   try {
     // 1. Insert the main job record
+    // bus_ref triggers auto-generation of display_job_id via database trigger
     const { data: jobData, error: jobError } = await supabase
       .from("jobs")
       .insert({
@@ -35,9 +36,9 @@ export async function createJobAction(
         dismantle_package: data.dismantlePackage,
         status: "pending",
         internal_notes: "",
-        business_id: data.businessId || null,
+        bus_ref: data.busRef || null,
       })
-      .select("job_id")
+      .select("job_id, display_job_id")
       .single();
 
     if (jobError) {
@@ -46,6 +47,7 @@ export async function createJobAction(
     }
 
     const jobId = jobData.job_id;
+    const displayJobId = jobData.display_job_id;
 
     // 2. Insert addresses
     const addressInserts = [];
@@ -196,7 +198,7 @@ export async function createJobAction(
       }
     }
 
-    return { success: true, jobId };
+    return { success: true, jobId, displayJobId };
   } catch (error) {
     console.error("Unexpected error creating job:", error);
     return {
@@ -289,6 +291,7 @@ export async function getJobAction(
 
     const jobData: JobData = {
       job_id: job.job_id,
+      display_job_id: job.display_job_id || null,
       created_at: job.created_at,
       status: job.status as JobStatus,
       homeSize: job.home_size,
@@ -304,7 +307,7 @@ export async function getJobAction(
       contact: transformContact(contact),
       internalNotes: job.internal_notes,
       costBreakdown: transformCostBreakdown(costBreakdown),
-      businessId: job.business_id || null,
+      busRef: job.bus_ref || null,
     };
 
     return { success: true, data: jobData };

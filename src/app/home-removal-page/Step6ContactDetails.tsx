@@ -40,7 +40,7 @@ export default function Step6ContactDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step6ContactDetailsProps) {
-  const { businessName, styles } = useTheme();
+  const { busRef, styles } = useTheme();
   // Load saved contact data from localStorage
   const loadSavedContactData = (): ContactData => {
     if (typeof window !== "undefined") {
@@ -456,7 +456,7 @@ export default function Step6ContactDetails({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -753,7 +753,7 @@ export default function Step6ContactDetails({
 
           {/* Logo */}
           <div className="mb-4">
-            <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+            <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
           </div>
 
           {/* Quote Summary Card */}

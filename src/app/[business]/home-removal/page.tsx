@@ -29,6 +29,7 @@ export default function BusinessHomeRemoval() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [submittedJobId, setSubmittedJobId] = useState<string>("");
+  const [displayJobId, setDisplayJobId] = useState<string | null>(null);
   const [furnitureQuantities, setFurnitureQuantities] = useState<{
     [key: string]: number;
   }>({});
@@ -344,11 +345,12 @@ export default function BusinessHomeRemoval() {
         collectionDate: savedData.collectionDate,
         materialsDeliveryDate: savedData.materialsDeliveryDate,
         contact: contactData,
-        businessId: config.slug !== 'demo' ? config.slug : null,
+        busRef: config.busRef,
       });
 
       if (result.success && result.jobId) {
         setSubmittedJobId(result.jobId);
+        setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
       } else {
         console.error("Error creating job:", result.error);
@@ -398,6 +400,7 @@ export default function BusinessHomeRemoval() {
         <ConfirmationModal
           isOpen={showConfirmationModal}
           jobId={submittedJobId}
+          displayJobId={displayJobId}
           onClose={handleCloseModal}
           onViewSummary={handleViewSummary}
         />
@@ -495,9 +498,9 @@ export default function BusinessHomeRemoval() {
               </div>
             )}
 
-            {/* Business Name */}
+            {/* Business Reference - TODO: Fetch business name from business_master */}
             <div className="mb-6">
-              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{config.name}</h1>
+              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{config.busRef}</h1>
             </div>
 
             {/* Service Title */}

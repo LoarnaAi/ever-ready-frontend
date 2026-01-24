@@ -168,7 +168,7 @@ export default function JobDetailPage() {
                 <span className="text-gray-900">Job Details</span>
               </div>
               <div className="flex items-center gap-3 mb-2">
-                <h1 className="text-2xl font-bold text-gray-900">{formatJobId(job.job_id)}</h1>
+                <h1 className="text-2xl font-bold text-gray-900">{formatJobId(job.job_id, job.display_job_id)}</h1>
                 {statusUpdated && (
                   <span className="text-xs text-green-600 bg-green-50 px-2 py-1 rounded">
                     Status Updated!
@@ -479,7 +479,7 @@ export default function JobDetailPage() {
               <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
               <div className="space-y-2">
                 <a
-                  href={`mailto:${job.contact.email}?subject=Regarding Your Booking ${formatJobId(job.job_id)}`}
+                  href={`mailto:${job.contact.email}?subject=Regarding Your Booking ${formatJobId(job.job_id, job.display_job_id)}`}
                   className="flex items-center gap-2 w-full py-2 px-3 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                 >
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

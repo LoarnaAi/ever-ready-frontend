@@ -24,6 +24,7 @@ export default function HomeRemoval() {
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [submittedJobId, setSubmittedJobId] = useState<string>("");
+  const [displayJobId, setDisplayJobId] = useState<string | null>(null);
   const [furnitureQuantities, setFurnitureQuantities] = useState<{
     [key: string]: number;
   }>({});
@@ -366,6 +367,7 @@ export default function HomeRemoval() {
       const savedData = loadSavedData();
 
       // Create job in Supabase database
+      // Use DEMO as default business reference for non-business-specific route
       const result = await createJobAction({
         homeSize: selectedService,
         furnitureItems: convertToFurnitureItems(furnitureQuantities),
@@ -378,11 +380,13 @@ export default function HomeRemoval() {
         collectionDate: savedData.collectionDate,
         materialsDeliveryDate: savedData.materialsDeliveryDate,
         contact: contactData,
+        busRef: 'DEMO',
       });
 
       if (result.success && result.jobId) {
         // Store job ID and show confirmation modal
         setSubmittedJobId(result.jobId);
+        setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
       } else {
         console.error("Error creating job:", result.error);
@@ -425,6 +429,7 @@ export default function HomeRemoval() {
         <ConfirmationModal
           isOpen={showConfirmationModal}
           jobId={submittedJobId}
+          displayJobId={displayJobId}
           onClose={handleCloseModal}
           onViewSummary={handleViewSummary}
         />

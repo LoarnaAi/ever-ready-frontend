@@ -2,12 +2,11 @@ import type { BusinessConfig } from '../types';
 
 /**
  * London Movers business configuration
- * Example of a customer with a blue theme
+ * Blue theme for this customer
+ * Business name and contact info are stored in business_master table
  */
-export const londonMoversConfig: BusinessConfig = {
-  id: 'london-movers',
-  slug: 'london-movers',
-  name: 'London Movers',
+export const lndnConfig: BusinessConfig = {
+  busRef: 'LNDN',
   theme: {
     primary: '#2563eb',      // blue-600
     primaryHover: '#1d4ed8', // blue-700
@@ -21,6 +20,4 @@ export const londonMoversConfig: BusinessConfig = {
     showNewsletterCheckbox: true,
     showPoweredBy: true,
   },
-  contactEmail: 'info@london-movers.example.com',
-  contactPhone: '+44 20 1234 5678',
 };

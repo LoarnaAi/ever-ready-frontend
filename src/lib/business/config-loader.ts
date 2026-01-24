@@ -1,38 +1,40 @@
 import type { BusinessConfig } from './types';
 import { demoConfig } from './configs/demo';
-import { londonMoversConfig } from './configs/london-movers';
+import { lndnConfig } from './configs/lndn';
 
 /**
  * Registry of all business configurations
+ * Keyed by busRef (4-char business reference code)
  * Add new customers here
  */
 const configRegistry: Record<string, BusinessConfig> = {
-  demo: demoConfig,
-  'london-movers': londonMoversConfig,
+  DEMO: demoConfig,
+  LNDN: lndnConfig,
 };
 
 /**
- * Get business configuration by slug
- * @param slug - URL path slug (e.g., "demo", "acme-removals")
+ * Get business configuration by busRef
+ * @param busRef - 4-char business reference (e.g., "DEMO", "LNDN")
  * @returns BusinessConfig if found, null otherwise
  */
-export function getBusinessConfig(slug: string): BusinessConfig | null {
-  return configRegistry[slug] ?? null;
+export function getBusinessConfig(busRef: string): BusinessConfig | null {
+  // Normalize to uppercase for case-insensitive lookup
+  return configRegistry[busRef.toUpperCase()] ?? null;
 }
 
 /**
- * Get all registered business slugs
+ * Get all registered business references
  * Useful for static generation of routes
  */
-export function getAllBusinessSlugs(): string[] {
+export function getAllBusinessRefs(): string[] {
   return Object.keys(configRegistry);
 }
 
 /**
- * Check if a business slug exists
+ * Check if a business reference exists
  */
-export function isValidBusinessSlug(slug: string): boolean {
-  return slug in configRegistry;
+export function isValidBusinessRef(busRef: string): boolean {
+  return busRef.toUpperCase() in configRegistry;
 }
 
 /**
@@ -40,5 +42,5 @@ export function isValidBusinessSlug(slug: string): boolean {
  * (Primarily for testing purposes)
  */
 export function registerBusinessConfig(config: BusinessConfig): void {
-  configRegistry[config.slug] = config;
+  configRegistry[config.busRef] = config;
 }

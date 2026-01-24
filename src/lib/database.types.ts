@@ -11,6 +11,8 @@ export type DateType = 'collection' | 'materials_delivery';
 export type FurnitureListType = 'current' | 'initial';
 
 // Database row types
+
+// Legacy businesses table (for backward compatibility)
 export interface DbBusiness {
   id: string;
   slug: string;
@@ -20,8 +22,48 @@ export interface DbBusiness {
   created_at: string;
 }
 
+// New business_master table
+export interface DbBusinessMaster {
+  bus_ref: string;
+  bus_id: string;
+  bus_name: string;
+  bus_email: string | null;
+  admins: string[] | null;
+  house_number: string;
+  building_name: string | null;
+  street_name: string;
+  city: string;
+  postcode: string;
+  lat: number;
+  lon: number;
+  dt: string;
+  dtts: string;
+}
+
+// Application-level business master type
+export interface BusinessMaster {
+  busRef: string;
+  busId: string;
+  name: string;
+  email: string | null;
+  admins: string[] | null;
+  address: {
+    houseNumber: string;
+    buildingName: string | null;
+    streetName: string;
+    city: string;
+    postcode: string;
+  };
+  location: {
+    lat: number;
+    lon: number;
+  };
+}
+
 export interface DbJob {
   job_id: string;
+  display_job_id: string | null;
+  bus_ref: string | null;
   created_at: string;
   status: string;
   home_size: string;
@@ -29,7 +71,7 @@ export interface DbJob {
   dismantle_package: boolean;
   internal_notes: string;
   user_id: string | null;
-  business_id: string | null;
+  business_id: string | null;  // Legacy field, kept for backward compatibility
   schema_version: number;
   extras: Record<string, unknown>;
 }
@@ -152,6 +194,7 @@ export interface CostBreakdown {
 // Full job data structure for application use
 export interface JobData {
   job_id: string;
+  display_job_id: string | null;
   created_at: string;
   status: JobStatus;
   homeSize: string;
@@ -167,10 +210,10 @@ export interface JobData {
   contact: ContactDetails;
   internalNotes: string;
   costBreakdown: CostBreakdown | null;
-  businessId: string | null;
+  busRef: string | null;
 }
 
 // Input type for creating a job (excludes auto-generated fields)
-export type CreateJobInput = Omit<JobData, 'job_id' | 'created_at' | 'status' | 'internalNotes' | 'costBreakdown' | 'businessId'> & {
-  businessId?: string | null;
+export type CreateJobInput = Omit<JobData, 'job_id' | 'display_job_id' | 'created_at' | 'status' | 'internalNotes' | 'costBreakdown' | 'busRef'> & {
+  busRef?: string | null;
 };

@@ -30,3 +30,14 @@
 
 ## Architecture Notes
 - This is a marketing site for EverReady built with Next.js App Router and Tailwind CSS. The root layout (`src/app/layout.tsx`) applies the site-wide shell.
+
+## Documentation
+- Project docs live under `docs/`.
+- Multi-tenant business config overview: `docs/business-configs.md`.
+
+## /init Tenant Onboarding
+- Gather tenant details (business name, brand colors, logo, service areas, contact info) and confirm copy for hero/services/FAQ sections.
+- Create a new route folder under `src/app/` using a kebab-case slug for the tenant and scaffold `page.tsx` (and `layout.tsx` if it needs custom meta).
+- Add tenant-specific assets in `public/images/` and reference them from the new page using the established marketing components.
+- Wire any tenant-specific constants or helpers in `src/lib/` and keep styling aligned with `tailwind.config.js` theme tokens.
+- Run `npm run lint`, then review the page locally with `npm run dev` before handoff.

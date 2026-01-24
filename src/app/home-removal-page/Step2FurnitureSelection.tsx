@@ -22,7 +22,7 @@ export default function Step2FurnitureSelection({
   onPrevious,
   initialFurnitureQuantities = {},
 }: Step2FurnitureSelectionProps) {
-  const { theme, businessName, styles } = useTheme();
+  const { theme, busRef, styles } = useTheme();
 
   // Helper function to convert name to ID
   const nameToId = (name: string): string => {
@@ -455,7 +455,7 @@ export default function Step2FurnitureSelection({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             {/* Quote Summary Card */}
@@ -688,7 +688,7 @@ export default function Step2FurnitureSelection({
               <div className="bg-white rounded-lg">
                 {/* Logo */}
                 <div className="mb-3">
-                  <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+                  <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
                 </div>
 
                 <div className="flex items-center justify-between mb-4">

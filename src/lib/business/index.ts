@@ -13,8 +13,8 @@ export {
 // Config loader
 export {
   getBusinessConfig,
-  getAllBusinessSlugs,
-  isValidBusinessSlug,
+  getAllBusinessRefs,
+  isValidBusinessRef,
   registerBusinessConfig,
 } from './config-loader';
 

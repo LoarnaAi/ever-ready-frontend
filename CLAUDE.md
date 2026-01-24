@@ -33,6 +33,10 @@ This is a multi-service web application featuring:
 
 Uses Next.js App Router with file-based routing and Supabase for backend operations.
 
+## Documentation
+
+Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`.
+
 ### Directory Structure
 
 - `src/app/` - App Router pages (each folder is a route)

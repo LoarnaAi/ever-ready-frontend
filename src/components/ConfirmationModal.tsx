@@ -3,11 +3,12 @@
 "use client";
 
 import { useState } from "react";
-import { formatJobId } from "@/lib/tempDb";
+import { formatJobId } from "@/lib/utils/jobUtils";
 
 interface ConfirmationModalProps {
   isOpen: boolean;
   jobId: string;
+  displayJobId?: string | null;
   onClose: () => void;
   onViewSummary: () => void;
 }
@@ -15,6 +16,7 @@ interface ConfirmationModalProps {
 export default function ConfirmationModal({
   isOpen,
   jobId,
+  displayJobId,
   onClose,
   onViewSummary,
 }: ConfirmationModalProps) {
@@ -22,7 +24,7 @@ export default function ConfirmationModal({
 
   if (!isOpen) return null;
 
-  const formattedJobId = formatJobId(jobId);
+  const formattedJobId = formatJobId(jobId, displayJobId);
 
   const handleCopyJobId = async () => {
     try {

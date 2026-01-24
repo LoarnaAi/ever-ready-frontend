@@ -28,7 +28,7 @@ export default function Step3PackingService({
   initialFurnitureQuantities = {},
   selectedDismantlePackage: propSelectedDismantlePackage = false,
 }: Step3PackingServiceProps) {
-  const { businessName, styles } = useTheme();
+  const { busRef, styles } = useTheme();
   const [selectedPackingService, setSelectedPackingService] =
     useState<string>("");
   const packingMaterialQuantities: { [key: string]: number } = {};
@@ -352,7 +352,7 @@ export default function Step3PackingService({
           <div className="bg-white rounded-lg">
             {/* Logo */}
             <div className="mb-3">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             <div className="flex items-center justify-between mb-3">
@@ -565,7 +565,7 @@ export default function Step3PackingService({
 
             {/* Logo */}
             <div className="mb-4">
-              <h1 className="text-xl font-bold" style={styles.brandText}>{businessName}</h1>
+              <h1 className="text-xl font-bold" style={styles.brandText}>{busRef}</h1>
             </div>
 
             {/* Quote Summary Card */}
