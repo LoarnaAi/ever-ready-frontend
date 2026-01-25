@@ -7,6 +7,7 @@ import type { BusinessConfig } from '../types';
  */
 export const limoConfig: BusinessConfig = {
   busRef: 'LIMO',
+  busName: 'Lions Moves Van',
   logoUrl: 'https://lionsmovesvan.com/wp-content/uploads/2025/08/Untitled-design-79.png?1769191250',
   logos: {
     logo: '/images/business/LIMO/logo.png',

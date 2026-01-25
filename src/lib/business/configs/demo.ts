@@ -8,6 +8,7 @@ import { DEFAULT_THEME, DEFAULT_FEATURES } from '../types';
  */
 export const demoConfig: BusinessConfig = {
   busRef: 'DEMO',
+  busName: 'Demo Removals',
   logos: {
     logo: '/images/business/DEMO/logo.svg',
     favicon: '/images/business/DEMO/favicon.svg',

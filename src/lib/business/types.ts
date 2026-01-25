@@ -42,6 +42,8 @@ export interface BusinessLogoConfig {
 export interface BusinessConfig {
   /** 4-char business reference - serves as both DB key and URL slug */
   busRef: string;
+  /** Business display name (from business_master.bus_name) */
+  busName: string;
   /** Theme configuration */
   theme: BusinessTheme;
   /** Feature flags */

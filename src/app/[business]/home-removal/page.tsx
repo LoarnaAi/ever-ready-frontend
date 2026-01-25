@@ -11,6 +11,7 @@ import Step5DateScheduling from "@/app/home-removal-page/Step5DateScheduling";
 import Step6ContactDetails from "@/app/home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import BusinessLogo from "@/components/BusinessLogo";
 import { createJobAction } from "@/lib/actions/jobActions";
 import { sendJobReportToAdminsAction } from "@/lib/actions/jobReportActions";
 import { useBusinessConfig } from "@/lib/business";
@@ -506,13 +507,16 @@ export default function BusinessHomeRemoval() {
               </div>
             )}
 
-            {/* Business Reference - TODO: Fetch business name from business_master */}
-            <div className="mb-6">
-              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{config.busRef}</h1>
+            {/* Business Logo and Name */}
+            <div className="mb-6 flex flex-col items-center">
+              <BusinessLogo
+                variant="full"
+                width={180}
+                height={60}
+                className="mb-3"
+              />
+              <h1 className="text-xl font-semibold text-gray-900 text-center">{config.busName}</h1>
             </div>
-
-            {/* Service Title */}
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Home Removals</h2>
 
             {/* Intro Text */}
             <p className="text-sm text-gray-600 mb-6">
