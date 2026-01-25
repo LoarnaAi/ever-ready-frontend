@@ -35,7 +35,7 @@ export default function Step3CurrentHome({
   ];
 
   const handleCounterChange = (roomId: string, delta: number) => {
-    const currentValue = formData.currentRooms[roomId] || 0;
+    const currentValue = Number(formData.currentRooms[roomId]) || 0;
     const newValue = Math.max(0, currentValue + delta);
     updateFormData("currentRooms", {
       ...formData.currentRooms,
@@ -160,7 +160,7 @@ export default function Step3CurrentHome({
                     </button>
                     <input
                       type="number"
-                      value={formData.currentRooms[room.id] || 0}
+                      value={Number(formData.currentRooms[room.id]) || 0}
                       onChange={(e) =>
                         updateFormData("currentRooms", {
                           ...formData.currentRooms,
@@ -181,7 +181,7 @@ export default function Step3CurrentHome({
                   <div className="flex justify-center">
                     <input
                       type="checkbox"
-                      checked={formData.currentRooms[room.id] || false}
+                      checked={Boolean(formData.currentRooms[room.id])}
                       onChange={() => handleCheckboxChange(room.id)}
                       className="w-5 h-5 text-yellow-500 border-gray-300 rounded focus:ring-yellow-500"
                     />

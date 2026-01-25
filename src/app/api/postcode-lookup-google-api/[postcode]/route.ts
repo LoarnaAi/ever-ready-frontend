@@ -24,9 +24,9 @@ interface GeocodeResponse {
 
 export async function GET(
     request: NextRequest,
-    { params }: { params: { postcode: string } }
+    { params }: { params: Promise<{ postcode: string }> }
 ) {
-    const { postcode } = params
+    const { postcode } = await params
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY
 
     console.log('[Google API] Postcode lookup request:', postcode)
