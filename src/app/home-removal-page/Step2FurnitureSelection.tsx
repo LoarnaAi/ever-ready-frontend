@@ -23,7 +23,7 @@ export default function Step2FurnitureSelection({
   onPrevious,
   initialFurnitureQuantities = {},
 }: Step2FurnitureSelectionProps) {
-  const { theme, busRef, styles } = useTheme();
+  const { theme, styles } = useTheme();
 
   // Helper function to convert name to ID
   const nameToId = (name: string): string => {
@@ -414,9 +414,6 @@ export default function Step2FurnitureSelection({
     "Other",
   ];
 
-  // Calculate total items for mobile summary
-  const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
       <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
@@ -679,7 +676,7 @@ export default function Step2FurnitureSelection({
                 Your inventory is ready to customise!
               </h2>
               <p className="text-sm text-gray-600 mb-4">
-                We've pre-selected typical items for your home. Add anything we missed or remove what you don't need.
+                We&apos;ve pre-selected typical items for your home. Add anything we missed or remove what you don&apos;t need.
               </p>
             </div>
 
@@ -981,7 +978,7 @@ export default function Step2FurnitureSelection({
                           d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                         />
                       </svg>
-                      <p className="text-sm">No items found matching "{searchQuery}"</p>
+                      <p className="text-sm">No items found matching &quot;{searchQuery}&quot;</p>
                     </div>
                   );
                 }
@@ -1253,7 +1250,7 @@ export default function Step2FurnitureSelection({
             No Surprises Guarantee
           </div>
           <p className="text-xs text-gray-700">
-            We'll complete the job, no matter how long it takes - at no extra
+            We&apos;ll complete the job, no matter how long it takes - at no extra
             charge - As long as the items, access, and dismantling info are
             accurate.
           </p>

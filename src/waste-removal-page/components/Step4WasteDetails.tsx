@@ -1,8 +1,13 @@
 /** @format */
 
+interface Step4WasteDetailsFormData {
+  wasteItems: Record<string, number>;
+  wasteDescription: string;
+}
+
 interface Step4WasteDetailsProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step4WasteDetailsFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
   onPrevious: () => void;
 }

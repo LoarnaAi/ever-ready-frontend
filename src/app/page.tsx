@@ -217,7 +217,7 @@ export default function Home() {
           <div className="mt-12">
             <p className="text-center text-xl font-semibold text-white mb-8">
               Below, we highlight compelling insights 
-              that showcase the tangible impact of AI in today's business landscape.
+              that showcase the tangible impact of AI in today&apos;s business landscape.
             </p>
             <div className="relative scale-90">
               <TestimonialSlider testimonials={aiTestimonials} />

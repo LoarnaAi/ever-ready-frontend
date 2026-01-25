@@ -1,8 +1,14 @@
 /** @format */
 
+interface Step2QuoteFormFormData {
+  typeOfMove: string;
+  preferredDate: string;
+  flexibleDates: string;
+}
+
 interface Step2QuoteFormProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step2QuoteFormFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
   onPrevious: () => void;
 }

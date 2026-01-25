@@ -35,7 +35,7 @@ export default function Step5DateScheduling({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step5DateSchedulingProps) {
-  const { busRef, styles } = useTheme();
+  const { styles } = useTheme();
   // Get tomorrow's date for materials delivery
   const getTomorrow = () => {
     const tomorrow = new Date();
@@ -61,7 +61,7 @@ export default function Step5DateScheduling({
             ...parsed,
             date: parsed.date ? new Date(parsed.date) : getTomorrow(),
           };
-        } catch (e) {
+        } catch {
           // If parsing fails, return default
         }
       }
@@ -83,7 +83,7 @@ export default function Step5DateScheduling({
             ...parsed,
             date: parsed.date ? new Date(parsed.date) : getDayAfterTomorrow(),
           };
-        } catch (e) {
+        } catch {
           // If parsing fails, return default
         }
       }
@@ -95,7 +95,7 @@ export default function Step5DateScheduling({
     };
   };
 
-  const [materialsDelivery, setMaterialsDeliveryState] = useState<ScheduleData>(loadSavedMaterialsDelivery());
+  const [materialsDelivery] = useState<ScheduleData>(loadSavedMaterialsDelivery());
   const [collectionDate, setCollectionDateState] = useState<ScheduleData>(loadSavedCollectionDate());
 
   // Load saved address data from localStorage (from Step 4)
@@ -125,13 +125,6 @@ export default function Step5DateScheduling({
   });
 
   // Wrapper functions to save to localStorage
-  const setMaterialsDelivery = (data: ScheduleData) => {
-    setMaterialsDeliveryState(data);
-    if (typeof window !== "undefined") {
-      localStorage.setItem("step5_materialsDelivery", JSON.stringify(data));
-    }
-  };
-
   const setCollectionDate = (data: ScheduleData) => {
     setCollectionDateState(data);
     if (typeof window !== "undefined") {
@@ -431,20 +424,6 @@ export default function Step5DateScheduling({
 
 
   const sixHourSlots = ["9:00 - 15:00", "12:00 - 18:00", "17:00 - 23:00"];
-  const twoHourSlots = [
-    "9:00 - 11:00",
-    "10:00 - 12:00",
-    "12:00 - 14:00",
-    "13:00 - 15:00",
-    "14:00 - 16:00",
-    "15:00 - 17:00",
-    "17:00 - 19:00",
-    "18:00 - 20:00",
-    "19:00 - 21:00",
-    "20:00 - 22:00",
-    "21:00 - 23:00",
-  ];
-
   const formatDate = (date: Date | null) => {
     if (!date) return "";
     const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -518,8 +497,6 @@ export default function Step5DateScheduling({
   };
 
   // Calculate total items for mobile summary
-  const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
@@ -1206,7 +1183,7 @@ export default function Step5DateScheduling({
             No Surprises Guarantee
           </div>
           <p className="text-xs text-gray-700">
-            We'll complete the job, no matter how long it takes - at no extra
+            We&apos;ll complete the job, no matter how long it takes - at no extra
             charge - As long as the items, access, and dismantling info are
             accurate.
           </p>

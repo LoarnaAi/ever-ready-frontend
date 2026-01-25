@@ -11,9 +11,42 @@ interface AddressAutocompleteProps {
   onAddressChange: (address: string) => void;
 }
 
+type GooglePlaceAddressComponent = {
+  long_name?: string;
+  types?: string[];
+};
+
+type GooglePlaceResult = {
+  formatted_address?: string;
+  address_components?: GooglePlaceAddressComponent[];
+};
+
+type GoogleAutocompleteInstance = {
+  addListener: (eventName: string, handler: () => void) => void;
+  getPlace: () => GooglePlaceResult;
+};
+
+type GoogleMapsApi = {
+  maps?: {
+    places?: {
+      Autocomplete: new (
+        input: HTMLInputElement,
+        opts: {
+          types: string[];
+          componentRestrictions: { country: string };
+          fields: string[];
+        }
+      ) => GoogleAutocompleteInstance;
+    };
+    event?: {
+      clearInstanceListeners: (instance: GoogleAutocompleteInstance) => void;
+    };
+  };
+};
+
 declare global {
   interface Window {
-    google: any;
+    google: GoogleMapsApi | undefined;
     initGooglePlaces: () => void;
   }
 }
@@ -25,7 +58,7 @@ export default function AddressAutocomplete({
   onAddressChange,
 }: AddressAutocompleteProps) {
   const addressInputRef = useRef<HTMLInputElement>(null);
-  const autocompleteRef = useRef<any>(null);
+  const autocompleteRef = useRef<GoogleAutocompleteInstance | null>(null);
 
   useEffect(() => {
     const apiKey = process.env.NEXT_PUBLIC_GOOGLE_PLACES_API_KEY;
@@ -78,7 +111,7 @@ export default function AddressAutocomplete({
             console.log("Address components:", place.address_components);
 
             const postcodeComponent = place.address_components.find(
-              (component: any) =>
+              (component) =>
                 component.types &&
                 Array.isArray(component.types) &&
                 component.types.includes("postal_code")

@@ -2,9 +2,16 @@
 
 import AddressAutocomplete from "../../components/AddressAutocomplete";
 
+interface Step4MovingToFormData {
+  newPostcode: string;
+  newAddress: string;
+  newPropertyType: string;
+  newHasLift: string;
+}
+
 interface Step4MovingToProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step4MovingToFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
   onPrevious: () => void;
 }

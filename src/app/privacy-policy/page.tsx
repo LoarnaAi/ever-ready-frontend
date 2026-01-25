@@ -14,7 +14,7 @@ export default function PrivacyPolicy() {
             60 Windsor Drive, Orpington, BR6 6HD) is committed to respecting your online privacy and recognises your need for appropriate protection and management of any personally identifiable information you share with us.
           </p>
           <p>
-            Ever-Ready-Response has established this online privacy notice ("Privacy Notice") so that you can understand the care with which we intend to treat your Personal Information.
+            Ever-Ready-Response has established this online privacy notice (&quot;Privacy Notice&quot;) so that you can understand the care with which we intend to treat your Personal Information.
           </p>
         </section>
         
@@ -28,7 +28,7 @@ export default function PrivacyPolicy() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Data Processing</h2>
           <p>
-            For the purposes of the Data Protection Act 2018, the European General Data Protection Regulation ("GDPR") and the retained EU law version of the GDPR (UK GDPR), generally when Ever-Ready-Response carries out functions on behalf of our customers we act as their Data Processor, where Ever-Ready-Response determines the use of individuals' Personal Information, as a prospective, current or former employee as well as when we process information when carrying out our marketing operations, we do so as a Data Controller.
+            For the purposes of the Data Protection Act 2018, the European General Data Protection Regulation (&quot;GDPR&quot;) and the retained EU law version of the GDPR (UK GDPR), generally when Ever-Ready-Response carries out functions on behalf of our customers we act as their Data Processor, where Ever-Ready-Response determines the use of individuals&apos; Personal Information, as a prospective, current or former employee as well as when we process information when carrying out our marketing operations, we do so as a Data Controller.
           </p>
         </section>
         
@@ -66,7 +66,7 @@ export default function PrivacyPolicy() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Marketing Opt-out</h2>
           <p>
-            You can opt-out of marketing communications at any time by emailing support@ever-ready.ai with the subject "Stop Marketing" or by post to the registered office.
+            You can opt-out of marketing communications at any time by emailing support@ever-ready.ai with the subject &quot;Stop Marketing&quot; or by post to the registered office.
           </p>
         </section>
         
@@ -86,7 +86,7 @@ export default function PrivacyPolicy() {
         </section>
         
         <section className="mb-8">
-          <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Children's Privacy</h2>
+          <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Children&apos;s Privacy</h2>
           <p>
             Ever-Ready-Response is a business-to-business website intended for users over 18 years of age. We do not intend to collect Personal Information from anyone under 18 years old.
           </p>

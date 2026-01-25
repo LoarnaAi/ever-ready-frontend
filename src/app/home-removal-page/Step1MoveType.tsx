@@ -1,8 +1,12 @@
 /** @format */
 
+interface Step1MoveTypeFormData {
+  moveType?: string;
+}
+
 interface Step1MoveTypeProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step1MoveTypeFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
 }
 

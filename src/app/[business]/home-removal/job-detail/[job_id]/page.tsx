@@ -18,7 +18,7 @@ export default function JobDetailPage() {
   const params = useParams();
   const jobId = params.job_id as string;
   const businessSlug = params.business as string;
-  const { config, theme } = useBusinessConfig();
+  const { theme } = useBusinessConfig();
 
   const [job, setJob] = useState<JobData | null>(null);
   const [loading, setLoading] = useState(true);

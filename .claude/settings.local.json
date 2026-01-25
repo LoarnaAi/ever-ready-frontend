@@ -14,7 +14,11 @@
       "Bash(find:*)",
       "Bash(npx tsc:*)",
       "Bash(grep:*)",
-      "WebFetch(domain:lionsmovesvan.com)"
+      "WebFetch(domain:lionsmovesvan.com)",
+      "Bash(set -a)",
+      "Bash(source .env.local)",
+      "Bash(set +a)",
+      "Bash(npx tsx:*)"
     ]
   }
 }
