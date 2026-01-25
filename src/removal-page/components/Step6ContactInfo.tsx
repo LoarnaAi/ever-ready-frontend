@@ -2,9 +2,16 @@
 
 import { useState } from "react";
 
+interface Step6ContactInfoFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
+
 interface Step6ContactInfoProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step6ContactInfoFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onPrevious: () => void;
 }
 
@@ -104,7 +111,7 @@ export default function Step6ContactInfo({
           </div>
           <p className="mt-1">
             Thank you! Your removal request has been submitted successfully.
-            We'll get back to you soon with quotes.
+            We&apos;ll get back to you soon with quotes.
           </p>
         </div>
       )}

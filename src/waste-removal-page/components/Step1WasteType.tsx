@@ -1,8 +1,12 @@
 /** @format */
 
+interface Step1WasteTypeFormData {
+  wasteType?: string;
+}
+
 interface Step1WasteTypeProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step1WasteTypeFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
 }
 

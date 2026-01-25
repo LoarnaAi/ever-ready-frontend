@@ -2,9 +2,16 @@
 
 import AddressAutocomplete from "../../components/AddressAutocomplete";
 
+interface Step3LocationInfoFormData {
+  postcode: string;
+  address: string;
+  propertyType: string;
+  hasLift: string;
+}
+
 interface Step3LocationInfoProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step3LocationInfoFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
   onPrevious: () => void;
 }

@@ -49,7 +49,7 @@ export default function Step6ContactDetails({
       if (saved) {
         try {
           return JSON.parse(saved);
-        } catch (e) {
+        } catch {
           // If parsing fails, return default
         }
       }
@@ -401,24 +401,6 @@ export default function Step6ContactDetails({
       }
       return updated;
     });
-  };
-
-  // Create a setContactData function that works with the state
-  const setContactData = (data: ContactData | ((prev: ContactData) => ContactData)) => {
-    if (typeof data === "function") {
-      setContactDataState((prev) => {
-        const updated = data(prev);
-        if (typeof window !== "undefined") {
-          localStorage.setItem("step6_contactData", JSON.stringify(updated));
-        }
-        return updated;
-      });
-    } else {
-      setContactDataState(data);
-      if (typeof window !== "undefined") {
-        localStorage.setItem("step6_contactData", JSON.stringify(data));
-      }
-    }
   };
 
   const isFormValid = () => {
@@ -1226,7 +1208,7 @@ export default function Step6ContactDetails({
           No Surprises Guarantee
         </div>
         <p className="text-xs text-gray-700">
-          We'll complete the job, no matter how long it takes - at no extra
+          We&apos;ll complete the job, no matter how long it takes - at no extra
           charge - As long as the items, access, and dismantling info are
           accurate.
         </p>

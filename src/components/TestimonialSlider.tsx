@@ -63,7 +63,7 @@ const TestimonialSlider = ({ testimonials, autoplayInterval = 5000 }: Testimonia
             <div key={index} className="flex-none w-full px-4">
               <blockquote className="text-xl font-semibold leading-8 text-white sm:text-2xl sm:leading-9">
                 <p className="text-center text-white">
-                  "{testimonial.quote}"
+                  &quot;{testimonial.quote}&quot;
                 </p>
                 <footer className="mt-6">
                   <p className="text-lg text-center text-white">

@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
 import BusinessLogo from "@/components/BusinessLogo";
@@ -59,7 +59,7 @@ export default function Step4AddressDetails({
   packingMaterialQuantities = {},
   selectedPackingService = "",
 }: Step4AddressDetailsProps) {
-  const { busRef, styles } = useTheme();
+  const { styles } = useTheme();
   // Default address data
   const getDefaultAddressData = (): AddressData => ({
     postcode: "",
@@ -85,7 +85,7 @@ export default function Step4AddressDetails({
         try {
           const parsed = JSON.parse(saved);
           return { ...getDefaultAddressData(), ...parsed };
-        } catch (e) {
+        } catch {
           // If parsing fails, return default
         }
       }
@@ -100,7 +100,7 @@ export default function Step4AddressDetails({
         try {
           const parsed = JSON.parse(saved);
           return { ...getDefaultAddressData(), ...parsed };
-        } catch (e) {
+        } catch {
           // If parsing fails, return default
         }
       }
@@ -571,8 +571,6 @@ export default function Step4AddressDetails({
   };
 
   // Calculate total items for mobile summary
-  const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
@@ -1134,7 +1132,7 @@ export default function Step4AddressDetails({
             {/* Collection Postcode Section */}
             <div className="mb-4">
               <h2 className="text-sm sm:text-base font-bold text-gray-900 mb-3">
-                What's your collection postcode in the UK?
+                What&apos;s your collection postcode in the UK?
               </h2>
 
               <div className="space-y-3 sm:space-y-2">
@@ -1299,7 +1297,7 @@ export default function Step4AddressDetails({
             {/* Delivery Postcode Section */}
             <div className="mb-4">
               <h2 className="text-sm sm:text-base font-bold text-gray-900 mb-3">
-                What's your delivery postcode in the UK?
+                What&apos;s your delivery postcode in the UK?
               </h2>
 
               <div className="space-y-3 sm:space-y-2">
@@ -1518,7 +1516,7 @@ export default function Step4AddressDetails({
             No Surprises Guarantee
           </div>
           <p className="text-xs text-gray-700">
-            We'll complete the job, no matter how long it takes - at no extra
+            We&apos;ll complete the job, no matter how long it takes - at no extra
             charge - As long as the items, access, and dismantling info are
             accurate.
           </p>

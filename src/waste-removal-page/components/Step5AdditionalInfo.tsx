@@ -1,8 +1,14 @@
 /** @format */
 
+interface Step5AdditionalInfoFormData {
+  specialRequirements: string[];
+  comment: string;
+  serviceArea: string;
+}
+
 interface Step5AdditionalInfoProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step5AdditionalInfoFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onNext: () => void;
   onPrevious: () => void;
 }

@@ -412,9 +412,7 @@ export default function BusinessHomeRemoval() {
 
   // Dynamic styles based on theme
   const primaryBgStyle = { backgroundColor: theme.primary };
-  const primaryBgHoverStyle = { backgroundColor: theme.primaryHover };
   const primaryTextStyle = { color: theme.primary };
-  const lightBgStyle = { backgroundColor: theme.primaryLight };
 
   // Render step 6
   if (currentStep === 6 && selectedService) {

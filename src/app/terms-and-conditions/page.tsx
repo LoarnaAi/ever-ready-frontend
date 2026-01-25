@@ -11,7 +11,7 @@ export default function TermsAndConditions() {
         <section className="mb-8">
           <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Service Description</h2>
           <p>
-            "Ever Ready Response" provides emergency response and service for property managers and their tenants. 
+            &quot;Ever Ready Response&quot; provides emergency response and service for property managers and their tenants. 
             Our service typically operates outside of normal business hours to handle urgent property-related issues.
           </p>
         </section>
@@ -123,7 +123,7 @@ export default function TermsAndConditions() {
           <h2 className="text-2xl font-semibold mb-4 text-everready-primary">Governing Law</h2>
           <p>
             These terms and conditions are governed by and construed in accordance with the laws 
-            applicable in the United Kingdom ('UK'). Any disputes arising from these terms will be 
+            applicable in the United Kingdom (&apos;UK&apos;). Any disputes arising from these terms will be 
             subject to the exclusive jurisdiction of the courts in the UK.
           </p>
         </section>

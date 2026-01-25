@@ -2,6 +2,7 @@
 
 import { getMessagingConfig } from '../messaging/config-loader';
 import { SendEmailInput, MessageResult, BookingConfirmationData } from '../messaging/types';
+import { generateBookingConfirmationHtml } from '../templates/bookingConfirmationHtml';
 
 export async function sendEmailAction(
     busRef: string,
@@ -74,13 +75,13 @@ export async function sendBookingConfirmationEmailAction(
     data: BookingConfirmationData
 ): Promise<MessageResult> {
     const subject = `Booking Confirmation - ${data.displayJobId || data.jobId}`;
-    const body = buildEmailTemplate(data);
+    const body = generateBookingConfirmationHtml(data);
 
     return sendEmailAction(data.busRef, {
         to: data.customerEmail,
         subject,
         body,
-        bodyType: 'Text',
+        bodyType: 'HTML',
     });
 }
 
@@ -113,43 +114,4 @@ async function getMicrosoftAccessToken(
 
     const data = await response.json();
     return data.access_token;
-}
-
-function buildEmailTemplate(data: BookingConfirmationData): string {
-    return `
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-   EVERREADY - BOOKING CONFIRMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Dear ${data.customerName},
-
-Thank you for choosing EverReady! Your home removal booking has been confirmed.
-
-BOOKING DETAILS
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Booking Reference: ${data.displayJobId || data.jobId}
-Home Size: ${data.homeSize}
-${data.collectionDate ? `Collection Date: ${data.collectionDate}` : ''}
-${data.collectionAddress ? `Collection Address: ${data.collectionAddress}` : ''}
-${data.deliveryAddress ? `Delivery Address: ${data.deliveryAddress}` : ''}
-
-CUSTOMER INFORMATION
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Name: ${data.customerName}
-Email: ${data.customerEmail}
-Phone: ${data.customerPhone}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-We will contact you shortly to confirm the final details of your move.
-
-If you have any questions, please don't hesitate to reach out.
-
-Best regards,
-The EverReady Team
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  © ${new Date().getFullYear()} EverReady - Your Trusted Moving Partner
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-`.trim();
 }

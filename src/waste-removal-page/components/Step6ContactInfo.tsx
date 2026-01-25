@@ -1,8 +1,21 @@
 /** @format */
 
+interface Step6ContactInfoFormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  wasteType: string;
+  typeOfService: string;
+  preferredDate: string;
+  address: string;
+  propertyType: string;
+  specialRequirements: string[];
+}
+
 interface Step6ContactInfoProps {
-  formData: any;
-  updateFormData: (field: string, value: any) => void;
+  formData: Step6ContactInfoFormData;
+  updateFormData: (field: string, value: unknown) => void;
   onPrevious: () => void;
 }
 

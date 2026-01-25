@@ -29,7 +29,7 @@ export default function Step3PackingService({
   initialFurnitureQuantities = {},
   selectedDismantlePackage: propSelectedDismantlePackage = false,
 }: Step3PackingServiceProps) {
-  const { busRef, styles } = useTheme();
+  const { styles } = useTheme();
   const [selectedPackingService, setSelectedPackingService] =
     useState<string>("");
   const packingMaterialQuantities: { [key: string]: number } = {};
@@ -331,8 +331,6 @@ export default function Step3PackingService({
 
 
   // Calculate total items for mobile summary
-  const totalItems = Object.values(furnitureQuantities).reduce((sum, qty) => sum + qty, 0);
-
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
@@ -524,11 +522,11 @@ export default function Step3PackingService({
             {/* Promotional Box */}
             <div className="bg-black border-2 rounded-lg p-3 mb-3" style={styles.primaryBorder}>
               <p className="text-xs text-white leading-relaxed">
-                Don't have time to pack? We'll do it for you. Just choose{" "}
+                Don&apos;t have time to pack? We&apos;ll do it for you. Just choose{" "}
                 <span className="font-semibold" style={styles.primaryText}>
-                  "All Inclusive Packing"
+                  &quot;All Inclusive Packing&quot;
                 </span>{" "}
-                and we'll take care of everything.
+                and we&apos;ll take care of everything.
               </p>
             </div>
 
@@ -743,11 +741,11 @@ export default function Step3PackingService({
             {/* Promotional Box */}
             <div className="bg-black border-2 rounded-lg p-3 mb-3" style={styles.primaryBorder}>
               <p className="text-xs text-white leading-relaxed">
-                Don't have time to pack? We'll do it for you. Just choose{" "}
+                Don&apos;t have time to pack? We&apos;ll do it for you. Just choose{" "}
                 <span className="font-semibold" style={styles.primaryText}>
-                  "All Inclusive Packing"
+                  &quot;All Inclusive Packing&quot;
                 </span>{" "}
-                and we'll take care of everything.
+                and we&apos;ll take care of everything.
               </p>
             </div>
 
@@ -765,7 +763,7 @@ export default function Step3PackingService({
                 Do you want All Inclusive Packing?
               </h2>
               <p className="text-sm sm:text-base text-gray-600">
-                We'll securely pack every item, saving you time and ensuring everything arrives safely.
+                We&apos;ll securely pack every item, saving you time and ensuring everything arrives safely.
               </p>
             </div>
 
@@ -787,7 +785,7 @@ export default function Step3PackingService({
                 </svg>
                 <div>
                   <h3 className="text-base sm:text-lg font-semibold text-gray-900">Furniture assembly and dismantle</h3>
-                  <p className="text-sm text-gray-600 mt-1">We'll carefully disassemble and reassemble your furniture</p>
+                  <p className="text-sm text-gray-600 mt-1">We&apos;ll carefully disassemble and reassemble your furniture</p>
                 </div>
               </div>
 
@@ -862,7 +860,7 @@ export default function Step3PackingService({
             No Surprises Guarantee
           </div>
           <p className="text-xs text-gray-700">
-            We'll complete the job, no matter how long it takes - at no extra
+            We&apos;ll complete the job, no matter how long it takes - at no extra
             charge - As long as the items, access, and dismantling info are
             accurate.
           </p>
