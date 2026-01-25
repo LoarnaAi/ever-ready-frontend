@@ -15,8 +15,9 @@
   - `set -a; source .env.local; set +a; npx tsx test-job-report.ts`
 
 ## Coding Style & Naming Conventions
-- TypeScript + React (Next.js 14 App Router).
+- TypeScript + React (Next.js 16 App Router).
 - Use 2-space indentation in TS/TSX as existing files do.
+- **Next.js 15+ Breaking Change**: Route handler `params` are now async. Use `{ params }: { params: Promise<{ id: string }> }` and `await params` instead of accessing params directly.
 - Components use PascalCase filenames and exported names (e.g., `AddressAutocomplete.tsx`).
 - Routes use kebab-case folder names under `src/app/` (e.g., `terms-and-conditions`).
 - Add `'use client'` at the top of components that use hooks or browser-only APIs.

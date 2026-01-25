@@ -19,7 +19,7 @@ set -a; source .env.local; set +a; npx tsx test-job-report.ts
 
 ## Tech Stack
 
-- **Framework**: Next.js 14 (App Router)
+- **Framework**: Next.js 16 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS with custom theme
 - **Font**: Inter (via next/font/google)
@@ -91,6 +91,9 @@ Components requiring browser APIs or hooks must use `'use client'` directive. Ex
 - **Server Actions**: Located in `src/lib/actions/` for database operations (e.g., `createJobAction`)
 - **Database Types**: Auto-generated TypeScript types in `src/lib/database.types.ts`
 - **Google Maps**: Address autocomplete functionality via `@googlemaps/js-api-loader`
+
+### Next.js 15+ Breaking Change
+Route handler `params` are now async. Use `{ params }: { params: Promise<{ id: string }> }` and `await params` instead of accessing params directly.
 
 ### Key Features
 
