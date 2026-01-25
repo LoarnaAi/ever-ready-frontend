@@ -35,7 +35,7 @@ Uses Next.js App Router with file-based routing and Supabase for backend operati
 
 ## Documentation
 
-Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`.
+Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`. Messaging API curl examples live in `docs/messaging-api.md`.
 
 ### Directory Structure
 
