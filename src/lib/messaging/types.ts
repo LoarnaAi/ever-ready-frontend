@@ -18,11 +18,18 @@ export interface MessagingConfig {
     whatsapp?: WhatsAppConfig;
 }
 
+export interface EmailAttachment {
+    filename: string;
+    content: string;
+    contentType: string;
+}
+
 export interface SendEmailInput {
     to: string;
     subject: string;
     body: string;
     bodyType?: 'Text' | 'HTML';
+    attachments?: EmailAttachment[];
 }
 
 export interface SendWhatsAppInput {

@@ -11,6 +11,8 @@
 - `npm run build` creates a production build.
 - `npm run start` serves the production build locally.
 - `npm run lint` runs Next.js ESLint checks.
+- For `tsx` scripts that rely on `.env.local`, source env vars first:
+  - `set -a; source .env.local; set +a; npx tsx test-job-report.ts`
 
 ## Coding Style & Naming Conventions
 - TypeScript + React (Next.js 14 App Router).
@@ -30,11 +32,13 @@
 
 ## Architecture Notes
 - This is a marketing site for EverReady built with Next.js App Router and Tailwind CSS. The root layout (`src/app/layout.tsx`) applies the site-wide shell.
+- Messaging features include email (Microsoft Graph) and WhatsApp (Meta Graph) notifications plus job report emails with PDF attachments.
 
 ## Documentation
 - Project docs live under `docs/`.
 - Multi-tenant business config overview: `docs/business-configs.md`.
 - Messaging API curl examples: `docs/messaging-api.md`.
+- Messaging features guide: `docs/messaging-features.md`.
 
 ## /init Tenant Onboarding
 - Gather tenant details (business name, brand colors, logo, service areas, contact info) and confirm copy for hero/services/FAQ sections.
