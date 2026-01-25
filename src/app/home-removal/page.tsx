@@ -12,6 +12,8 @@ import Step6ContactDetails from "../home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { createJobAction } from "@/lib/actions/jobActions";
+import { sendBookingNotificationsAction } from "@/lib/actions/notificationActions";
+import { BookingConfirmationData } from "@/lib/messaging/types";
 import {
   FurnitureItem,
   PackingMaterial,
@@ -388,6 +390,28 @@ export default function HomeRemoval() {
         setSubmittedJobId(result.jobId);
         setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
+
+        // Send notifications (fire-and-forget)
+        const notificationData: BookingConfirmationData = {
+          jobId: result.jobId,
+          displayJobId: result.displayJobId || null,
+          customerName: `${contactData.firstName} ${contactData.lastName}`,
+          customerEmail: contactData.email,
+          customerPhone: contactData.phone,
+          countryCode: contactData.countryCode,
+          homeSize: selectedService,
+          collectionDate: savedData.collectionDate?.date,
+          collectionAddress: savedData.collectionAddress?.address,
+          deliveryAddress: savedData.deliveryAddress?.address,
+          busRef: 'DEMO',
+        };
+
+        sendBookingNotificationsAction(notificationData)
+          .then((r) => {
+            if (!r.email.success) console.warn('Email failed:', r.email.error);
+            if (!r.whatsapp.success) console.warn('WhatsApp failed:', r.whatsapp.error);
+          })
+          .catch(console.error);
       } else {
         console.error("Error creating job:", result.error);
         alert("There was an error submitting your booking. Please try again.");

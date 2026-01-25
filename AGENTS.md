@@ -34,6 +34,7 @@
 ## Documentation
 - Project docs live under `docs/`.
 - Multi-tenant business config overview: `docs/business-configs.md`.
+- Messaging API curl examples: `docs/messaging-api.md`.
 
 ## /init Tenant Onboarding
 - Gather tenant details (business name, brand colors, logo, service areas, contact info) and confirm copy for hero/services/FAQ sections.
