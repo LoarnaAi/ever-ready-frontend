@@ -14,7 +14,9 @@ import ConfirmationModal from "@/components/ConfirmationModal";
 import BusinessLogo from "@/components/BusinessLogo";
 import { createJobAction } from "@/lib/actions/jobActions";
 import { sendJobReportToAdminsAction } from "@/lib/actions/jobReportActions";
+import { sendBookingNotificationsAction } from "@/lib/actions/notificationActions";
 import { useBusinessConfig } from "@/lib/business";
+import { BookingConfirmationData } from "@/lib/messaging/types";
 import {
   FurnitureItem,
   PackingMaterial,
@@ -359,6 +361,28 @@ export default function BusinessHomeRemoval() {
           .then((r) => {
             if (r.success) console.log('Job report sent to:', r.sentTo);
             if (r.errors.length > 0) console.warn('Job report errors:', r.errors);
+          })
+          .catch(console.error);
+
+        // Send notifications (email + WhatsApp to admins) - fire-and-forget
+        const notificationData: BookingConfirmationData = {
+          jobId: result.jobId,
+          displayJobId: result.displayJobId || null,
+          customerName: `${contactData.firstName} ${contactData.lastName}`,
+          customerEmail: contactData.email,
+          customerPhone: contactData.phone,
+          countryCode: contactData.countryCode,
+          homeSize: selectedService,
+          collectionDate: savedData.collectionDate?.date,
+          collectionAddress: savedData.collectionAddress?.address,
+          deliveryAddress: savedData.deliveryAddress?.address,
+          busRef: config.busRef,
+        };
+
+        sendBookingNotificationsAction(notificationData)
+          .then((r) => {
+            if (!r.email.success) console.warn('Email failed:', r.email.error);
+            if (!r.whatsapp.success) console.warn('WhatsApp failed:', r.whatsapp.error);
           })
           .catch(console.error);
       } else {

@@ -120,7 +120,7 @@ function buildWhatsAppMessage(data: BookingConfirmationData): string {
     message += `🏡 *Home Size:* ${data.homeSize}\n`;
 
     if (data.collectionDate) {
-        message += `📅 *Collection Date:* ${data.collectionDate}\n`;
+        message += `📅 *Collection Date:* ${formatDateYMD(data.collectionDate)}\n`;
     }
 
     if (data.collectionAddress) {
@@ -135,4 +135,11 @@ function buildWhatsAppMessage(data: BookingConfirmationData): string {
     message += `Thank you for choosing EverReady! 🚚`;
 
     return message;
+}
+
+function formatDateYMD(value?: string | null): string {
+    if (!value) return '';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return value;
+    return d.toISOString().slice(0, 10); // yyyy-mm-dd
 }
