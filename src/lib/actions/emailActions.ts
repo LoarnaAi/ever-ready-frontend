@@ -47,6 +47,12 @@ export async function sendEmailAction(
                                 },
                             },
                         ],
+                        attachments: input.attachments?.map(att => ({
+                            '@odata.type': '#microsoft.graph.fileAttachment',
+                            name: att.filename,
+                            contentType: att.contentType,
+                            contentBytes: att.content,
+                        })) || [],
                     },
                 }),
             }

@@ -7,6 +7,7 @@ import type { BusinessConfig } from '../types';
  */
 export const lndnConfig: BusinessConfig = {
   busRef: 'LNDN',
+  busName: 'London Movers',
   logos: {
     logo: '/images/business/LNDN/logo.svg',
     favicon: '/images/business/LNDN/favicon.svg',

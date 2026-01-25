@@ -27,6 +27,7 @@ const BusinessContext = createContext<BusinessContextValue | null>(null);
  */
 export const DEMO_CONFIG: BusinessConfig = {
   busRef: 'DEMO',
+  busName: 'Demo Removals',
   theme: DEFAULT_THEME,
   features: DEFAULT_FEATURES,
 };

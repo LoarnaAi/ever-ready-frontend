@@ -12,6 +12,7 @@ import Step6ContactDetails from "../home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import { createJobAction } from "@/lib/actions/jobActions";
+import { sendJobReportToAdminsAction } from "@/lib/actions/jobReportActions";
 import { sendBookingNotificationsAction } from "@/lib/actions/notificationActions";
 import { BookingConfirmationData } from "@/lib/messaging/types";
 import {
@@ -390,6 +391,14 @@ export default function HomeRemoval() {
         setSubmittedJobId(result.jobId);
         setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
+
+        // Send job report to admins (fire-and-forget)
+        sendJobReportToAdminsAction(result.jobId, 'DEMO')
+          .then((r) => {
+            if (r.success) console.log('Job report sent to:', r.sentTo);
+            if (r.errors.length > 0) console.warn('Job report errors:', r.errors);
+          })
+          .catch(console.error);
 
         // Send notifications (fire-and-forget)
         const notificationData: BookingConfirmationData = {

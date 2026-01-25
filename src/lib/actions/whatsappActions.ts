@@ -8,6 +8,11 @@ export async function sendWhatsAppAction(
     input: SendWhatsAppInput
 ): Promise<MessageResult> {
     try {
+        console.log('[WHATSAPP] sendWhatsAppAction start', {
+            busRef,
+            to: maskPhone(input.to),
+            messageLength: input.message.length,
+        });
         const config = getMessagingConfig(busRef);
 
         if (config.mockMode) {
@@ -16,11 +21,17 @@ export async function sendWhatsAppAction(
         }
 
         if (!config.whatsapp) {
+            console.warn('[WHATSAPP] config missing or disabled', { busRef });
             return { success: false, error: 'WhatsApp not configured for this business' };
         }
 
         const validationResult = validatePhoneNumber(input.to);
         if (!validationResult.valid) {
+            console.warn('[WHATSAPP] invalid phone number', {
+                busRef,
+                to: maskPhone(input.to),
+                error: validationResult.error,
+            });
             return { success: false, error: validationResult.error };
         }
 
@@ -45,10 +56,19 @@ export async function sendWhatsAppAction(
 
         if (!response.ok) {
             const errorText = await response.text();
+            console.error('[WHATSAPP] API error', {
+                busRef,
+                status: response.status,
+                error: errorText,
+            });
             return { success: false, error: `WhatsApp API error: ${response.status} - ${errorText}` };
         }
 
         const data = await response.json();
+        console.log('[WHATSAPP] sent', {
+            busRef,
+            messageId: data.messages?.[0]?.id || 'whatsapp-sent',
+        });
         return { success: true, messageId: data.messages?.[0]?.id || 'whatsapp-sent' };
     } catch (error) {
         console.error('WhatsApp send error:', error);
@@ -84,6 +104,14 @@ function validatePhoneNumber(phone: string): { valid: boolean; formattedPhone?: 
     };
 }
 
+function maskPhone(phone: string): string {
+    const cleaned = phone.replace(/\D/g, '');
+    if (cleaned.length <= 4) {
+        return cleaned;
+    }
+    return `${cleaned.slice(0, 2)}****${cleaned.slice(-2)}`;
+}
+
 function buildWhatsAppMessage(data: BookingConfirmationData): string {
     let message = `🏠 *EVERREADY - Booking Confirmed*\n\n`;
     message += `Hi ${data.customerName},\n\n`;
@@ -92,7 +120,7 @@ function buildWhatsAppMessage(data: BookingConfirmationData): string {
     message += `🏡 *Home Size:* ${data.homeSize}\n`;
 
     if (data.collectionDate) {
-        message += `📅 *Collection Date:* ${data.collectionDate}\n`;
+        message += `📅 *Collection Date:* ${formatDateYMD(data.collectionDate)}\n`;
     }
 
     if (data.collectionAddress) {
@@ -107,4 +135,11 @@ function buildWhatsAppMessage(data: BookingConfirmationData): string {
     message += `Thank you for choosing EverReady! 🚚`;
 
     return message;
+}
+
+function formatDateYMD(value?: string | null): string {
+    if (!value) return '';
+    const d = new Date(value);
+    if (Number.isNaN(d.getTime())) return value;
+    return d.toISOString().slice(0, 10); // yyyy-mm-dd
 }

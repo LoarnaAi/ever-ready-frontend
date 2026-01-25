@@ -1,0 +1,111 @@
+import { StyleSheet } from '@react-pdf/renderer';
+
+export const pdfStyles = StyleSheet.create({
+    page: {
+        padding: 40,
+        fontSize: 15,
+        fontFamily: 'Helvetica',
+        backgroundColor: '#ffffff',
+    },
+    header: {
+        marginBottom: 20,
+        paddingBottom: 15,
+        borderBottom: '2 solid #f97316',
+    },
+    title: {
+        fontSize: 30,
+        fontWeight: 'bold',
+        color: '#1f2937',
+        marginBottom: 5,
+    },
+    subtitle: {
+        fontSize: 18,
+        color: '#6b7280',
+    },
+    statusBadge: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fef3c7',
+        color: '#92400e',
+        padding: '4 8',
+        borderRadius: 4,
+        fontSize: 14,
+        fontWeight: 'bold',
+        textTransform: 'uppercase',
+        marginTop: 8,
+        alignSelf: 'flex-start',
+    },
+    section: {
+        marginBottom: 20,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#1f2937',
+        marginBottom: 10,
+        paddingBottom: 5,
+        borderBottom: '1 solid #e5e7eb',
+    },
+    row: {
+        display: 'flex',
+        flexDirection: 'row',
+        marginBottom: 8,
+    },
+    label: {
+        width: '35%',
+        fontSize: 15,
+        color: '#6b7280',
+        fontWeight: 'bold',
+    },
+    value: {
+        width: '65%',
+        fontSize: 15,
+        color: '#1f2937',
+    },
+    grid: {
+        display: 'flex',
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        gap: 8,
+    },
+    gridItem: {
+        width: '48%',
+        padding: 8,
+        backgroundColor: '#f9fafb',
+        borderRadius: 4,
+        marginBottom: 8,
+    },
+    gridItemText: {
+        fontSize: 15,
+        color: '#374151',
+    },
+    footer: {
+        position: 'absolute',
+        bottom: 30,
+        left: 40,
+        right: 40,
+        textAlign: 'center',
+        fontSize: 12,
+        color: '#9ca3af',
+        paddingTop: 10,
+        borderTop: '1 solid #e5e7eb',
+    },
+    addressBox: {
+        padding: 10,
+        backgroundColor: '#f9fafb',
+        borderRadius: 4,
+        marginBottom: 10,
+    },
+    addressTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#1f2937',
+        marginBottom: 5,
+    },
+    addressText: {
+        fontSize: 15,
+        color: '#4b5563',
+        marginBottom: 3,
+    },
+});

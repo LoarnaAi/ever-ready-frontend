@@ -11,8 +11,12 @@ import Step5DateScheduling from "@/app/home-removal-page/Step5DateScheduling";
 import Step6ContactDetails from "@/app/home-removal-page/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
+import BusinessLogo from "@/components/BusinessLogo";
 import { createJobAction } from "@/lib/actions/jobActions";
+import { sendJobReportToAdminsAction } from "@/lib/actions/jobReportActions";
+import { sendBookingNotificationsAction } from "@/lib/actions/notificationActions";
 import { useBusinessConfig } from "@/lib/business";
+import { BookingConfirmationData } from "@/lib/messaging/types";
 import {
   FurnitureItem,
   PackingMaterial,
@@ -352,6 +356,35 @@ export default function BusinessHomeRemoval() {
         setSubmittedJobId(result.jobId);
         setDisplayJobId(result.displayJobId || null);
         setShowConfirmationModal(true);
+
+        sendJobReportToAdminsAction(result.jobId, config.busRef)
+          .then((r) => {
+            if (r.success) console.log('Job report sent to:', r.sentTo);
+            if (r.errors.length > 0) console.warn('Job report errors:', r.errors);
+          })
+          .catch(console.error);
+
+        // Send notifications (email + WhatsApp to admins) - fire-and-forget
+        const notificationData: BookingConfirmationData = {
+          jobId: result.jobId,
+          displayJobId: result.displayJobId || null,
+          customerName: `${contactData.firstName} ${contactData.lastName}`,
+          customerEmail: contactData.email,
+          customerPhone: contactData.phone,
+          countryCode: contactData.countryCode,
+          homeSize: selectedService,
+          collectionDate: savedData.collectionDate?.date,
+          collectionAddress: savedData.collectionAddress?.address,
+          deliveryAddress: savedData.deliveryAddress?.address,
+          busRef: config.busRef,
+        };
+
+        sendBookingNotificationsAction(notificationData)
+          .then((r) => {
+            if (!r.email.success) console.warn('Email failed:', r.email.error);
+            if (!r.whatsapp.success) console.warn('WhatsApp failed:', r.whatsapp.error);
+          })
+          .catch(console.error);
       } else {
         console.error("Error creating job:", result.error);
         alert("There was an error submitting your booking. Please try again.");
@@ -498,13 +531,16 @@ export default function BusinessHomeRemoval() {
               </div>
             )}
 
-            {/* Business Reference - TODO: Fetch business name from business_master */}
-            <div className="mb-6">
-              <h1 className="text-2xl lg:text-3xl font-bold text-gray-900">{config.busRef}</h1>
+            {/* Business Logo and Name */}
+            <div className="mb-6 flex flex-col items-center">
+              <BusinessLogo
+                variant="full"
+                width={180}
+                height={60}
+                className="mb-3"
+              />
+              <h1 className="text-xl font-semibold text-gray-900 text-center">{config.busName}</h1>
             </div>
-
-            {/* Service Title */}
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Home Removals</h2>
 
             {/* Intro Text */}
             <p className="text-sm text-gray-600 mb-6">

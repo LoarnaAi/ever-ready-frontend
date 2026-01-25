@@ -11,6 +11,12 @@ npm run start    # Start production server
 npm run lint     # Run ESLint
 ```
 
+For `tsx` scripts that rely on `.env.local`, source env vars first:
+
+```bash
+set -a; source .env.local; set +a; npx tsx test-job-report.ts
+```
+
 ## Tech Stack
 
 - **Framework**: Next.js 14 (App Router)
@@ -35,7 +41,7 @@ Uses Next.js App Router with file-based routing and Supabase for backend operati
 
 ## Documentation
 
-Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`. Messaging API curl examples live in `docs/messaging-api.md`.
+Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`. Messaging API curl examples live in `docs/messaging-api.md`. Messaging feature instructions live in `docs/messaging-features.md`.
 
 ### Directory Structure
 
@@ -92,6 +98,7 @@ Components requiring browser APIs or hooks must use `'use client'` directive. Ex
 2. **Address Autocomplete**: Google Maps integration for accurate location input
 3. **Dynamic Pricing**: Database-driven pricing for furniture items and packing materials
 4. **Mobile Responsive**: Custom mobile components (BottomSheet, Accordion) for better UX
+5. **Messaging**: Email and WhatsApp notifications plus job report emails with PDF attachments
 
 
 ## Browser Debugging Note

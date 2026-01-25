@@ -4,7 +4,7 @@
 
 import { useState } from "react";
 import { formatJobId } from "@/lib/utils/jobUtils";
-import { useTheme } from "@/lib/business";
+import { useTheme, useBusinessConfig } from "@/lib/business";
 import BusinessLogo from "@/components/BusinessLogo";
 
 interface ConfirmationModalProps {
@@ -24,6 +24,7 @@ export default function ConfirmationModal({
 }: ConfirmationModalProps) {
   const [copied, setCopied] = useState(false);
   const { theme, styles } = useTheme();
+  const { config } = useBusinessConfig();
 
   if (!isOpen) return null;
 
@@ -151,9 +152,11 @@ export default function ConfirmationModal({
             >
               View Booking Summary
             </button>
-            <p className="text-xs text-center mt-1" style={styles.primaryText}>
-              <span className="inline-block">↑</span> Note: View the report that will be sent to your business over Email or WhatsApp
-            </p>
+            {config.busRef === 'DEMO' && (
+              <p className="text-xs text-center mt-1" style={styles.primaryText}>
+                <span className="inline-block">↑</span> Note: View the report that will be sent to your business over Email or WhatsApp
+              </p>
+            )}
             <button
               onClick={onClose}
               className="w-full py-3 px-4 bg-gray-100 text-gray-700 font-medium rounded-xl hover:bg-gray-200 transition-colors"
