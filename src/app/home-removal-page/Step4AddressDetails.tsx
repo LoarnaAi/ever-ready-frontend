@@ -1150,7 +1150,7 @@ export default function Step4AddressDetails({
                       }
                       onKeyDown={handleCollectionKeyDown}
                       placeholder="e.g. SW1A 1AA"
-                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                       style={styles.focusRing}
                       autoComplete="off"
                     />
@@ -1315,7 +1315,7 @@ export default function Step4AddressDetails({
                       }
                       onKeyDown={handleDeliveryKeyDown}
                       placeholder="e.g. SW1A 1AA"
-                      className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                      className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                       style={styles.focusRing}
                       autoComplete="off"
                     />

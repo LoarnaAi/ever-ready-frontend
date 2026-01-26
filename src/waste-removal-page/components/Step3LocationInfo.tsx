@@ -1,5 +1,7 @@
 /** @format */
 
+// TODO: Remove this legacy component (scheduled for deletion).
+
 import AddressAutocomplete from "../../components/AddressAutocomplete";
 
 interface Step3LocationInfoFormData {

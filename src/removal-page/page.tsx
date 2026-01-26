@@ -2,6 +2,8 @@
 
 "use client";
 
+// TODO: Remove this legacy page (scheduled for deletion).
+
 import { useState } from "react";
 import Step1MoveType from "./components/Step1MoveType";
 import Step2QuoteForm from "./components/Step2QuoteForm";

@@ -1,5 +1,7 @@
 /** @format */
 
+// TODO: Remove this legacy component (scheduled for deletion).
+
 import { useState } from "react";
 
 interface Step6ContactInfoFormData {

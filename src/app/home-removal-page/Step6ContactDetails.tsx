@@ -1035,7 +1035,7 @@ export default function Step6ContactDetails({
                 value={contactData.firstName}
                 onChange={(e) => updateContactData("firstName", e.target.value)}
                 placeholder="First name"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                 style={styles.focusRing}
               />
             </div>
@@ -1048,7 +1048,7 @@ export default function Step6ContactDetails({
                 value={contactData.lastName}
                 onChange={(e) => updateContactData("lastName", e.target.value)}
                 placeholder="Last name"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                 style={styles.focusRing}
               />
             </div>
@@ -1061,7 +1061,7 @@ export default function Step6ContactDetails({
                 value={contactData.email}
                 onChange={(e) => updateContactData("email", e.target.value)}
                 placeholder="Email"
-                className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                 style={styles.focusRing}
               />
             </div>
@@ -1073,7 +1073,7 @@ export default function Step6ContactDetails({
                 <select
                   value={contactData.countryCode}
                   onChange={(e) => updateContactData("countryCode", e.target.value)}
-                  className="px-2 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
+                  className="px-2 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-700 bg-white cursor-pointer"
                   style={styles.focusRing}
                 >
                   <option value="+44">GB +44</option>
@@ -1087,7 +1087,7 @@ export default function Step6ContactDetails({
                   value={contactData.phone}
                   onChange={(e) => updateContactData("phone", e.target.value)}
                   placeholder="Phone number"
-                  className="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
+                  className="flex-1 px-3 py-2 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all text-gray-600 placeholder-gray-400"
                   style={styles.focusRing}
                 />
               </div>

@@ -1,5 +1,7 @@
 /** @format */
 
+// TODO: Remove this legacy component (scheduled for deletion).
+
 interface Step5AdditionalInfoFormData {
   specialRequirements: string[];
   comment: string;

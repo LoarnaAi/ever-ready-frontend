@@ -1141,7 +1141,7 @@ export default function Step5DateScheduling({
                       const selectedDate = e.target.value ? new Date(e.target.value) : null;
                       setCollectionDate({ ...collectionDate, date: selectedDate });
                     }}
-                    className="w-full px-4 py-2.5 text-sm border border-gray-300 rounded-lg outline-none transition-all"
+                    className="w-full px-4 py-2.5 text-[16px] sm:text-sm border border-gray-300 rounded-lg outline-none transition-all"
                     style={styles.focusRing}
                   />
                 </div>

@@ -1,5 +1,7 @@
 /** @format */
 
+// TODO: Remove this legacy component (scheduled for deletion).
+
 interface Step6ContactInfoFormData {
   firstName: string;
   lastName: string;

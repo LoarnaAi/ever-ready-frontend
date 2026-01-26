@@ -1,4 +1,5 @@
 # Repository Guidelines
+Note: iOS input zoom is avoided by setting mobile input/select font size to 16px (e.g., `text-[16px] sm:text-sm`).
 
 ## Project Structure & Module Organization
 - `src/app/` contains Next.js App Router routes; each folder (e.g., `src/app/home-removal/`) maps to a URL and typically includes `page.tsx` and optional `layout.tsx`.

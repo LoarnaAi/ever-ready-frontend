@@ -913,7 +913,7 @@ export default function Step2FurnitureSelection({
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Add/Remove/Edit your list"
-                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 outline-none transition-all text-sm sm:text-base"
+                  className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 outline-none transition-all text-[16px] sm:text-base"
                   style={{ '--tw-ring-color': theme.primaryRing } as React.CSSProperties}
                   onFocus={(e) => e.target.style.borderColor = theme.primary}
                   onBlur={(e) => e.target.style.borderColor = '#e5e7eb'}

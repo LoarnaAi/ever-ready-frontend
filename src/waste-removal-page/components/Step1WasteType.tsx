@@ -1,5 +1,7 @@
 /** @format */
 
+// TODO: Remove this legacy component (scheduled for deletion).
+
 interface Step1WasteTypeFormData {
   wasteType?: string;
 }
