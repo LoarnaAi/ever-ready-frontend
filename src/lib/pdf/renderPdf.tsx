@@ -7,5 +7,7 @@ export async function renderJobReportPdf(
     job: JobData,
     businessName: string
 ): Promise<Buffer> {
-    return renderToBuffer(<JobReportPdf job={job} businessName={businessName} />);
+    // Use React.createElement to avoid JSX runtime issues in serverless environments
+    const document = React.createElement(JobReportPdf, { job, businessName });
+    return renderToBuffer(document as Parameters<typeof renderToBuffer>[0]);
 }

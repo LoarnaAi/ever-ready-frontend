@@ -3,6 +3,9 @@ import { Document, Page, Text, View } from '@react-pdf/renderer';
 import { pdfStyles } from './styles';
 import { JobData } from '../database.types';
 
+// Helper to create elements without JSX (avoids serverless JSX transformation issues)
+const h = React.createElement;
+
 interface JobReportPdfProps {
     job: JobData;
     businessName: string;
@@ -23,179 +26,172 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
         return ` (${slot})`;
     };
 
-    return (
-        <Document>
-            <Page size="A4" style={pdfStyles.page}>
-                <View style={pdfStyles.header}>
-                    <Text style={pdfStyles.title}>Job Report</Text>
-                    <Text style={pdfStyles.subtitle}>
-                        Reference: {job.display_job_id || job.job_id}
-                    </Text>
-                    <View style={pdfStyles.statusBadge}>
-                        <Text>{job.status}</Text>
-                    </View>
-                </View>
+    // Build furniture items section
+    const furnitureSection = job.furnitureItems.length > 0
+        ? h(View, { style: pdfStyles.section },
+            h(Text, { style: pdfStyles.sectionTitle }, 'Furniture Items'),
+            h(View, { style: pdfStyles.grid },
+                job.furnitureItems.map((item, idx) =>
+                    h(View, { key: idx, style: pdfStyles.gridItem },
+                        h(Text, { style: pdfStyles.gridItemText }, `${item.quantity}x ${item.name}`)
+                    )
+                )
+            )
+        )
+        : null;
 
-                <View style={pdfStyles.section}>
-                    <Text style={pdfStyles.sectionTitle}>Service Details</Text>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Home Size:</Text>
-                        <Text style={pdfStyles.value}>{job.homeSize}</Text>
-                    </View>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Packing Service:</Text>
-                        <Text style={pdfStyles.value}>{job.packingService || 'None'}</Text>
-                    </View>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Dismantle Package:</Text>
-                        <Text style={pdfStyles.value}>{job.dismantlePackage ? 'Yes' : 'No'}</Text>
-                    </View>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Total Items:</Text>
-                        <Text style={pdfStyles.value}>{job.furnitureItems.length}</Text>
-                    </View>
-                </View>
+    // Build packing materials section
+    const packingSection = job.packingMaterials.length > 0
+        ? h(View, { style: pdfStyles.section },
+            h(Text, { style: pdfStyles.sectionTitle }, 'Packing Materials'),
+            h(View, { style: pdfStyles.grid },
+                job.packingMaterials.map((material, idx) =>
+                    h(View, { key: idx, style: pdfStyles.gridItem },
+                        h(Text, { style: pdfStyles.gridItemText }, `${material.quantity}x ${material.name}`)
+                    )
+                )
+            )
+        )
+        : null;
 
-                {job.furnitureItems.length > 0 && (
-                    <View style={pdfStyles.section}>
-                        <Text style={pdfStyles.sectionTitle}>Furniture Items</Text>
-                        <View style={pdfStyles.grid}>
-                            {job.furnitureItems.map((item, idx) => (
-                                <View key={idx} style={pdfStyles.gridItem}>
-                                    <Text style={pdfStyles.gridItemText}>
-                                        {item.quantity}x {item.name}
-                                    </Text>
-                                </View>
-                            ))}
-                        </View>
-                    </View>
-                )}
+    // Build collection address section
+    const collectionAddressSection = job.collectionAddress
+        ? h(View, { style: pdfStyles.addressBox },
+            h(Text, { style: pdfStyles.addressTitle }, 'Collection Address'),
+            h(Text, { style: pdfStyles.addressText }, job.collectionAddress.address),
+            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.collectionAddress.postcode}`),
+            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.collectionAddress.floor}`),
+            h(Text, { style: pdfStyles.addressText }, `Parking: ${job.collectionAddress.hasParking ? 'Available' : 'Not Available'}`),
+            h(Text, { style: pdfStyles.addressText }, `Lift: ${job.collectionAddress.hasLift ? 'Available' : 'Not Available'}`)
+        )
+        : null;
 
-                {job.packingMaterials.length > 0 && (
-                    <View style={pdfStyles.section}>
-                        <Text style={pdfStyles.sectionTitle}>Packing Materials</Text>
-                        <View style={pdfStyles.grid}>
-                            {job.packingMaterials.map((material, idx) => (
-                                <View key={idx} style={pdfStyles.gridItem}>
-                                    <Text style={pdfStyles.gridItemText}>
-                                        {material.quantity}x {material.name}
-                                    </Text>
-                                </View>
-                            ))}
-                        </View>
-                    </View>
-                )}
+    // Build delivery address section
+    const deliveryAddressSection = job.deliveryAddress
+        ? h(View, { style: pdfStyles.addressBox },
+            h(Text, { style: pdfStyles.addressTitle }, 'Delivery Address'),
+            h(Text, { style: pdfStyles.addressText }, job.deliveryAddress.address),
+            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.deliveryAddress.postcode}`),
+            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.deliveryAddress.floor}`),
+            h(Text, { style: pdfStyles.addressText }, `Parking: ${job.deliveryAddress.hasParking ? 'Available' : 'Not Available'}`),
+            h(Text, { style: pdfStyles.addressText }, `Lift: ${job.deliveryAddress.hasLift ? 'Available' : 'Not Available'}`)
+        )
+        : null;
 
-                <View style={pdfStyles.section}>
-                    <Text style={pdfStyles.sectionTitle}>Addresses</Text>
-                    {job.collectionAddress && (
-                        <View style={pdfStyles.addressBox}>
-                            <Text style={pdfStyles.addressTitle}>Collection Address</Text>
-                            <Text style={pdfStyles.addressText}>{job.collectionAddress.address}</Text>
-                            <Text style={pdfStyles.addressText}>Postcode: {job.collectionAddress.postcode}</Text>
-                            <Text style={pdfStyles.addressText}>Floor: {job.collectionAddress.floor}</Text>
-                            <Text style={pdfStyles.addressText}>
-                                Parking: {job.collectionAddress.hasParking ? 'Available' : 'Not Available'}
-                            </Text>
-                            <Text style={pdfStyles.addressText}>
-                                Lift: {job.collectionAddress.hasLift ? 'Available' : 'Not Available'}
-                            </Text>
-                        </View>
-                    )}
-                    {job.deliveryAddress && (
-                        <View style={pdfStyles.addressBox}>
-                            <Text style={pdfStyles.addressTitle}>Delivery Address</Text>
-                            <Text style={pdfStyles.addressText}>{job.deliveryAddress.address}</Text>
-                            <Text style={pdfStyles.addressText}>Postcode: {job.deliveryAddress.postcode}</Text>
-                            <Text style={pdfStyles.addressText}>Floor: {job.deliveryAddress.floor}</Text>
-                            <Text style={pdfStyles.addressText}>
-                                Parking: {job.deliveryAddress.hasParking ? 'Available' : 'Not Available'}
-                            </Text>
-                            <Text style={pdfStyles.addressText}>
-                                Lift: {job.deliveryAddress.hasLift ? 'Available' : 'Not Available'}
-                            </Text>
-                        </View>
-                    )}
-                </View>
+    // Build schedule section
+    const collectionDateRow = job.collectionDate
+        ? h(View, { style: pdfStyles.row },
+            h(Text, { style: pdfStyles.label }, 'Collection Date:'),
+            h(Text, { style: pdfStyles.value }, `${formatDate(job.collectionDate.date)}${formatTimeSlot(job.collectionDate.timeSlot)}`)
+        )
+        : null;
 
-                <View style={pdfStyles.section}>
-                    <Text style={pdfStyles.sectionTitle}>Schedule</Text>
-                    {job.collectionDate && (
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Collection Date:</Text>
-                            <Text style={pdfStyles.value}>
-                                {formatDate(job.collectionDate.date)}
-                                {formatTimeSlot(job.collectionDate.timeSlot)}
-                            </Text>
-                        </View>
-                    )}
-                    {job.materialsDeliveryDate && (
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Materials Delivery:</Text>
-                            <Text style={pdfStyles.value}>
-                                {formatDate(job.materialsDeliveryDate.date)}
-                                {formatTimeSlot(job.materialsDeliveryDate.timeSlot)}
-                            </Text>
-                        </View>
-                    )}
-                </View>
+    const materialsDateRow = job.materialsDeliveryDate
+        ? h(View, { style: pdfStyles.row },
+            h(Text, { style: pdfStyles.label }, 'Materials Delivery:'),
+            h(Text, { style: pdfStyles.value }, `${formatDate(job.materialsDeliveryDate.date)}${formatTimeSlot(job.materialsDeliveryDate.timeSlot)}`)
+        )
+        : null;
 
-                <View style={pdfStyles.section}>
-                    <Text style={pdfStyles.sectionTitle}>Customer Contact</Text>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Name:</Text>
-                        <Text style={pdfStyles.value}>
-                            {job.contact.firstName} {job.contact.lastName}
-                        </Text>
-                    </View>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Email:</Text>
-                        <Text style={pdfStyles.value}>{job.contact.email}</Text>
-                    </View>
-                    <View style={pdfStyles.row}>
-                        <Text style={pdfStyles.label}>Phone:</Text>
-                        <Text style={pdfStyles.value}>
-                            {job.contact.countryCode} {job.contact.phone}
-                        </Text>
-                    </View>
-                </View>
+    // Build cost breakdown section
+    const costSection = job.costBreakdown
+        ? h(View, { style: pdfStyles.section },
+            h(Text, { style: pdfStyles.sectionTitle }, 'Cost Breakdown'),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Base Price:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.basePrice.toFixed(2)}`)
+            ),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Furniture Charge:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.furnitureCharge.toFixed(2)}`)
+            ),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Packing Materials:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.packingMaterialsCharge.toFixed(2)}`)
+            ),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Distance Surcharge:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.distanceSurcharge.toFixed(2)}`)
+            ),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Floor Surcharge:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.floorSurcharge.toFixed(2)}`)
+            ),
+            h(View, { style: pdfStyles.row },
+                h(Text, { style: pdfStyles.label }, 'Total:'),
+                h(Text, { style: pdfStyles.value }, `£${job.costBreakdown.total.toFixed(2)}`)
+            )
+        )
+        : null;
 
-                {job.costBreakdown && (
-                    <View style={pdfStyles.section}>
-                        <Text style={pdfStyles.sectionTitle}>Cost Breakdown</Text>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Base Price:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.basePrice.toFixed(2)}</Text>
-                        </View>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Furniture Charge:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.furnitureCharge.toFixed(2)}</Text>
-                        </View>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Packing Materials:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.packingMaterialsCharge.toFixed(2)}</Text>
-                        </View>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Distance Surcharge:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.distanceSurcharge.toFixed(2)}</Text>
-                        </View>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Floor Surcharge:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.floorSurcharge.toFixed(2)}</Text>
-                        </View>
-                        <View style={pdfStyles.row}>
-                            <Text style={pdfStyles.label}>Total:</Text>
-                            <Text style={pdfStyles.value}>£{job.costBreakdown.total.toFixed(2)}</Text>
-                        </View>
-                    </View>
-                )}
-
-                <View style={pdfStyles.footer}>
-                    <Text>
-                        {businessName} • Generated on {new Date().toLocaleDateString('en-GB')}
-                    </Text>
-                </View>
-            </Page>
-        </Document>
+    return h(Document, null,
+        h(Page, { size: 'A4', style: pdfStyles.page },
+            // Header
+            h(View, { style: pdfStyles.header },
+                h(Text, { style: pdfStyles.title }, 'Job Report'),
+                h(Text, { style: pdfStyles.subtitle }, `Reference: ${job.display_job_id || job.job_id}`),
+                h(View, { style: pdfStyles.statusBadge },
+                    h(Text, null, String(job.status))
+                )
+            ),
+            // Service Details
+            h(View, { style: pdfStyles.section },
+                h(Text, { style: pdfStyles.sectionTitle }, 'Service Details'),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Home Size:'),
+                    h(Text, { style: pdfStyles.value }, job.homeSize)
+                ),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Packing Service:'),
+                    h(Text, { style: pdfStyles.value }, job.packingService || 'None')
+                ),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Dismantle Package:'),
+                    h(Text, { style: pdfStyles.value }, job.dismantlePackage ? 'Yes' : 'No')
+                ),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Total Items:'),
+                    h(Text, { style: pdfStyles.value }, String(job.furnitureItems.length))
+                )
+            ),
+            // Furniture Items
+            furnitureSection,
+            // Packing Materials
+            packingSection,
+            // Addresses
+            h(View, { style: pdfStyles.section },
+                h(Text, { style: pdfStyles.sectionTitle }, 'Addresses'),
+                collectionAddressSection,
+                deliveryAddressSection
+            ),
+            // Schedule
+            h(View, { style: pdfStyles.section },
+                h(Text, { style: pdfStyles.sectionTitle }, 'Schedule'),
+                collectionDateRow,
+                materialsDateRow
+            ),
+            // Customer Contact
+            h(View, { style: pdfStyles.section },
+                h(Text, { style: pdfStyles.sectionTitle }, 'Customer Contact'),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Name:'),
+                    h(Text, { style: pdfStyles.value }, `${job.contact.firstName} ${job.contact.lastName}`)
+                ),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Email:'),
+                    h(Text, { style: pdfStyles.value }, job.contact.email)
+                ),
+                h(View, { style: pdfStyles.row },
+                    h(Text, { style: pdfStyles.label }, 'Phone:'),
+                    h(Text, { style: pdfStyles.value }, `${job.contact.countryCode} ${job.contact.phone}`)
+                )
+            ),
+            // Cost Breakdown
+            costSection,
+            // Footer
+            h(View, { style: pdfStyles.footer },
+                h(Text, null, `${businessName} • Generated on ${new Date().toLocaleDateString('en-GB')}`)
+            )
+        )
     );
 };
