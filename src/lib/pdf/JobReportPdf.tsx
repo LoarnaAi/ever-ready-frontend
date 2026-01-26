@@ -1,17 +1,18 @@
-import React from 'react';
-import { Document, Page, Text, View } from '@react-pdf/renderer';
 import { pdfStyles } from './styles';
 import { JobData } from '../database.types';
 
-// Helper to create elements without JSX (avoids serverless JSX transformation issues)
-const h = React.createElement;
+// Factory function that creates the PDF document using dynamically imported modules
+// This ensures all React and PDF components are from the same module instances
+export async function createJobReportDocument(
+    job: JobData,
+    businessName: string
+) {
+    // Dynamic imports to ensure consistent module instances in serverless
+    const React = (await import('react')).default;
+    const { Document, Page, Text, View } = await import('@react-pdf/renderer');
 
-interface JobReportPdfProps {
-    job: JobData;
-    businessName: string;
-}
+    const h = React.createElement;
 
-export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName }) => {
     const formatDate = (dateStr?: string) => {
         if (!dateStr) return 'Not specified';
         return new Date(dateStr).toLocaleDateString('en-GB', {
@@ -27,12 +28,12 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
     };
 
     // Build furniture items section
-    const furnitureSection = job.furnitureItems.length > 0
+    const furnitureSection = job.furnitureItems && job.furnitureItems.length > 0
         ? h(View, { style: pdfStyles.section },
             h(Text, { style: pdfStyles.sectionTitle }, 'Furniture Items'),
             h(View, { style: pdfStyles.grid },
                 job.furnitureItems.map((item, idx) =>
-                    h(View, { key: idx, style: pdfStyles.gridItem },
+                    h(View, { key: String(idx), style: pdfStyles.gridItem },
                         h(Text, { style: pdfStyles.gridItemText }, `${item.quantity}x ${item.name}`)
                     )
                 )
@@ -41,12 +42,12 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
         : null;
 
     // Build packing materials section
-    const packingSection = job.packingMaterials.length > 0
+    const packingSection = job.packingMaterials && job.packingMaterials.length > 0
         ? h(View, { style: pdfStyles.section },
             h(Text, { style: pdfStyles.sectionTitle }, 'Packing Materials'),
             h(View, { style: pdfStyles.grid },
                 job.packingMaterials.map((material, idx) =>
-                    h(View, { key: idx, style: pdfStyles.gridItem },
+                    h(View, { key: String(idx), style: pdfStyles.gridItem },
                         h(Text, { style: pdfStyles.gridItemText }, `${material.quantity}x ${material.name}`)
                     )
                 )
@@ -58,9 +59,9 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
     const collectionAddressSection = job.collectionAddress
         ? h(View, { style: pdfStyles.addressBox },
             h(Text, { style: pdfStyles.addressTitle }, 'Collection Address'),
-            h(Text, { style: pdfStyles.addressText }, job.collectionAddress.address),
-            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.collectionAddress.postcode}`),
-            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.collectionAddress.floor}`),
+            h(Text, { style: pdfStyles.addressText }, String(job.collectionAddress.address || '')),
+            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.collectionAddress.postcode || ''}`),
+            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.collectionAddress.floor || ''}`),
             h(Text, { style: pdfStyles.addressText }, `Parking: ${job.collectionAddress.hasParking ? 'Available' : 'Not Available'}`),
             h(Text, { style: pdfStyles.addressText }, `Lift: ${job.collectionAddress.hasLift ? 'Available' : 'Not Available'}`)
         )
@@ -70,9 +71,9 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
     const deliveryAddressSection = job.deliveryAddress
         ? h(View, { style: pdfStyles.addressBox },
             h(Text, { style: pdfStyles.addressTitle }, 'Delivery Address'),
-            h(Text, { style: pdfStyles.addressText }, job.deliveryAddress.address),
-            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.deliveryAddress.postcode}`),
-            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.deliveryAddress.floor}`),
+            h(Text, { style: pdfStyles.addressText }, String(job.deliveryAddress.address || '')),
+            h(Text, { style: pdfStyles.addressText }, `Postcode: ${job.deliveryAddress.postcode || ''}`),
+            h(Text, { style: pdfStyles.addressText }, `Floor: ${job.deliveryAddress.floor || ''}`),
             h(Text, { style: pdfStyles.addressText }, `Parking: ${job.deliveryAddress.hasParking ? 'Available' : 'Not Available'}`),
             h(Text, { style: pdfStyles.addressText }, `Lift: ${job.deliveryAddress.hasLift ? 'Available' : 'Not Available'}`)
         )
@@ -131,7 +132,7 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
                 h(Text, { style: pdfStyles.title }, 'Job Report'),
                 h(Text, { style: pdfStyles.subtitle }, `Reference: ${job.display_job_id || job.job_id}`),
                 h(View, { style: pdfStyles.statusBadge },
-                    h(Text, null, String(job.status))
+                    h(Text, null, String(job.status || ''))
                 )
             ),
             // Service Details
@@ -139,11 +140,11 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
                 h(Text, { style: pdfStyles.sectionTitle }, 'Service Details'),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Home Size:'),
-                    h(Text, { style: pdfStyles.value }, job.homeSize)
+                    h(Text, { style: pdfStyles.value }, String(job.homeSize || ''))
                 ),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Packing Service:'),
-                    h(Text, { style: pdfStyles.value }, job.packingService || 'None')
+                    h(Text, { style: pdfStyles.value }, String(job.packingService || 'None'))
                 ),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Dismantle Package:'),
@@ -151,7 +152,7 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
                 ),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Total Items:'),
-                    h(Text, { style: pdfStyles.value }, String(job.furnitureItems.length))
+                    h(Text, { style: pdfStyles.value }, String(job.furnitureItems?.length || 0))
                 )
             ),
             // Furniture Items
@@ -175,15 +176,15 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
                 h(Text, { style: pdfStyles.sectionTitle }, 'Customer Contact'),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Name:'),
-                    h(Text, { style: pdfStyles.value }, `${job.contact.firstName} ${job.contact.lastName}`)
+                    h(Text, { style: pdfStyles.value }, `${job.contact?.firstName || ''} ${job.contact?.lastName || ''}`)
                 ),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Email:'),
-                    h(Text, { style: pdfStyles.value }, job.contact.email)
+                    h(Text, { style: pdfStyles.value }, String(job.contact?.email || ''))
                 ),
                 h(View, { style: pdfStyles.row },
                     h(Text, { style: pdfStyles.label }, 'Phone:'),
-                    h(Text, { style: pdfStyles.value }, `${job.contact.countryCode} ${job.contact.phone}`)
+                    h(Text, { style: pdfStyles.value }, `${job.contact?.countryCode || ''} ${job.contact?.phone || ''}`)
                 )
             ),
             // Cost Breakdown
@@ -194,4 +195,4 @@ export const JobReportPdf: React.FC<JobReportPdfProps> = ({ job, businessName })
             )
         )
     );
-};
+}
