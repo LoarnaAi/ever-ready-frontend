@@ -1,6 +1,6 @@
-import { StyleSheet } from '@react-pdf/renderer';
-
-export const pdfStyles = StyleSheet.create({
+// Keep styles as plain objects so this module can be imported without pulling in
+// @react-pdf/renderer (avoids Next/React runtime mismatches during PDF generation).
+export const pdfStyles = {
     page: {
         padding: 40,
         fontSize: 15,
@@ -108,4 +108,4 @@ export const pdfStyles = StyleSheet.create({
         color: '#4b5563',
         marginBottom: 3,
     },
-});
+} as const;

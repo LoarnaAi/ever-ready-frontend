@@ -1,15 +1,23 @@
 import { pdfStyles } from './styles';
 import { JobData } from '../database.types';
 
-// Factory function that creates the PDF document using dynamically imported modules
-// This ensures all React and PDF components are from the same module instances
-export async function createJobReportDocument(
+type PdfComponents = {
+    Document: typeof import('@react-pdf/renderer').Document;
+    Page: typeof import('@react-pdf/renderer').Page;
+    Text: typeof import('@react-pdf/renderer').Text;
+    View: typeof import('@react-pdf/renderer').View;
+};
+
+// Factory function that creates the PDF document using provided module instances.
+// This avoids Next.js' internal React runtime (react.transitional.element) leaking
+// into @react-pdf/renderer, which expects standard React elements.
+export function createJobReportDocument(
+    React: typeof import('react'),
+    components: PdfComponents,
     job: JobData,
     businessName: string
 ) {
-    // Dynamic imports to ensure consistent module instances in serverless
-    const React = (await import('react')).default;
-    const { Document, Page, Text, View } = await import('@react-pdf/renderer');
+    const { Document, Page, Text, View } = components;
 
     const h = React.createElement;
 
