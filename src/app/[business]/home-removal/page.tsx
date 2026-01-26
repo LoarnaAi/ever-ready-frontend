@@ -571,8 +571,14 @@ export default function BusinessHomeRemoval() {
           {/* Right Section */}
           <div className="w-full md:flex-1 bg-white p-4 md:p-6 rounded-lg shadow-sm flex flex-col">
             {/* Mobile Header */}
-            <div className="md:hidden mb-4">
-              <h1 className="text-xl font-bold text-gray-900 mb-1">Home Removals</h1>
+            <div className="md:hidden mb-4 flex flex-col items-center">
+              <BusinessLogo
+                variant="full"
+                width={140}
+                height={47}
+                className="mb-2"
+              />
+              <h1 className="text-xl font-bold text-gray-900 mb-1">{config.busName}</h1>
               {config.features.showTrustpilot && (
                 <div className="flex items-center gap-2 text-xs text-gray-600">
                   <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20">
@@ -585,12 +591,9 @@ export default function BusinessHomeRemoval() {
 
             {/* Heading */}
             <div className="mb-6">
-              <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                How big is your home?
-              </h2>
-              <p className="text-base text-gray-600">
-                Select your home size to get started with your quote
-              </p>
+              <h4 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
+                Please select the number of rooms in your home
+              </h4>
             </div>
 
             {/* Service Options Grid */}

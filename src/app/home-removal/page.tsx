@@ -659,7 +659,7 @@ export default function HomeRemoval() {
             {/* Heading */}
             <div className="mb-6">
               <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2">
-                How big is your home?
+                Please select the number of rooms in your home
               </h2>
               <p className="text-base text-gray-600">
                 Select your home size to get started with your quote
