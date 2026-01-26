@@ -2,6 +2,7 @@
 
 import { BookingConfirmationData, MessageResult } from '../messaging/types';
 import { sendWhatsAppAction } from './whatsappActions';
+import { sendBookingConfirmationEmailAction } from './emailActions';
 import { getBusinessMaster } from './businessActions';
 
 export interface NotificationResults {
@@ -32,12 +33,17 @@ export async function sendBookingNotificationsAction(
     const admins = businessResult.data.admins?.filter(Boolean) || [];
 
     const whatsappPromise = sendWhatsAppToAdmins(admins, data);
+    const emailPromise = sendBookingConfirmationEmailAction(data);
 
-    const [whatsappResult] = await Promise.all([whatsappPromise]);
-    const emailResult: MessageResult = {
-        success: true,
-        messageId: 'skipped',
-    };
+    const [whatsappResult, emailResult] = await Promise.all([whatsappPromise, emailPromise]);
+
+    console.log('[NOTIFICATIONS] email send result', {
+        busRef: data.busRef,
+        jobId: data.jobId,
+        toEmail: data.customerEmail,
+        success: emailResult.success,
+        error: emailResult.error,
+    });
 
     console.log('[NOTIFICATIONS] booking notifications result', {
         busRef: data.busRef,
