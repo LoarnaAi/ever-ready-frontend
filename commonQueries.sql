@@ -5,17 +5,24 @@ select * from business_master;
 
 update business_master 
 set 
-bus_email = 'Removals@lionsmoves.co.uk', admins=Array['447936432077'] 
+bus_email = 'lionsmoves@yahoo.com', admins=Array['447936432077'] 
 where bus_ref = 'LIMO';
 
-
+Lionsmoves@yahoo.com
 update business_master 
 set 
 bus_email = 'lohith.uvce@gmail.com', admins=Array['447448440754'] 
+where bus_ref = 'LIMO'447936432077;
+
+update business_master 
+set 
+bus_email = 'ngncity@gmail.com', admins=Array['447850773336'] 
 where bus_ref = 'LIMO';
 
 update business_master 
 set 
-bus_email = 'ngncity@gmail.com', admins=Array['447448440754'] 
+bus_email = 'admin@ever-ready.ai', admins=Array['447448440754'] 
 where bus_ref = 'LIMO';
+
+
 
