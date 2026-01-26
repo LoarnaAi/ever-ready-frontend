@@ -670,18 +670,8 @@ export default function Step2FurnitureSelection({
 
           {/* Right Content Area - Full width on mobile */}
           <div className="flex-1 bg-white rounded-lg shadow-sm p-4 md:p-6">
-            {/* Heading */}
-            <div className="mb-6">
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">
-                Your inventory is ready to customise!
-              </h2>
-              <p className="text-sm text-gray-600 mb-4">
-                We&apos;ve pre-selected typical items for your home. Add anything we missed or remove what you don&apos;t need.
-              </p>
-            </div>
-
-            {/* Mobile Accordion - View pre selected inventory */}
-            <MobileJobDetailsAccordion title="View pre selected inventory">
+            {/* Mobile Accordion - Suggested Inventory List - Moved to top */}
+            <MobileJobDetailsAccordion title="Suggested Inventory List" defaultExpanded={false} size="large" className="mb-4">
               {/* Quote Summary Card - Same as desktop */}
               <div className="bg-white rounded-lg">
                 <div className="flex items-center justify-between mb-4">
@@ -890,12 +880,18 @@ export default function Step2FurnitureSelection({
               </div>
             </MobileJobDetailsAccordion>
 
+            {/* Description Text */}
+            <div className="mb-6">
+              <p className="text-sm text-gray-600">
+                Please review Suggested Inventory List by clicking the above.
+              </p>
+              <p className="text-sm text-gray-600 mt-2">
+                Search items in the box below to Add/Remove/Edit your list.
+              </p>
+            </div>
 
             {/* Search Box */}
             <div className="mb-6">
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search to add new items or remove existing ones
-              </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
                   <svg
@@ -916,7 +912,7 @@ export default function Step2FurnitureSelection({
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="e.g. sofa, wardrobe, bicycle..."
+                  placeholder="Add/Remove/Edit your list"
                   className="w-full pl-12 pr-4 py-3 border-2 border-gray-200 rounded-lg focus:ring-2 outline-none transition-all text-sm sm:text-base"
                   style={{ '--tw-ring-color': theme.primaryRing } as React.CSSProperties}
                   onFocus={(e) => e.target.style.borderColor = theme.primary}

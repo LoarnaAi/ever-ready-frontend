@@ -2,6 +2,8 @@
 
 import { getMessagingConfig } from '../messaging/config-loader';
 import { SendEmailInput, MessageResult, BookingConfirmationData } from '../messaging/types';
+
+// Note: Email attachments have been removed. SendEmailInput.attachments is ignored.
 import { generateBookingConfirmationHtml } from '../templates/bookingConfirmationHtml';
 
 export async function sendEmailAction(
@@ -48,12 +50,6 @@ export async function sendEmailAction(
                                 },
                             },
                         ],
-                        attachments: input.attachments?.map(att => ({
-                            '@odata.type': '#microsoft.graph.fileAttachment',
-                            name: att.filename,
-                            contentType: att.contentType,
-                            contentBytes: att.content,
-                        })) || [],
                     },
                 }),
             }

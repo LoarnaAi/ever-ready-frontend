@@ -202,11 +202,6 @@ export function generateJobReportHtml(job: JobData, business: BusinessMaster): s
         ` : ''}
       </div>
       ` : ''}
-
-      <div class="note">
-        📎 <strong>Full job details are attached as a PDF.</strong><br>
-        Please review the attachment for complete information including furniture items, packing materials, and cost breakdown.
-      </div>
     </div>
 
     <div class="footer">

@@ -3,7 +3,6 @@
 import { getJobAction } from './jobActions';
 import { getBusinessMaster } from './businessActions';
 import { sendEmailAction } from './emailActions';
-import { renderJobReportPdf } from '../pdf/renderPdf';
 import { generateJobReportHtml } from '../templates/jobReportHtml';
 
 export interface JobReportResult {
@@ -44,18 +43,6 @@ export async function sendJobReportToAdminsAction(
             return result;
         }
 
-        let pdfBase64: string | null = null;
-        try {
-            const pdfBuffer = await renderJobReportPdf(job, business.name);
-            pdfBase64 = pdfBuffer.toString('base64');
-        } catch (pdfError) {
-            console.error('PDF generation failed:', pdfError);
-            result.errors.push({
-                email: 'N/A',
-                error: `PDF generation failed: ${pdfError instanceof Error ? pdfError.message : 'Unknown error'}`,
-            });
-        }
-
         const htmlBody = generateJobReportHtml(job, business);
         const subjectId = job.display_job_id || job.job_id;
         const subject = `New Booking: ${subjectId}`;
@@ -66,15 +53,6 @@ export async function sendJobReportToAdminsAction(
                 subject,
                 body: htmlBody,
                 bodyType: 'HTML',
-                attachments: pdfBase64
-                    ? [
-                        {
-                            filename: `job-report-${job.display_job_id || job.job_id}.pdf`,
-                            content: pdfBase64,
-                            contentType: 'application/pdf',
-                        },
-                    ]
-                    : undefined,
             });
 
             if (emailResult.success) {

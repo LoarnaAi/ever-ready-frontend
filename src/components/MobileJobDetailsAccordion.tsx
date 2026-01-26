@@ -9,20 +9,28 @@ import BusinessLogo from "@/components/BusinessLogo";
 interface MobileJobDetailsAccordionProps {
   children: ReactNode;
   title: string;
+  defaultExpanded?: boolean;
+  className?: string;
+  size?: "default" | "large";
 }
 
 export default function MobileJobDetailsAccordion({
   children,
   title,
+  defaultExpanded = false,
+  className = "",
+  size = "default",
 }: MobileJobDetailsAccordionProps) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   const { theme } = useTheme();
 
+  const isLarge = size === "large";
+
   return (
-    <div className="md:hidden mb-4">
+    <div className={`md:hidden ${className}`}>
       <button
         onClick={() => setIsExpanded(!isExpanded)}
-        className="w-full flex items-center justify-between rounded-lg px-4 py-3 text-left transition-all"
+        className={`w-full flex items-center justify-between rounded-lg text-left transition-all ${isLarge ? "px-5 py-4" : "px-4 py-3"}`}
         style={{
           backgroundColor: theme.primaryLight,
           borderWidth: '1px',
@@ -31,8 +39,8 @@ export default function MobileJobDetailsAccordion({
         }}
       >
         <div className="flex items-center gap-3">
-          <BusinessLogo variant="square" width={28} height={28} />
-          <span className="font-medium text-gray-900">{title}</span>
+          <BusinessLogo variant="square" width={isLarge ? 36 : 28} height={isLarge ? 36 : 28} />
+          <span className={`font-medium text-gray-900 ${isLarge ? "text-lg" : ""}`}>{title}</span>
         </div>
         <svg
           className={`w-5 h-5 text-gray-500 transform transition-transform duration-200 ${
