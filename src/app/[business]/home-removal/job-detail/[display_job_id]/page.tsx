@@ -16,7 +16,7 @@ import { useBusinessConfig, themedStyles } from "@/lib/business";
 
 export default function JobDetailPage() {
   const params = useParams();
-  const jobId = params.job_id as string;
+  const displayJobId = params.display_job_id as string;
   const businessSlug = params.business as string;
   const { theme } = useBusinessConfig();
 
@@ -30,8 +30,8 @@ export default function JobDetailPage() {
 
   useEffect(() => {
     async function fetchJob() {
-      if (jobId) {
-        const result = await getJobAction(jobId);
+      if (displayJobId) {
+        const result = await getJobAction(displayJobId);
         if (result.success && result.data) {
           setJob(result.data);
           setNotes(result.data.internalNotes);
@@ -42,10 +42,10 @@ export default function JobDetailPage() {
       }
     }
     fetchJob();
-  }, [jobId]);
+  }, [displayJobId]);
 
   const handleStatusChange = async (newStatus: JobStatus) => {
-    const result = await updateJobStatusAction(jobId, newStatus);
+    const result = await updateJobStatusAction(displayJobId, newStatus);
     if (result.success) {
       setJob((prev) => (prev ? { ...prev, status: newStatus } : null));
       setStatusUpdated(true);
@@ -54,7 +54,7 @@ export default function JobDetailPage() {
   };
 
   const handleSaveNotes = async () => {
-    const result = await updateInternalNotesAction(jobId, notes);
+    const result = await updateInternalNotesAction(displayJobId, notes);
     if (result.success) {
       setJob((prev) => (prev ? { ...prev, internalNotes: notes } : null));
       setNotesSaved(true);
@@ -484,7 +484,7 @@ export default function JobDetailPage() {
                   Call Customer
                 </a>
                 <Link
-                  href={`/${businessSlug}/home-removal/job-summary/${jobId}`}
+                  href={`/${businessSlug}/home-removal/job-summary/${job.display_job_id}`}
                   target="_blank"
                   className="flex items-center gap-2 w-full py-2 px-3 text-sm text-gray-700 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
                 >

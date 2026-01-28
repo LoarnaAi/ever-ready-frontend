@@ -210,14 +210,14 @@ export async function createJobAction(
 
 // Fetch a job by ID with all related data
 export async function getJobAction(
-  jobId: string
+  displayJobId: string
 ): Promise<{ success: boolean; data?: JobData; error?: string }> {
   try {
     // 1. Fetch the main job record
     const { data: job, error: jobError } = await supabase
       .from("jobs")
       .select("*")
-      .eq("job_id", jobId)
+      .eq("display_job_id", displayJobId)
       .single();
 
     if (jobError || !job) {
@@ -228,38 +228,38 @@ export async function getJobAction(
     const { data: addresses } = await supabase
       .from("job_addresses")
       .select("*")
-      .eq("job_id", jobId);
+      .eq("job_id", job.job_id);
 
     // 3. Fetch dates
     const { data: dates } = await supabase
       .from("job_dates")
       .select("*")
-      .eq("job_id", jobId);
+      .eq("job_id", job.job_id);
 
     // 4. Fetch contact details
     const { data: contact } = await supabase
       .from("job_contact_details")
       .select("*")
-      .eq("job_id", jobId)
+      .eq("job_id", job.job_id)
       .single();
 
     // 5. Fetch furniture items
     const { data: furnitureItems } = await supabase
       .from("job_furniture_items")
       .select("*")
-      .eq("job_id", jobId);
+      .eq("job_id", job.job_id);
 
     // 6. Fetch packing materials
     const { data: packingMaterials } = await supabase
       .from("job_packing_materials")
       .select("*")
-      .eq("job_id", jobId);
+      .eq("job_id", job.job_id);
 
     // 7. Fetch cost breakdown
     const { data: costBreakdown } = await supabase
       .from("job_cost_breakdowns")
       .select("*")
-      .eq("job_id", jobId)
+      .eq("job_id", job.job_id)
       .single();
 
     // Transform to application data structure
@@ -322,14 +322,14 @@ export async function getJobAction(
 
 // Update job status
 export async function updateJobStatusAction(
-  jobId: string,
+  displayJobId: string,
   status: JobStatus
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { error } = await supabase
       .from("jobs")
       .update({ status })
-      .eq("job_id", jobId);
+      .eq("display_job_id", displayJobId);
 
     if (error) {
       return { success: false, error: error.message };
@@ -346,14 +346,14 @@ export async function updateJobStatusAction(
 
 // Update internal notes
 export async function updateInternalNotesAction(
-  jobId: string,
+  displayJobId: string,
   notes: string
 ): Promise<{ success: boolean; error?: string }> {
   try {
     const { error } = await supabase
       .from("jobs")
       .update({ internal_notes: notes })
-      .eq("job_id", jobId);
+      .eq("display_job_id", displayJobId);
 
     if (error) {
       return { success: false, error: error.message };
