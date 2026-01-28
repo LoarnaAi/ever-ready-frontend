@@ -8,14 +8,15 @@ set
 bus_email = 'lionsmoves@yahoo.com', admins=Array['447936432077'] 
 where bus_ref = 'LIMO';
 
-Lionsmoves@yahoo.com
-update business_master 
-set 
-bus_email = 'lohith.uvce@gmail.com', admins=Array['447448440754'] 
-where bus_ref = 'LIMO'447936432077;
+-- Lionsmoves@yahoo.com;
 
 update business_master 
 set 
+bus_email = 'lohith.uvce@gmail.com', admins=Array['447448440754'] 
+where bus_ref = 'LIMO';
+
+update business_master 
+set :WHEN
 bus_email = 'ngncity@gmail.com', admins=Array['447850773336'] 
 where bus_ref = 'LIMO';
 
@@ -24,5 +25,8 @@ set
 bus_email = 'admin@ever-ready.ai', admins=Array['447448440754'] 
 where bus_ref = 'LIMO';
 
+
+
+https://err.ever-ready.ai/limo/home-removal/job-summary/d49c3ab4-1045-4a5a-90fe-23c7c5f17afb
 
 

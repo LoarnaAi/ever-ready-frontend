@@ -4,11 +4,11 @@
 
 import { useState } from "react";
 import { useRouter, useParams } from "next/navigation";
-import Step2FurnitureSelection from "@/app/home-removal-page/Step2FurnitureSelection";
-import Step3PackingService from "@/app/home-removal-page/Step3PackingService";
-import Step4AddressDetails from "@/app/home-removal-page/Step4AddressDetails";
-import Step5DateScheduling from "@/app/home-removal-page/Step5DateScheduling";
-import Step6ContactDetails from "@/app/home-removal-page/Step6ContactDetails";
+import Step2FurnitureSelection from "@/components/home-removal-steps/Step2FurnitureSelection";
+import Step3PackingService from "@/components/home-removal-steps/Step3PackingService";
+import Step4AddressDetails from "@/components/home-removal-steps/Step4AddressDetails";
+import Step5DateScheduling from "@/components/home-removal-steps/Step5DateScheduling";
+import Step6ContactDetails from "@/components/home-removal-steps/Step6ContactDetails";
 import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import BusinessLogo from "@/components/BusinessLogo";
