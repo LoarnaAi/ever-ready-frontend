@@ -12,7 +12,7 @@ import {
 } from "@/lib/actions/jobActions";
 import { formatJobId } from "@/lib/utils/jobUtils";
 import { JobData, JobStatus } from "@/lib/database.types";
-import { useBusinessConfig } from "@/lib/business";
+import { useBusinessConfig, themedStyles } from "@/lib/business";
 
 export default function JobDetailPage() {
   const params = useParams();
@@ -26,7 +26,6 @@ export default function JobDetailPage() {
   const [notesSaved, setNotesSaved] = useState(false);
   const [statusUpdated, setStatusUpdated] = useState(false);
 
-  const primaryTextStyle = { color: theme.primary };
   const primaryBgStyle = { backgroundColor: theme.primary };
 
   useEffect(() => {
@@ -238,7 +237,7 @@ export default function JobDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {job.collectionAddress && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-xs font-medium uppercase tracking-wide mb-3" style={primaryTextStyle}>Collection From</p>
+                    <p className="text-xs font-medium uppercase tracking-wide mb-3" style={themedStyles.primaryTextLabel(theme)}>Collection From</p>
                     <p className="text-sm font-medium text-gray-900 mb-2">
                       {job.collectionAddress.address || job.collectionAddress.postcode}
                     </p>
@@ -266,7 +265,7 @@ export default function JobDetailPage() {
                 )}
                 {job.deliveryAddress && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-xs font-medium uppercase tracking-wide mb-3" style={primaryTextStyle}>Delivery To</p>
+                    <p className="text-xs font-medium uppercase tracking-wide mb-3" style={themedStyles.primaryTextLabel(theme)}>Delivery To</p>
                     <p className="text-sm font-medium text-gray-900 mb-2">
                       {job.deliveryAddress.address || job.deliveryAddress.postcode}
                     </p>
@@ -301,14 +300,14 @@ export default function JobDetailPage() {
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {job.collectionDate && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Collection Date</p>
+                    <p className="text-xs font-medium uppercase tracking-wide mb-2" style={themedStyles.primaryTextLabel(theme)}>Collection Date</p>
                     <p className="text-sm font-medium text-gray-900">{formatDate(job.collectionDate.date)}</p>
                     <p className="text-sm text-gray-600">{job.collectionDate.timeSlot}</p>
                   </div>
                 )}
                 {job.materialsDeliveryDate && (
                   <div className="bg-gray-50 rounded-lg p-4">
-                    <p className="text-xs font-medium uppercase tracking-wide mb-2" style={primaryTextStyle}>Materials Delivery</p>
+                    <p className="text-xs font-medium uppercase tracking-wide mb-2" style={themedStyles.primaryTextLabel(theme)}>Materials Delivery</p>
                     <p className="text-sm font-medium text-gray-900">{formatDate(job.materialsDeliveryDate.date)}</p>
                     <p className="text-sm text-gray-600">{job.materialsDeliveryDate.timeSlot}</p>
                   </div>
@@ -369,13 +368,13 @@ export default function JobDetailPage() {
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Email</p>
-                  <a href={`mailto:${job.contact.email}`} className="font-medium" style={primaryTextStyle}>
+                  <a href={`mailto:${job.contact.email}`} className="font-medium" style={themedStyles.primaryTextLabel(theme)}>
                     {job.contact.email}
                   </a>
                 </div>
                 <div>
                   <p className="text-xs text-gray-500 uppercase tracking-wide mb-1">Phone</p>
-                  <a href={`tel:${job.contact.countryCode}${job.contact.phone}`} className="font-medium" style={primaryTextStyle}>
+                  <a href={`tel:${job.contact.countryCode}${job.contact.phone}`} className="font-medium" style={themedStyles.primaryTextLabel(theme)}>
                     {job.contact.countryCode} {job.contact.phone}
                   </a>
                 </div>
@@ -427,7 +426,7 @@ export default function JobDetailPage() {
                   )}
                   <div className="flex justify-between pt-3 mt-3 border-t border-gray-200">
                     <span className="font-semibold text-gray-900">Estimated Total</span>
-                    <span className="font-bold text-lg" style={primaryTextStyle}>£{job.costBreakdown.total}</span>
+                    <span className="font-bold text-lg" style={themedStyles.primaryTextLabel(theme)}>£{job.costBreakdown.total}</span>
                   </div>
                 </div>
                 <p className="text-xs text-gray-500 mt-3">

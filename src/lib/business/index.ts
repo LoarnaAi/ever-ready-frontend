@@ -27,6 +27,8 @@ export {
   getThemeCSSVariables,
   themedStyles,
   combineStyles,
+  getRelativeLuminance,
+  isLightColor,
 } from './theme-utils';
 
 // Theme hook (works outside BusinessProvider with defaults)

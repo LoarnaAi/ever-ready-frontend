@@ -2,6 +2,40 @@ import type { BusinessTheme } from './types';
 import type React from 'react';
 
 /**
+ * Calculate relative luminance of a hex color
+ * Based on WCAG 2.0 guidelines
+ * @returns luminance value between 0 (black) and 1 (white)
+ */
+export function getRelativeLuminance(hexColor: string): number {
+  // Remove # if present
+  const hex = hexColor.replace('#', '');
+
+  // Parse RGB values
+  const r = parseInt(hex.substring(0, 2), 16) / 255;
+  const g = parseInt(hex.substring(2, 4), 16) / 255;
+  const b = parseInt(hex.substring(4, 6), 16) / 255;
+
+  // Apply gamma correction
+  const toLinear = (c: number) => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+
+  const rLinear = toLinear(r);
+  const gLinear = toLinear(g);
+  const bLinear = toLinear(b);
+
+  // Calculate luminance
+  return 0.2126 * rLinear + 0.7152 * gLinear + 0.0722 * bLinear;
+}
+
+/**
+ * Check if a color is considered "light" (would have poor contrast on light backgrounds)
+ * @param hexColor - hex color string (with or without #)
+ * @param threshold - luminance threshold (default 0.5, higher = more colors considered light)
+ */
+export function isLightColor(hexColor: string, threshold = 0.5): boolean {
+  return getRelativeLuminance(hexColor) > threshold;
+}
+
+/**
  * Generate CSS custom properties from a business theme
  * Can be applied to a container element to cascade theme colors
  */
@@ -68,6 +102,26 @@ export const themedStyles = {
   primaryButtonText: (theme: BusinessTheme): React.CSSProperties => ({
     color: theme.primaryButtonText,
   }),
+
+  /**
+   * Primary text with automatic contrast background for light theme colors
+   * Adds a dark background when primary color is light (e.g., yellow)
+   */
+  primaryTextLabel: (theme: BusinessTheme): React.CSSProperties => {
+    const needsBackground = isLightColor(theme.primary);
+    if (needsBackground) {
+      return {
+        color: theme.primary,
+        backgroundColor: '#1f2937', // gray-800
+        padding: '2px 8px',
+        borderRadius: '4px',
+        display: 'inline-block',
+      };
+    }
+    return {
+      color: theme.primary,
+    };
+  },
 };
 
 /**
