@@ -398,7 +398,7 @@ export default function BusinessHomeRemoval() {
   };
 
   const handleViewSummary = () => {
-    router.push(`/${businessSlug}/home-removal/job-summary/${submittedJobId}`);
+    router.push(`/${businessSlug}/home-removal/job-summary/${displayJobId}`);
   };
 
   const handleCloseModal = () => {

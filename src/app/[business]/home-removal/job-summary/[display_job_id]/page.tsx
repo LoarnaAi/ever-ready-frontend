@@ -12,7 +12,7 @@ import { useBusinessConfig } from "@/lib/business";
 
 export default function JobSummaryPage() {
   const params = useParams();
-  const jobId = params.job_id as string;
+  const displayJobId = params.display_job_id as string;
   const businessSlug = params.business as string;
   const { config, theme } = useBusinessConfig();
 
@@ -25,8 +25,8 @@ export default function JobSummaryPage() {
 
   useEffect(() => {
     async function fetchJob() {
-      if (jobId) {
-        const result = await getJobAction(jobId);
+      if (displayJobId) {
+        const result = await getJobAction(displayJobId);
         if (result.success && result.data) {
           setJob(result.data);
         } else {
@@ -36,7 +36,7 @@ export default function JobSummaryPage() {
       }
     }
     fetchJob();
-  }, [jobId]);
+  }, [displayJobId]);
 
   const handleCopyLink = async () => {
     try {
