@@ -102,7 +102,17 @@ POST /api/messaging/whatsapp/enquiry-notification
    ```bash
    curl -X POST http://localhost:3000/api/messaging/whatsapp/enquiry-notification \
      -H "Content-Type: application/json" \
-     -d '{"busRef":"LIMO","recipient":"+447123456789","display_job_id":"TEST123"}'
+     -d '{"busRef":"LIMO","recipient":"+447123456789","display_job_id":"LIMO-00054"}'
    ```
 3. With `MESSAGING_MOCK_MODE=true`, verify logged payload structure
 4. With mock mode off (if credentials available), verify message delivery
+
+## Test Curl Command
+```bash
+curl -X POST http://localhost:3000/api/messaging/whatsapp/enquiry-notification \
+  -H "Content-Type: application/json" \
+  -d '{"busRef":"LIMO","recipient":"+447123456789","display_job_id":"LIMO-00054"}'
+```
+
+This will send the `enquiry_notification` template with button URL:
+`https://demo.ever-ready.ai/limo/home-removal/job-detail/LIMO-00054`
