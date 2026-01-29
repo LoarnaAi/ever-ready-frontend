@@ -5,6 +5,7 @@ import { SendEmailInput, MessageResult, BookingConfirmationData } from '../messa
 
 // Note: Email attachments have been removed. SendEmailInput.attachments is ignored.
 import { generateBookingConfirmationHtml } from '../templates/bookingConfirmationHtml';
+import { getBusinessMaster } from './businessActions';
 
 export async function sendEmailAction(
     busRef: string,
@@ -70,11 +71,29 @@ export async function sendEmailAction(
 export async function sendBookingConfirmationEmailAction(
     data: BookingConfirmationData
 ): Promise<MessageResult> {
-    const subject = `Booking Confirmation - ${data.displayJobId || data.jobId}`;
-    const body = generateBookingConfirmationHtml(data);
+    // Fetch business information
+    const businessResult = await getBusinessMaster(data.busRef);
+    if (!businessResult.success || !businessResult.data) {
+        return {
+            success: false,
+            error: businessResult.error || 'Business not found'
+        };
+    }
+
+    const business = businessResult.data;
+
+    if (!business.email) {
+        return {
+            success: false,
+            error: 'No business email configured'
+        };
+    }
+
+    const subject = `New Booking Enquiry - ${data.displayJobId || data.jobId}`;
+    const body = generateBookingConfirmationHtml(data, business.name);
 
     return sendEmailAction(data.busRef, {
-        to: data.customerEmail,
+        to: business.email,
         subject,
         body,
         bodyType: 'HTML',
