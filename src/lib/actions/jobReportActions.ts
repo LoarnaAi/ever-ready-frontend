@@ -43,7 +43,7 @@ export async function sendJobReportToAdminsAction(
             return result;
         }
 
-        const htmlBody = generateJobReportHtml(job, business);
+        const htmlBody = generateJobReportHtml(job, business, busRef);
         const subjectId = job.display_job_id || job.job_id;
         const subject = `New Booking: ${subjectId}`;
 

@@ -4,6 +4,7 @@ import { BookingConfirmationData, MessageResult } from '../messaging/types';
 import { sendWhatsAppAction } from './whatsappActions';
 import { sendBookingConfirmationEmailAction } from './emailActions';
 import { getBusinessMaster } from './businessActions';
+import { generateJobDetailUrl } from '../utils/urlUtils';
 
 export interface NotificationResults {
     email: MessageResult;
@@ -97,6 +98,7 @@ async function sendWhatsAppToAdmins(adminPhones: string[], data: BookingConfirma
 
 function buildAdminWhatsAppMessage(data: BookingConfirmationData): string {
     const collection = formatDateYMD(data.collectionDate);
+    const jobDetailUrl = generateJobDetailUrl(data.busRef, data.displayJobId, data.jobId);
     let message = `📦 New Booking - ${data.displayJobId || data.jobId}\n`;
     message += `Customer: ${data.customerName}\n`;
     message += `Phone: ${data.countryCode}${data.customerPhone}\n`;
@@ -105,6 +107,7 @@ function buildAdminWhatsAppMessage(data: BookingConfirmationData): string {
     if (data.collectionAddress) message += `Collection: ${data.collectionAddress}\n`;
     if (data.deliveryAddress) message += `Delivery: ${data.deliveryAddress}\n`;
     message += `\nPlease follow up with the customer to confirm details.`;
+    message += `\n\nView full details: ${jobDetailUrl}`;
     return message;
 }
 
