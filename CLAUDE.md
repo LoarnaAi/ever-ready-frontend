@@ -43,6 +43,31 @@ Uses Next.js App Router with file-based routing and Supabase for backend operati
 
 Reference docs are stored in `docs/`. Multi-tenant configuration details are documented in `docs/business-configs.md`. Messaging API curl examples live in `docs/messaging-api.md`. Messaging feature instructions live in `docs/messaging-features.md`.
 
+### Recent Implementation Updates
+
+**Multi-Tenant Architecture:**
+- Refactored to use 4-character business references (`busRef`: DEMO, LNDN, LIMO) as primary identifier
+- Created `business_master` table for dynamic business data
+- Added `display_job_id` (human-readable format: `DEMO-00001`) alongside internal UUID `job_id`
+
+**Business Configurations:**
+- New LIMO tenant with bright yellow theme (#FACC15)
+- Added configurable `primaryButtonText` for button contrast on colored backgrounds
+- Business logos support with local image storage (`public/images/business/{BUSREF}/`)
+- Dynamic favicons per business
+
+**Messaging System:**
+- Email notifications (Microsoft Graph API)
+- WhatsApp messages (Facebook Graph API)
+- Customer booking confirmations with clickable job detail links
+- Admin job reports with PDF attachments
+- WhatsApp marketing template endpoint for enquiry notifications
+
+**Routing & Navigation:**
+- Job detail pages use display_job_id in URLs (e.g., `/demo/home-removal/job-detail/DEMO-00001`)
+- Consolidated home removal step components to `src/components/home-removal-steps/`
+- Fixed Next.js 15+ async params in dynamic routes
+
 ### Directory Structure
 
 - `src/app/` - App Router pages (each folder is a route)
@@ -56,15 +81,28 @@ Reference docs are stored in `docs/`. Multi-tenant configuration details are doc
   - `MobileBottomSheet.tsx` - Mobile UI component
   - `MobileJobDetailsAccordion.tsx` - Mobile job details display
 - `src/components/layout/` - Layout components (Header, Footer)
+- `src/components/home-removal-steps/` - Home removal form steps (Step2-Step6) and icons
 - `src/lib/` - Backend integration and utilities
   - `supabase.ts` - Supabase client initialization
   - `database.types.ts` - TypeScript types for database schema
-  - `tempDb.ts` - Temporary database utilities
-  - `actions/` - Server actions for database operations
-  - `utils/` - Utility functions
-- `src/removal-page/` - Components specific to removal service pages
-- `src/waste-removal-page/` - Components specific to waste removal pages
+  - `actions/` - Server actions (jobs, email, WhatsApp, job reports)
+  - `business/` - Multi-tenant config system
+    - `types.ts` - BusinessConfig, BusinessTheme, BusinessFeatures interfaces
+    - `config-loader.ts` - Registry and lookup functions
+    - `configs/` - Individual tenant configs (demo.ts, lndn.ts, limo.ts)
+    - `BusinessContext.tsx` - React Context provider
+    - `logo-utils.ts` - Logo resolution and favicon metadata
+    - `theme-utils.ts` - CSS variable injection and styled utilities
+  - `messaging/` - Email and WhatsApp configuration
+    - `types.ts` - EmailConfig, WhatsAppConfig, messaging interfaces
+    - `config-loader.ts` - Multi-tenant messaging config resolution
+  - `templates/` - Email HTML templates (bookingConfirmation, jobReport)
+  - `pdf/` - Job report PDF generation (JobReportPdf component)
+  - `utils/` - Utility functions (jobUtils, urlUtils, etc.)
 - `public/images/` - Static assets
+  - `business/` - Per-business logos and favicons
+- `docs/` - External documentation
+  - `business-configs.md` - Multi-tenant configuration guide
 
 ### Layout Pattern
 
@@ -101,7 +139,20 @@ Route handler `params` are now async. Use `{ params }: { params: Promise<{ id: s
 2. **Address Autocomplete**: Google Maps integration for accurate location input
 3. **Dynamic Pricing**: Database-driven pricing for furniture items and packing materials
 4. **Mobile Responsive**: Custom mobile components (BottomSheet, Accordion) for better UX
-5. **Messaging**: Email and WhatsApp notifications plus job report emails with PDF attachments
+5. **Multi-Tenant Support**:
+   - Business reference system (4-char codes: DEMO, LNDN, LIMO)
+   - Per-business theming and configuration
+   - Isolated messaging settings
+   - Business-specific logos and favicons
+6. **Job Management**:
+   - Human-readable job IDs (LIMO-00001 format)
+   - Display and detailed job tracking pages
+   - Sequential numbering per business
+7. **Messaging System**:
+   - Customer booking confirmations via email
+   - Admin notifications (email with PDF report, WhatsApp)
+   - Marketing templates for enquiry notifications
+   - Multi-tenant messaging config support
 
 
 ## Browser Debugging Note
