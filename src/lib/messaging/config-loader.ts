@@ -23,7 +23,7 @@ function loadEmailConfig(busRef: string): EmailConfig | undefined {
     const clientId = getEnvVar(`MESSAGING_${busRef}_MS_CLIENT_ID`, 'MESSAGING_MS_CLIENT_ID');
     const clientSecret = getEnvVar(`MESSAGING_${busRef}_MS_CLIENT_SECRET`, 'MESSAGING_MS_CLIENT_SECRET');
     const tenantId = getEnvVar(`MESSAGING_${busRef}_MS_TENANT_ID`, 'MESSAGING_MS_TENANT_ID');
-    const senderEmail = getEnvVar(`MESSAGING_${busRef}_MS_SENDER_EMAIL`, 'MESSAGING_MS_SENDER_EMAIL');
+    const senderEmail = process.env.MESSAGING_MS_SENDER_EMAIL; // Always use default, not business-specific
 
     if (!clientId || !clientSecret || !tenantId || !senderEmail) {
         console.warn(`Email config incomplete for busRef: ${busRef}`);
