@@ -95,6 +95,12 @@ export async function sendEnquiryNotificationTemplateAction(
             return { success: false, error: validationResult.error };
         }
 
+        // Bypass admin number
+        if (validationResult.formattedPhone === '447448440754') {
+            console.log('[WHATSAPP_TEMPLATE] bypassing admin WA msg to 44****54');
+            return { success: true, messageId: 'bypassed-admin-number' };
+        }
+
         const payload = {
             ...templatePayload,
             to: validationResult.formattedPhone,
