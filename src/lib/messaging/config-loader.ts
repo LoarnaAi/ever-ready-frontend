@@ -14,16 +14,25 @@ export function getMessagingConfig(busRef: string): MessagingConfig {
 }
 
 function loadEmailConfig(busRef: string): EmailConfig | undefined {
-    const enabled = getEnvVar(`MESSAGING_${busRef}_EMAIL_ENABLED`, 'MESSAGING_EMAIL_ENABLED') === 'true';
+    // Use project-level constants (not business-specific)
+    const enabled = process.env.MESSAGING_EMAIL_ENABLED === 'true';
+    const clientId = process.env.MESSAGING_MS_CLIENT_ID;
+    const clientSecret = process.env.MESSAGING_MS_CLIENT_SECRET;
+    const tenantId = process.env.MESSAGING_MS_TENANT_ID;
+    const senderEmail = process.env.MESSAGING_MS_SENDER_EMAIL;
+
+    console.log('[DEBUG] Email config for', busRef, ':', {
+        enabled,
+        clientId: clientId ? 'SET' : 'MISSING',
+        clientSecret: clientSecret ? 'SET' : 'MISSING',
+        tenantId: tenantId ? 'SET' : 'MISSING',
+        senderEmail,
+    });
 
     if (!enabled) {
+        console.warn(`Email not enabled for busRef: ${busRef}`);
         return undefined;
     }
-
-    const clientId = getEnvVar(`MESSAGING_${busRef}_MS_CLIENT_ID`, 'MESSAGING_MS_CLIENT_ID');
-    const clientSecret = getEnvVar(`MESSAGING_${busRef}_MS_CLIENT_SECRET`, 'MESSAGING_MS_CLIENT_SECRET');
-    const tenantId = getEnvVar(`MESSAGING_${busRef}_MS_TENANT_ID`, 'MESSAGING_MS_TENANT_ID');
-    const senderEmail = process.env.MESSAGING_MS_SENDER_EMAIL; // Always use default, not business-specific
 
     if (!clientId || !clientSecret || !tenantId || !senderEmail) {
         console.warn(`Email config incomplete for busRef: ${busRef}`);

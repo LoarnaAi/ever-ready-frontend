@@ -13,6 +13,12 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        // Bypass admin number
+        if (recipient === '447448440754') {
+            console.log('[WHATSAPP] bypassing admin WA msg to 44****54');
+            return NextResponse.json({ success: true, messageId: 'bypassed-admin-number' }, { status: 200 });
+        }
+
         const result = await sendEnquiryNotificationTemplateAction(busRef, {
             recipient,
             display_job_id,
