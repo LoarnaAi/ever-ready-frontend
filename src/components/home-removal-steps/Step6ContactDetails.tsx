@@ -420,8 +420,8 @@ export default function Step6ContactDetails({
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-2 sm:p-4">
-      <div className="w-full max-w-6xl">
+    <div className="min-h-screen bg-gray-50">
+      <div className="w-full max-w-6xl mx-auto p-4 md:p-6">
         {/* Progress Bar */}
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
@@ -719,8 +719,8 @@ export default function Step6ContactDetails({
             </p>
           </div>
         </MobileJobDetailsAccordion>
-      </div>
-      <div className="w-full max-w-6xl flex flex-col md:flex-row gap-4">
+
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6">
         {/* Left Sidebar - Quote Summary (hidden on mobile, shown on tablet+) */}
         <div className="hidden md:flex md:flex-col w-full md:w-80 lg:w-96 bg-white border border-gray-200 p-4 rounded-lg shadow-sm order-1 md:order-1">
           {/* Logo */}
@@ -1191,8 +1191,8 @@ export default function Step6ContactDetails({
         </div>
       </div>
 
-      {/* Guarantee Message - Moved to end for mobile view */}
-      <div className="w-full max-w-6xl bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
+      {/* Guarantee Message */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mt-4">
         <div className="font-semibold text-xs text-gray-900 mb-1.5">
           No Surprises Guarantee
         </div>
@@ -1203,5 +1203,6 @@ export default function Step6ContactDetails({
         </p>
       </div>
     </div>
+  </div>
   );
 }

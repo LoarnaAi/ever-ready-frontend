@@ -1,6 +1,7 @@
 import { BookingConfirmationData } from '../messaging/types';
+import { generateJobDetailUrl } from '../utils/urlUtils';
 
-export function generateBookingConfirmationHtml(data: BookingConfirmationData): string {
+export function generateBookingConfirmationHtml(data: BookingConfirmationData, businessName: string): string {
   const formatDate = (value?: string) => {
     if (!value) return undefined;
     const parsed = new Date(value);
@@ -16,6 +17,7 @@ export function generateBookingConfirmationHtml(data: BookingConfirmationData): 
   const collectionDate = formatDate(data.collectionDate);
   const collectionAddress = data.collectionAddress;
   const deliveryAddress = data.deliveryAddress;
+  const jobDetailUrl = generateJobDetailUrl(data.busRef, data.displayJobId, data.jobId);
 
   const row = (label: string, value?: string) =>
     value
@@ -106,16 +108,26 @@ export function generateBookingConfirmationHtml(data: BookingConfirmationData): 
       color: #6b7280;
       border-top: 1px solid #e5e7eb;
     }
+    .btn-primary {
+      display: inline-block;
+      background-color: #f97316;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>Booking Confirmation</h1>
+      <h1>New Booking Enquiry</h1>
     </div>
     <div class="content">
-      <p class="intro">Dear ${data.customerName},</p>
-      <p class="intro">Thank you for choosing EverReady. Your home removal booking has been confirmed.</p>
+      <p class="intro">Dear ${businessName},</p>
+      <p class="intro">There is a new booking enquiry.</p>
 
       <div class="section-title">Booking Details</div>
       <table class="info-table" role="presentation">
@@ -134,8 +146,11 @@ export function generateBookingConfirmationHtml(data: BookingConfirmationData): 
       </table>
 
       <div class="note">
-        We will contact you shortly to confirm the final details of your move.
-        If you have any questions, please reply to this email.
+        Please contact the customer to confirm the final details of the move.
+      </div>
+
+      <div style="text-align: center; margin-top: 24px;">
+        <a href="${jobDetailUrl}" class="btn-primary">View Booking Details</a>
       </div>
     </div>
     <div class="footer">

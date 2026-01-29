@@ -1,7 +1,7 @@
 'use server';
 
 import { BookingConfirmationData, MessageResult } from '../messaging/types';
-import { sendWhatsAppAction } from './whatsappActions';
+import { sendEnquiryNotificationTemplateAction } from './whatsappTemplateActions';
 import { sendBookingConfirmationEmailAction } from './emailActions';
 import { getBusinessMaster } from './businessActions';
 
@@ -66,13 +66,13 @@ async function sendWhatsAppToAdmins(adminPhones: string[], data: BookingConfirma
         return { success: false, error: 'No admin phone numbers configured' };
     }
 
-    const message = buildAdminWhatsAppMessage(data);
+    const displayJobId = data.displayJobId || data.jobId;
 
     const results = await Promise.all(
         adminPhones.map(async (phone) => {
-            const res = await sendWhatsAppAction(data.busRef, {
-                to: phone,
-                message,
+            const res = await sendEnquiryNotificationTemplateAction(data.busRef, {
+                recipient: phone,
+                display_job_id: displayJobId,
             });
             return { phone, res };
         })
@@ -95,30 +95,10 @@ async function sendWhatsAppToAdmins(adminPhones: string[], data: BookingConfirma
     };
 }
 
-function buildAdminWhatsAppMessage(data: BookingConfirmationData): string {
-    const collection = formatDateYMD(data.collectionDate);
-    let message = `📦 New Booking - ${data.displayJobId || data.jobId}\n`;
-    message += `Customer: ${data.customerName}\n`;
-    message += `Phone: ${data.countryCode}${data.customerPhone}\n`;
-    message += `Home Size: ${data.homeSize}\n`;
-    if (collection) message += `Collection Date: ${collection}\n`;
-    if (data.collectionAddress) message += `Collection: ${data.collectionAddress}\n`;
-    if (data.deliveryAddress) message += `Delivery: ${data.deliveryAddress}\n`;
-    message += `\nPlease follow up with the customer to confirm details.`;
-    return message;
-}
-
 function maskPhone(phone: string): string {
     const cleaned = phone.replace(/\D/g, '');
     if (cleaned.length <= 4) {
         return cleaned;
     }
     return `${cleaned.slice(0, 2)}****${cleaned.slice(-2)}`;
-}
-
-function formatDateYMD(value?: string | null): string | undefined {
-    if (!value) return undefined;
-    const d = new Date(value);
-    if (Number.isNaN(d.getTime())) return value;
-    return d.toISOString().slice(0, 10); // yyyy-mm-dd
 }

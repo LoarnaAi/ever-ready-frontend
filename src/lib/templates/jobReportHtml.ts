@@ -1,6 +1,7 @@
 import { JobData, BusinessMaster } from '../database.types';
+import { generateJobDetailUrl } from '../utils/urlUtils';
 
-export function generateJobReportHtml(job: JobData, business: BusinessMaster): string {
+export function generateJobReportHtml(job: JobData, business: BusinessMaster, busRef: string): string {
     const formatDate = (dateStr?: string) => {
         if (!dateStr) return 'Not specified';
         return new Date(dateStr).toLocaleDateString('en-GB', {
@@ -14,6 +15,8 @@ export function generateJobReportHtml(job: JobData, business: BusinessMaster): s
         if (!slot) return '';
         return ` (${slot})`;
     };
+
+    const jobDetailUrl = generateJobDetailUrl(busRef, job.display_job_id, job.job_id);
 
     return `
 <!DOCTYPE html>
@@ -109,6 +112,16 @@ export function generateJobReportHtml(job: JobData, business: BusinessMaster): s
       color: #6b7280;
       border-top: 1px solid #e5e7eb;
     }
+    .btn-primary {
+      display: inline-block;
+      background-color: #f97316;
+      color: #ffffff;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 14px;
+    }
   </style>
 </head>
 <body>
@@ -121,6 +134,9 @@ export function generateJobReportHtml(job: JobData, business: BusinessMaster): s
       <div class="section">
         <h2 style="margin: 0 0 10px 0; color: #1f2937;">Job Reference: ${job.display_job_id || job.job_id}</h2>
         <span class="badge">${job.status}</span>
+        <div style="margin-top: 16px;">
+          <a href="${jobDetailUrl}" class="btn-primary">View Full Job Details</a>
+        </div>
       </div>
 
       <div class="section">
