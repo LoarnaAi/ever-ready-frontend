@@ -1,7 +1,7 @@
 import { MessagingConfig, EmailConfig, WhatsAppConfig } from './types';
 
 export function getMessagingConfig(busRef: string): MessagingConfig {
-    const mockMode = process.env.MESSAGING_MOCK_MODE === 'true';
+    const mockMode = parseEnvBool(process.env.MESSAGING_MOCK_MODE);
 
     const emailConfig = loadEmailConfig(busRef);
     const whatsappConfig = loadWhatsAppConfig(busRef);
@@ -15,7 +15,8 @@ export function getMessagingConfig(busRef: string): MessagingConfig {
 
 function loadEmailConfig(busRef: string): EmailConfig | undefined {
     // Use project-level constants (not business-specific)
-    const enabled = process.env.MESSAGING_EMAIL_ENABLED === 'true';
+    const enabledRaw = process.env.MESSAGING_EMAIL_ENABLED;
+    const enabled = parseEnvBool(enabledRaw);
     const clientId = process.env.MESSAGING_MS_CLIENT_ID;
     const clientSecret = process.env.MESSAGING_MS_CLIENT_SECRET;
     const tenantId = process.env.MESSAGING_MS_TENANT_ID;
@@ -23,6 +24,7 @@ function loadEmailConfig(busRef: string): EmailConfig | undefined {
 
     console.log('[DEBUG] Email config for', busRef, ':', {
         enabled,
+        enabledRaw,
         clientId: clientId ? 'SET' : 'MISSING',
         clientSecret: clientSecret ? 'SET' : 'MISSING',
         tenantId: tenantId ? 'SET' : 'MISSING',
@@ -49,7 +51,7 @@ function loadEmailConfig(busRef: string): EmailConfig | undefined {
 }
 
 function loadWhatsAppConfig(busRef: string): WhatsAppConfig | undefined {
-    const enabled = getEnvVar(`MESSAGING_${busRef}_WHATSAPP_ENABLED`, 'MESSAGING_WHATSAPP_ENABLED') === 'true';
+    const enabled = parseEnvBool(getEnvVar(`MESSAGING_${busRef}_WHATSAPP_ENABLED`, 'MESSAGING_WHATSAPP_ENABLED'));
 
     if (!enabled) {
         return undefined;
@@ -72,4 +74,25 @@ function loadWhatsAppConfig(busRef: string): WhatsAppConfig | undefined {
 
 function getEnvVar(businessSpecific: string, defaultVar: string): string | undefined {
     return process.env[businessSpecific] || process.env[defaultVar];
+}
+
+function parseEnvBool(value: string | undefined): boolean {
+    if (!value) {
+        return false;
+    }
+
+    const normalized = normalizeEnvValue(value).toLowerCase();
+    return normalized === 'true' || normalized === '1' || normalized === 'yes' || normalized === 'on';
+}
+
+function normalizeEnvValue(value: string): string {
+    const trimmed = value.trim();
+    const isWrappedInDoubleQuotes = trimmed.startsWith('"') && trimmed.endsWith('"');
+    const isWrappedInSingleQuotes = trimmed.startsWith("'") && trimmed.endsWith("'");
+
+    if (isWrappedInDoubleQuotes || isWrappedInSingleQuotes) {
+        return trimmed.slice(1, -1).trim();
+    }
+
+    return trimmed;
 }
