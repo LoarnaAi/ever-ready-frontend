@@ -7,6 +7,7 @@ import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
 import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
+import type { QuoteResult } from "@/lib/quote";
 
 interface Step6ContactDetailsProps {
   serviceParam: string | null;
@@ -17,6 +18,7 @@ interface Step6ContactDetailsProps {
   selectedDismantlePackage?: boolean;
   packingMaterialQuantities?: { [key: string]: number };
   selectedPackingService?: string;
+  quoteResult?: QuoteResult | null;
 }
 
 interface ContactData {
@@ -40,6 +42,7 @@ export default function Step6ContactDetails({
   selectedDismantlePackage = false,
   packingMaterialQuantities = {},
   selectedPackingService = "",
+  quoteResult = null,
 }: Step6ContactDetailsProps) {
   const { busRef, styles } = useTheme();
   // Load saved contact data from localStorage
@@ -1009,6 +1012,30 @@ export default function Step6ContactDetails({
 
         {/* Right Content Area */}
         <div className="flex-1 bg-white rounded-lg shadow-sm p-4 max-w-2xl order-2 md:order-2">
+          {/* Quote Summary */}
+          {quoteResult && (
+            <div className="mb-4 border rounded-lg overflow-hidden" style={{ borderColor: styles.progressBar.backgroundColor }}>
+              <div className="px-4 py-2" style={styles.primaryButton}>
+                <h3 className="text-xs font-bold">Your Quote Estimate</h3>
+              </div>
+              <div className="p-3 bg-white">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-xl font-bold text-gray-900">
+                    £{quoteResult.pricing.totalCost.toFixed(2)}
+                  </span>
+                  <span className="text-xs text-gray-500">
+                    {quoteResult.vehicleType === 'Ford Transit Custom' ? 'Transit Custom' :
+                     quoteResult.vehicleType === 'Ford Transit 350 L3H3' ? 'Transit 350' :
+                     'Luton'} · {quoteResult.crewSize} mover{quoteResult.crewSize > 1 ? 's' : ''} · {quoteResult.timeEstimate.totalHours}h
+                  </span>
+                </div>
+                <p className="text-xs text-gray-500">
+                  *Final price confirmed after review.
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Heading */}
           <h2 className="text-sm sm:text-base font-bold text-gray-900 mb-4">
             Leave your details, and our team will reach out to finalize your order

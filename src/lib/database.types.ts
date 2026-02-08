@@ -217,3 +217,50 @@ export interface JobData {
 export type CreateJobInput = Omit<JobData, 'job_id' | 'display_job_id' | 'created_at' | 'status' | 'internalNotes' | 'costBreakdown' | 'busRef'> & {
   busRef?: string | null;
 };
+
+// Removal items table (volume/weight data for auto-quote)
+export interface DbRemovalItem {
+  item_id: string;
+  name: string;
+  room: string;
+  weight_kg: number;
+  volume_m3: number;
+  is_active: boolean;
+  created_at: string;
+}
+
+// Job quote table (persisted auto-quote results)
+export interface DbJobQuote {
+  quote_id: number;
+  job_id: string;
+  total_volume: number;
+  num_heavy_items: number;
+  customer_assistance: boolean;
+  num_rooms: number;
+  difficult_access: boolean;
+  distance_miles: number;
+  no_parking: boolean;
+  no_lift: boolean;
+  driving_minutes: number;
+  vehicle_type: string;
+  crew_size: number;
+  reasoning: string;
+  base_hours: number;
+  add_on_minutes: number;
+  total_hours: number;
+  time_notes: string[];
+  zone: string;
+  hourly_rate: number | null;
+  rate_is_per_mover: boolean;
+  base_cost: number | null;
+  extra_cost: number | null;
+  total_cost: number;
+  pricing_notes: string[];
+  price_per_mile: number | null;
+  occupancy: string;
+  volume_category: string;
+  complexity_factor: number;
+  suitable_for_single_trip: boolean;
+  is_active: boolean;
+  created_at: string;
+}

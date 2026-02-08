@@ -7,6 +7,7 @@ import { getFurnitureIcon } from "./furnitureIcons";
 import MobileJobDetailsAccordion from "@/components/MobileJobDetailsAccordion";
 import BusinessLogo from "@/components/BusinessLogo";
 import { useTheme } from "@/lib/business";
+import type { QuoteResult } from "@/lib/quote";
 
 interface Step5DateSchedulingProps {
   serviceParam: string | null;
@@ -17,6 +18,7 @@ interface Step5DateSchedulingProps {
   selectedDismantlePackage?: boolean;
   packingMaterialQuantities?: { [key: string]: number };
   selectedPackingService?: string;
+  quoteResult?: QuoteResult | null;
 }
 
 interface ScheduleData {
@@ -34,6 +36,7 @@ export default function Step5DateScheduling({
   selectedDismantlePackage = false,
   packingMaterialQuantities = {},
   selectedPackingService = "",
+  quoteResult = null,
 }: Step5DateSchedulingProps) {
   const { styles } = useTheme();
   // Get tomorrow's date for materials delivery
@@ -1062,6 +1065,50 @@ export default function Step5DateScheduling({
 
           {/* Right Content Area */}
           <div className="flex-1 bg-white rounded-lg shadow-sm p-3 sm:p-4 max-w-3xl overflow-y-auto max-h-[85vh] order-2 lg:order-2">
+            {/* Quote Summary */}
+            {quoteResult && (
+              <div className="mb-6 border rounded-lg overflow-hidden" style={{ borderColor: styles.progressBar.backgroundColor }}>
+                <div className="px-4 py-3" style={styles.primaryButton}>
+                  <h3 className="text-sm font-bold">Your Quote Estimate</h3>
+                </div>
+                <div className="p-4 bg-white space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-2xl font-bold text-gray-900">
+                      £{quoteResult.pricing.totalCost.toFixed(2)}
+                    </span>
+                    <span className="text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">
+                      {quoteResult.pricing.zone === 'local' ? 'Local Move' : 'Non-Local Move'}
+                    </span>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div className="bg-gray-50 rounded-lg p-2">
+                      <div className="text-xs text-gray-500">Vehicle</div>
+                      <div className="text-xs font-semibold text-gray-900 mt-0.5">
+                        {quoteResult.vehicleType === 'Ford Transit Custom' ? 'Transit Custom' :
+                         quoteResult.vehicleType === 'Ford Transit 350 L3H3' ? 'Transit 350' :
+                         'Luton'}
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-2">
+                      <div className="text-xs text-gray-500">Crew</div>
+                      <div className="text-xs font-semibold text-gray-900 mt-0.5">
+                        {quoteResult.crewSize} mover{quoteResult.crewSize > 1 ? 's' : ''}
+                      </div>
+                    </div>
+                    <div className="bg-gray-50 rounded-lg p-2">
+                      <div className="text-xs text-gray-500">Est. Time</div>
+                      <div className="text-xs font-semibold text-gray-900 mt-0.5">
+                        {quoteResult.timeEstimate.totalHours}h
+                      </div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-gray-500">
+                    *Final price confirmed after review. No surprises guarantee applies.
+                  </p>
+                </div>
+              </div>
+            )}
+
             {/* Materials Delivery Section */}
             {/* <div className="mb-6">
             <div className="inline-block bg-gray-900 text-white text-xs font-medium px-3 py-1 rounded-full mb-3">

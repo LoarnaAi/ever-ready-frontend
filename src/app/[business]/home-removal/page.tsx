@@ -13,10 +13,12 @@ import MobileBottomSheet from "@/components/MobileBottomSheet";
 import ConfirmationModal from "@/components/ConfirmationModal";
 import BusinessLogo from "@/components/BusinessLogo";
 import { createJobAction } from "@/lib/actions/jobActions";
+import { calculateQuoteAction } from "@/lib/actions/quoteActions";
 import { sendJobReportToAdminsAction } from "@/lib/actions/jobReportActions";
 import { sendBookingNotificationsAction } from "@/lib/actions/notificationActions";
 import { useBusinessConfig } from "@/lib/business";
 import { BookingConfirmationData } from "@/lib/messaging/types";
+import type { QuoteResult } from "@/lib/quote";
 import {
   FurnitureItem,
   PackingMaterial,
@@ -212,7 +214,42 @@ export default function BusinessHomeRemoval() {
 
   const handleStep2Previous = () => setCurrentStep(1);
   const handleStep3Previous = () => setCurrentStep(2);
-  const handleStep4Continue = () => setCurrentStep(5);
+  const handleStep4Continue = async () => {
+    // Calculate quote after address step completes
+    try {
+      // Read address data for noParking/noLift
+      const collectionAddr = typeof window !== "undefined"
+        ? localStorage.getItem("step4_collectionAddress")
+        : null;
+      const collection = collectionAddr ? JSON.parse(collectionAddr) : null;
+
+      // Invert hasParking/hasLift to noParking/noLift
+      const noParking = collection ? !collection.hasParking : false;
+      const noLift = collection ? !collection.hasLift : false;
+
+      // Build furniture items list for quote
+      const items = Object.entries(furnitureQuantities)
+        .filter(([, qty]) => qty > 0)
+        .map(([itemId, quantity]) => ({ itemId, quantity }));
+
+      const result = await calculateQuoteAction({
+        busRef: config.busRef,
+        furnitureItems: items,
+        homeSize: selectedService,
+        noParking,
+        noLift,
+      });
+
+      if (result.success && result.data) {
+        setQuoteResult(result.data);
+      } else {
+        console.warn("Quote calculation failed:", result.error);
+      }
+    } catch (error) {
+      console.warn("Quote calculation error:", error);
+    }
+    setCurrentStep(5);
+  };
   const handleStep4Previous = () => setCurrentStep(3);
   const handleStep5Continue = () => setCurrentStep(6);
   const handleStep5Previous = () => setCurrentStep(4);
@@ -327,6 +364,7 @@ export default function BusinessHomeRemoval() {
     };
   };
 
+  const [quoteResult, setQuoteResult] = useState<QuoteResult | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleStep6Submit = async (contactData: ContactDetails) => {
@@ -427,6 +465,7 @@ export default function BusinessHomeRemoval() {
           selectedDismantlePackage={selectedDismantlePackage}
           packingMaterialQuantities={packingMaterialQuantities}
           selectedPackingService={selectedPackingService}
+          quoteResult={quoteResult}
         />
         <ConfirmationModal
           isOpen={showConfirmationModal}
@@ -451,6 +490,7 @@ export default function BusinessHomeRemoval() {
         selectedDismantlePackage={selectedDismantlePackage}
         packingMaterialQuantities={packingMaterialQuantities}
         selectedPackingService={selectedPackingService}
+        quoteResult={quoteResult}
       />
     );
   }
